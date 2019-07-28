@@ -1,0 +1,11 @@
+<Project>
+	<!-- StyleCop Analyzers configuration -->
+	<PropertyGroup>
+		<CodeAnalysisRuleSet>$(SolutionDir)\..\eng\CodeStyle\AnalyzerRules.ruleset</CodeAnalysisRuleSet>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="16.0.102" />
+		<PackageReference Include="StyleCop.Analyzers" Version="1.1.118" />
+		<AdditionalFiles Include="$(SolutionDir)\..\eng\CodeStyle\stylecop.json" />
+	</ItemGroup>
+</Project>

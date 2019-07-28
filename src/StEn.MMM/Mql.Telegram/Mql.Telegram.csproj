@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <AssemblyName>Mql.Telegram</AssemblyName>
+    <RootNamespace>StEn.MMM.Mql.Telegram</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+
+  </ItemGroup>
+
+</Project>
