@@ -4,10 +4,11 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <AssemblyName>Mql.Telegram</AssemblyName>
     <RootNamespace>StEn.MMM.Mql.Telegram</RootNamespace>
+    <Platforms>AnyCPU;x64;x86</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
-
+    <PackageReference Include="UnmanagedExports.Repack" Version="1.0.4" />
   </ItemGroup>
 
 </Project>
