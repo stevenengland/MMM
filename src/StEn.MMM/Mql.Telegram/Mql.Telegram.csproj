@@ -1,14 +1,46 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
-    <AssemblyName>Mql.Telegram</AssemblyName>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>Mql_Telegram</AssemblyName>
+    <PackageProjectUrl>https://github.com/stevenengland/MMM</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/stevenengland/MMM</RepositoryUrl>
+    <PackageId>Mql.Telegram</PackageId>
+    <Authors>Steven England (StEn)</Authors>
+    <Product>Mql.Telegram</Product>
+    <Company />
     <RootNamespace>StEn.MMM.Mql.Telegram</RootNamespace>
     <Platforms>AnyCPU;x64;x86</Platforms>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+
   <ItemGroup>
+    <PackageReference Include="Costura.Fody" Version="4.0.0" />
+    <PackageReference Include="Fody" Version="5.1.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Telegram.Bot" Version="14.12.0" />
     <PackageReference Include="UnmanagedExports.Repack" Version="1.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Mql.Common\Mql.Common.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Base\" />
   </ItemGroup>
 
 </Project>
