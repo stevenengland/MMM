@@ -1,24 +1,26 @@
 ﻿using System;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using System.Threading;
+#if RELEASE
 using RGiesecke.DllExport;
-using StEn.MMM.Mql.Common;
+#endif
+using StEn.MMM.Mql.Common.Base.Utilities;
 using StEn.MMM.Mql.Common.Services.InApi.Factories;
-using StEn.MMM.Mql.Telegram.Services.TelegramBotClient;
+using StEn.MMM.Mql.Telegram.Services.Telegram;
 using Telegram.Bot;
 
 namespace StEn.MMM.Mql.Telegram
 {
-	public static class DllExports
+	public class DllExports
 	{
 		static DllExports()
 		{
 		}
 
-		internal static ITelegramBotApi Bot { get; set; }
+		internal static ITelegramBotMapper Bot { get; set; }
 
+#if RELEASE
 		[DllExport("GetMe", CallingConvention = CallingConvention.StdCall)]
+#endif
 		[return: MarshalAs(UnmanagedType.LPWStr)]
 		public static string GetMe()
 		{
@@ -33,7 +35,9 @@ namespace StEn.MMM.Mql.Telegram
 			}
 		}
 
+#if RELEASE
 		[DllExport("GetMeAsync", CallingConvention = CallingConvention.StdCall)]
+#endif
 		[return: MarshalAs(UnmanagedType.LPWStr)]
 		public static string GetMeAsync()
 		{
@@ -73,7 +77,11 @@ namespace StEn.MMM.Mql.Telegram
 		}
 		*/
 
+#region Configuration API
+
+#if RELEASE
 		[DllExport("Initialize", CallingConvention = CallingConvention.StdCall)]
+#endif
 		[return: MarshalAs(UnmanagedType.LPWStr)]
 		public static string Initialize(
 			[MarshalAs(UnmanagedType.LPWStr)] string apiKey,
@@ -81,16 +89,38 @@ namespace StEn.MMM.Mql.Telegram
 		{
 			try
 			{
+				Ensure.NotNullOrEmptyOrWhiteSpace(apiKey, $"{nameof(apiKey)} must not be empty or just whitespace.");
+				Ensure.That<ArgumentException>(timeout > 0, $"{nameof(timeout)} must be greater than 0.");
 				Bot = new TelegramBotMapper(new TelegramBotClient(apiKey))
 				{
 					RequestTimeout = timeout,
 				};
-				return MessageFactory.Success().ToString();
+				return ResponseFactory.Success().ToString();
 			}
 			catch (Exception e)
 			{
-				return MessageFactory.Error(e).ToString();
+				return ResponseFactory.Error(e).ToString();
 			}
 		}
+
+#if RELEASE
+		[DllExport("SetRequestTimeout", CallingConvention = CallingConvention.StdCall)]
+#endif
+		[return: MarshalAs(UnmanagedType.LPWStr)]
+		public static string SetRequestTimeout(int timeout)
+		{
+			try
+			{
+				Ensure.That<ArgumentException>(timeout > 0, $"{nameof(timeout)} must be greater than 0.");
+				Bot.RequestTimeout = timeout;
+				return ResponseFactory.Success().ToString();
+			}
+			catch (Exception e)
+			{
+				return ResponseFactory.Error(e).ToString();
+			}
+		}
+
+#endregion
 	}
 }

@@ -155,7 +155,7 @@ namespace StEn.MMM.Mql.Common.Base.Utilities
 		[DebuggerStepThrough]
 		public static string NotNullOrEmptyOrWhiteSpace(string value, string message = "String must not be null, empty or whitespace.")
 		{
-			That<ArgumentException>(string.IsNullOrWhiteSpace(value), message);
+			That<ArgumentException>(!string.IsNullOrWhiteSpace(value), message);
 			return value;
 		}
 

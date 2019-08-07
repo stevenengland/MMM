@@ -8,9 +8,9 @@ using StEn.MMM.Mql.Common.Services.InApi.Entities;
 using StEn.MMM.Mql.Common.Services.InApi.Factories;
 using Telegram.Bot;
 
-namespace StEn.MMM.Mql.Telegram.Services.TelegramBotClient
+namespace StEn.MMM.Mql.Telegram.Services.Telegram
 {
-	internal class TelegramBotMapper : ITelegramBotApi, IErrorHandler, ISuccessHandler, IProxyCall
+	public class TelegramBotMapper : ITelegramBotMapper, IErrorHandler, ISuccessHandler, IProxyCall
 	{
 		private readonly ITelegramBotClient botClient;
 
@@ -23,14 +23,14 @@ namespace StEn.MMM.Mql.Telegram.Services.TelegramBotClient
 
 		public int RequestTimeout { get; set; }
 
-		public void HandleError(Exception ex, string correlationKey)
+		public void HandleFireAndForgetError(Exception ex, string correlationKey)
 		{
-			this.messageStore.Add(correlationKey, MessageFactory.Error(ex).ToString());
+			this.messageStore.Add(correlationKey, ResponseFactory.Error(ex).ToString());
 		}
 
-		public void HandleSuccess<T>(T data, string correlationKey)
+		public void HandleFireAndForgetSuccess<T>(T data, string correlationKey)
 		{
-			this.messageStore.Add(correlationKey, MessageFactory.Success(message: new Message<T>() { Payload = data }).ToString());
+			this.messageStore.Add(correlationKey, ResponseFactory.Success(message: new Message<T>() { Payload = data }).ToString());
 		}
 
 		public string GetMe()
@@ -49,12 +49,11 @@ namespace StEn.MMM.Mql.Telegram.Services.TelegramBotClient
 			{
 				string correlationKey = IDGenerator.Instance.Next;
 				telegramMethod.FireAndForgetSafe(correlationKey, this, this);
-				return MessageFactory.Success(correlationKey).ToString();
+				return ResponseFactory.Success(correlationKey).ToString();
 			}
 			catch (Exception ex)
 			{
-				Console.WriteLine(ex);
-				throw;
+				return ResponseFactory.Error(ex).ToString();
 			}
 		}
 
@@ -63,11 +62,11 @@ namespace StEn.MMM.Mql.Telegram.Services.TelegramBotClient
 			try
 			{
 				var result = telegramMethod.FireSafe();
-				return MessageFactory.Success(message: new Message<T>() { Payload = result }).ToString();
+				return ResponseFactory.Success(message: new Message<T>() { Payload = result }).ToString();
 			}
 			catch (Exception ex)
 			{
-				return MessageFactory.Error(ex).ToString();
+				return ResponseFactory.Error(ex).ToString();
 			}
 		}
 

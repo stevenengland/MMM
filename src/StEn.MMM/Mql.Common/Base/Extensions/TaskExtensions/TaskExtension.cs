@@ -19,11 +19,11 @@ namespace StEn.MMM.Mql.Common.Base.Extensions.TaskExtensions
 #pragma warning disable VSTHRD003
 				var result = await task;
 #pragma warning restore VSTHRD003
-				successHandler?.HandleSuccess(result, correlationKey);
+				successHandler?.HandleFireAndForgetSuccess(result, correlationKey);
 			}
 			catch (Exception ex)
 			{
-				errorHandler?.HandleError(ex, correlationKey);
+				errorHandler?.HandleFireAndForgetError(ex, correlationKey);
 			}
 		}
 

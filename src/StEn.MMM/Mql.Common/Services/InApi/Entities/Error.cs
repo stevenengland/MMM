@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
 namespace StEn.MMM.Mql.Common.Services.InApi.Entities
@@ -9,7 +10,13 @@ namespace StEn.MMM.Mql.Common.Services.InApi.Entities
 		[JsonProperty(Required = Required.Always)]
 		public string Message { get; internal set; }
 
-		[JsonProperty(Required = Required.Always)]
+		[JsonProperty(Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
 		public string ExceptionMessage { get; internal set; }
+
+		[JsonProperty(Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
+		public string StackTrace { get; internal set; }
+
+		[JsonProperty(Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
+		public string ExceptionType { get; internal set; }
 	}
 }

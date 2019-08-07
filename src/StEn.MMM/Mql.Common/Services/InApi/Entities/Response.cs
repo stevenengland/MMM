@@ -11,10 +11,10 @@ namespace StEn.MMM.Mql.Common.Services.InApi.Entities
 		[DefaultValue(false)]
 		public bool IsSuccess { get; set; }
 
-		[JsonProperty(Required = Required.Always, NullValueHandling = NullValueHandling.Ignore)]
+		[JsonProperty(Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
 		public string CorrelationKey { get; set; }
 
-		[JsonProperty(Required = Required.Always, NullValueHandling = NullValueHandling.Ignore)]
+		[JsonProperty(Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
 		public T Content { get; set; }
 
 		public override string ToString()

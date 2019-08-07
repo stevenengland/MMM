@@ -2,6 +2,6 @@
 {
 	public interface ISuccessHandler
 	{
-		void HandleSuccess<T>(T data, string correlationKey);
+		void HandleFireAndForgetSuccess<T>(T data, string correlationKey);
 	}
 }
