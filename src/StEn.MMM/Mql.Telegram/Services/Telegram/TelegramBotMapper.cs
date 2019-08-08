@@ -38,7 +38,7 @@ namespace StEn.MMM.Mql.Telegram.Services.Telegram
 			return this.ProxyCall(this.botClient.GetMeAsync(this.CtFactory()));
 		}
 
-		public string GetMeAsync()
+		public string GetMeStart()
 		{
 			return this.FireAndForgetProxyCall(this.botClient.GetMeAsync(this.CtFactory()));
 		}

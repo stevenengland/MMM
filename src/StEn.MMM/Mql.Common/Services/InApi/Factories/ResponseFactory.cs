@@ -56,16 +56,18 @@ namespace StEn.MMM.Mql.Common.Services.InApi.Factories
 			string message;
 			switch (ex)
 			{
-				case OperationCanceledException operationCanceledException:
-					message = "The operation was cancelled.";
+				case ArgumentException argumentException:
+					message = "One or more arguments are not valid.";
 					break;
 				case JsonSerializationException jsonSerializationException:
 					message = "There was a problem serializing/deserializing a message.";
 					break;
+				case OperationCanceledException operationCanceledException:
+					message = "The operation was cancelled.";
+					break;
 				default:
 					message = "An exception occured.";
 					break;
-
 			}
 
 			return message;

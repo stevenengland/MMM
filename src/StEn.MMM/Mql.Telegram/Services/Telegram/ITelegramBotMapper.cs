@@ -1,11 +1,11 @@
 ﻿namespace StEn.MMM.Mql.Telegram.Services.Telegram
 {
-	internal interface ITelegramBotMapper
+	public interface ITelegramBotMapper
 	{
 		int RequestTimeout { get; set; }
 
 		string GetMe();
 
-		string GetMeAsync();
+		string GetMeStart();
 	}
 }

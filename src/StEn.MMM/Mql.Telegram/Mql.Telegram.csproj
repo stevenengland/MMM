@@ -11,6 +11,7 @@
     <Company />
     <RootNamespace>StEn.MMM.Mql.Telegram</RootNamespace>
     <Platforms>AnyCPU;x64;x86</Platforms>
+	<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

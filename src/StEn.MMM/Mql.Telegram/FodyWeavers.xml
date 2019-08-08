@@ -5,6 +5,7 @@
       Mql.Common
       Newtonsoft.Json
       Telegram.Bot
+      Nito.*
     </IncludeAssemblies>
   </Costura>
 </Weavers>

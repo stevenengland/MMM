@@ -16,7 +16,14 @@ namespace StEn.MMM.Mql.Telegram
 		{
 		}
 
-		internal static ITelegramBotMapper Bot { get; set; }
+#pragma warning disable S1118
+		public DllExports(ITelegramBotMapper bot)
+#pragma warning restore S1118
+		{
+			Bot = bot;
+		}
+
+		public static ITelegramBotMapper Bot { get; set; }
 
 #if RELEASE
 		[DllExport("GetMe", CallingConvention = CallingConvention.StdCall)]
@@ -36,14 +43,14 @@ namespace StEn.MMM.Mql.Telegram
 		}
 
 #if RELEASE
-		[DllExport("GetMeAsync", CallingConvention = CallingConvention.StdCall)]
+		[DllExport("StartGetMe", CallingConvention = CallingConvention.StdCall)]
 #endif
 		[return: MarshalAs(UnmanagedType.LPWStr)]
-		public static string GetMeAsync()
+		public static string StartGetMe()
 		{
 			try
 			{
-				return Bot.GetMeAsync();
+				return Bot.GetMeStart();
 			}
 			catch (Exception e)
 			{
@@ -63,7 +70,7 @@ namespace StEn.MMM.Mql.Telegram
 				try
 				{
 					var botClient = new TelegramBotClient("YOUR_ACCESS_TOKEN_HERE");
-					var me = botClient.GetMeAsync().Result;
+					var me = botClient.GetMeStart().Result;
 					DllExports.apiKey = me.FirstName;
 					return DllExports.apiKey;
 				}

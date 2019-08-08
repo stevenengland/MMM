@@ -84,6 +84,7 @@ namespace StEn.MMM.Mql.Common.Base.Utilities
 				{
 					Prefix[i] = '0';
 				}
+
 				i--;
 			}
 		}

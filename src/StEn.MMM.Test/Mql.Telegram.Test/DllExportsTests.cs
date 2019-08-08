@@ -1,14 +1,18 @@
 ﻿using System;
+using Moq;
 using Newtonsoft.Json;
 using StEn.MMM.Mql.Common.Services.InApi.Entities;
 using StEn.MMM.Mql.Common.Services.InApi.Factories;
 using StEn.MMM.Mql.Telegram;
+using StEn.MMM.Mql.Telegram.Services.Telegram;
 using Xunit;
 
 namespace Mql.Telegram.Tests
 {
 	public class DllExportsTests
 	{
+		private const string ApiKey = "1234567:4TT8bAc8GHUspu3ERYn-KGcvsvGB9u_n4ddy";
+
 		public DllExportsTests()
 		{
 			ResponseFactory.IsDebugEnabled = true;
@@ -43,10 +47,30 @@ namespace Mql.Telegram.Tests
 		[Fact]
 		public void EmptyApiKeyReturnsInitError()
 		{
-			var exportResponse = DllExports.Initialize("", 10);
+			var exportResponse = DllExports.Initialize(string.Empty, 10);
 			var responseError = JsonConvert.DeserializeObject<Response<Error>>(exportResponse);
 			Assert.IsType<Response<Error>>(responseError);
 			Assert.Equal(typeof(ArgumentException).Name, responseError.Content.ExceptionType);
+		}
+
+		[Fact]
+		public void TimeoutIsSet()
+		{
+			DllExports.Initialize(ApiKey, 10);
+			DllExports.SetRequestTimeout(10);
+			Assert.True(DllExports.Bot.RequestTimeout == 10);
+		}
+
+		[Fact]
+		public void GetMeSucceeds()
+		{
+			var mock = new Mock<ITelegramBotMapper>();
+			mock.Setup(x => x.GetMe()).Returns("ok");
+			mock.Setup(x => x.GetMeStart()).Returns("ok");
+
+			var dllExports = new DllExports(mock.Object);
+			Assert.True(DllExports.GetMe() == "ok");
+			Assert.True(DllExports.StartGetMe() == "ok");
 		}
 	}
 }
