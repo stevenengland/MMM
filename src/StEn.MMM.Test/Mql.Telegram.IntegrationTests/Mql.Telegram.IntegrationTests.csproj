@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <!-- >Mobile Build Tools</!-->
+  <PropertyGroup>
+	<BuildHostSecretPrefix>SAFE_</BuildHostSecretPrefix>
+  </PropertyGroup>
+  
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="Mobile.BuildTools" Version="1.4.0.638">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\..\StEn.MMM\Mql.Telegram\Mql.Telegram.csproj" />
+  </ItemGroup>
+
+</Project>
