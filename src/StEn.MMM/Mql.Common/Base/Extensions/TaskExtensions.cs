@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Threading;
 using System.Threading.Tasks;
-using Nito.AsyncEx;
 using Nito.AsyncEx.Synchronous;
 using StEn.MMM.Mql.Common.Base.Interfaces;
 
-namespace StEn.MMM.Mql.Common.Base.Extensions.TaskExtensions
+namespace StEn.MMM.Mql.Common.Base.Extensions
 {
-	public static class TaskExtension
+	public static class TaskExtensions
 	{
 #pragma warning disable RECS0165 // Asynchronous methods should return a Task instead of void
 #pragma warning disable S3168
@@ -33,34 +31,6 @@ namespace StEn.MMM.Mql.Common.Base.Extensions.TaskExtensions
 		public static T FireSafe<T>(this Task<T> task)
 		{
 			return Task.Run(() => task).WaitAndUnwrapException();
-
-			/*
-			avoid launching a thread from ThreadPool (safe in terms of sync - context but costs more resources
-			if (SynchronizationContext.Current == null)
-			{
-				return task.WaitAndUnwrapException();
-			}
-
-			if (task.IsCompleted)
-			{
-				return task.WaitAndUnwrapException();
-			}
-
-			var tcs = new TaskCompletionSource<T>();
-			task.ContinueWith(
-				t =>
-			{
-				var ex = t.Exception;
-				if (ex != null)
-				{
-					tcs.SetException(ex);
-				}
-				else
-				{
-					tcs.SetResult(t.Result);
-				}
-			}, TaskScheduler.Default);
-			*/
 		}
 	}
 }

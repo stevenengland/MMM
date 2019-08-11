@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using StEn.MMM.Mql.Common.Base.Extensions.TaskExtensions;
+using StEn.MMM.Mql.Common.Base.Extensions;
 using StEn.MMM.Mql.Common.Base.Interfaces;
 using StEn.MMM.Mql.Common.Base.Utilities;
 using StEn.MMM.Mql.Common.Services.InApi.Entities;
