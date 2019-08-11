@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using StEn.MMM.Mql.Common.Base.Extensions.TaskExtensions;
@@ -14,7 +15,7 @@ namespace StEn.MMM.Mql.Telegram.Services.Telegram
 	{
 		private readonly ITelegramBotClient botClient;
 
-		private readonly MessageStore<string, object> messageStore = new MessageStore<string, object>(1000);
+		private readonly MessageStore<string, string> messageStore = new MessageStore<string, string>(1000);
 
 		public TelegramBotMapper(ITelegramBotClient botClient)
 		{
@@ -31,6 +32,13 @@ namespace StEn.MMM.Mql.Telegram.Services.Telegram
 		public void HandleFireAndForgetSuccess<T>(T data, string correlationKey)
 		{
 			this.messageStore.Add(correlationKey, ResponseFactory.Success(message: new Message<T>() { Payload = data }).ToString());
+		}
+
+		public string GetMessageByCorrelationId(string correlationKey)
+		{
+			return this.messageStore.TryGetValue(correlationKey, out string resultValue)
+				? resultValue
+				: ResponseFactory.Error(new KeyNotFoundException($"There is no entry for correlation key {correlationKey} in the queue."), $"There is no entry for correlation key {correlationKey} in the queue.", correlationKey).ToString();
 		}
 
 		public string GetMe()

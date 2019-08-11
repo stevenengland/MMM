@@ -4,6 +4,8 @@ namespace StEn.MMM.Mql.Common.Services.InApi.Entities
 {
 	public class MessageStore<TKey, TValue>
 	{
+		static readonly object lockObject = new object();
+
 		private readonly Dictionary<TKey, TValue> dictionary;
 		private readonly Queue<TKey> keys;
 		private readonly int capacity;
@@ -17,16 +19,24 @@ namespace StEn.MMM.Mql.Common.Services.InApi.Entities
 
 		public TValue this[TKey key] => this.dictionary[key];
 
+		public bool TryGetValue(TKey key, out TValue value)
+		{
+			return this.dictionary.TryGetValue(key, out value);
+		}
+
 		public void Add(TKey key, TValue value)
 		{
-			if (this.dictionary.Count == this.capacity)
+			lock (lockObject)
 			{
-				var oldestKey = this.keys.Dequeue();
-				this.dictionary.Remove(oldestKey);
-			}
+				if (this.dictionary.Count == this.capacity)
+				{
+					var oldestKey = this.keys.Dequeue();
+					this.dictionary.Remove(oldestKey);
+				}
 
-			this.dictionary.Add(key, value);
-			this.keys.Enqueue(key);
+				this.dictionary.Add(key, value);
+				this.keys.Enqueue(key);
+			}
 		}
 	}
 }
