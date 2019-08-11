@@ -27,6 +27,14 @@ namespace Mql.Telegram.Tests
 		}
 
 		[Fact]
+		public void MissingInitializationLeedsToErrors()
+		{
+			var exportResponse = DllExports.GetMe();
+			var responseError = JsonConvert.DeserializeObject<Response<Error>>(exportResponse);
+			Assert.Equal(typeof(ApplicationException).Name, responseError.Content.ExceptionType);
+		}
+
+		[Fact]
 		public void WrongApiKeyFormatReturnsInitError()
 		{
 			var exportResponse = DllExports.Initialize("test", 10);

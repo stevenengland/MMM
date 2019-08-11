@@ -12,6 +12,10 @@ namespace StEn.MMM.Mql.Telegram
 {
 	public class DllExports
 	{
+		private static ITelegramBotMapper bot;
+
+		private static bool isInitialized;
+
 		static DllExports()
 		{
 		}
@@ -23,7 +27,19 @@ namespace StEn.MMM.Mql.Telegram
 			Bot = bot;
 		}
 
-		public static ITelegramBotMapper Bot { get; set; }
+		/// <summary>
+		/// Gets or sets the Bot to be used. In order to use it you must call <see cref="Initialize"/> first.
+		/// The public non static constructor is meant for testing only.
+		/// </summary>
+		public static ITelegramBotMapper Bot
+		{
+			get
+			{
+				Ensure.That<ApplicationException>(isInitialized, $"The framework is not initialized yet. Please run the {nameof(Initialize)} method first.");
+				return bot;
+			}
+			private set => bot = value;
+		}
 
 #if RELEASE
 		[DllExport("GetMe", CallingConvention = CallingConvention.StdCall)]
@@ -37,8 +53,7 @@ namespace StEn.MMM.Mql.Telegram
 			}
 			catch (Exception e)
 			{
-				Console.WriteLine(e);
-				throw;
+				return ResponseFactory.Error(e).ToString();
 			}
 		}
 
@@ -54,8 +69,7 @@ namespace StEn.MMM.Mql.Telegram
 			}
 			catch (Exception e)
 			{
-				Console.WriteLine(e);
-				throw;
+				return ResponseFactory.Error(e).ToString();
 			}
 		}
 
@@ -102,6 +116,7 @@ namespace StEn.MMM.Mql.Telegram
 				{
 					RequestTimeout = timeout,
 				};
+				isInitialized = true;
 				return ResponseFactory.Success().ToString();
 			}
 			catch (Exception e)

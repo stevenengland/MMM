@@ -1,15 +1,24 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-  <!-- >Mobile Build Tools</!-->
-  <PropertyGroup>
-	<BuildHostSecretPrefix>SAFE_</BuildHostSecretPrefix>
-  </PropertyGroup>
-  
+﻿<Project Sdk="Microsoft.NET.Sdk">  
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
+	<Platforms>AnyCPU;x64;x86</Platforms>
+	<!-- >Mobile Build Tools</!-->
+	<BuildHostSecretPrefix>SAFE_</BuildHostSecretPrefix>
+	<Platforms>AnyCPU;x64;x86</Platforms>
   </PropertyGroup>
   
   <ItemGroup>
     <PackageReference Include="Mobile.BuildTools" Version="1.4.0.638">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="xunit" Version="2.4.1" />
+    <PackageReference Include="xunit.analyzers" Version="0.10.0" />
+    <PackageReference Include="xunit.runner.console" Version="2.4.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
