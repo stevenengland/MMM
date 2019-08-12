@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace StEn.MMM.Mql.Common.Services.InApi.Entities
+namespace StEn.MMM.Mql.Common.Base.Utilities
 {
 	public class MessageStore<TKey, TValue>
 	{
