@@ -8,6 +8,7 @@ using StEn.MMM.Mql.Common.Base.Utilities;
 using StEn.MMM.Mql.Common.Services.InApi.Entities;
 using StEn.MMM.Mql.Common.Services.InApi.Factories;
 using Telegram.Bot;
+using Telegram.Bot.Types;
 
 namespace StEn.MMM.Mql.Telegram.Services.Telegram
 {
@@ -24,6 +25,45 @@ namespace StEn.MMM.Mql.Telegram.Services.Telegram
 
 		public int RequestTimeout { get; set; }
 
+		public string GetMessageByCorrelationId(string correlationKey)
+		{
+			return this.messageStore.TryGetValue(correlationKey, out string resultValue)
+				? resultValue
+				: ResponseFactory.Error(new KeyNotFoundException($"There is no entry for correlation key {correlationKey} in the queue."), $"There is no entry for correlation key {correlationKey} in the queue.", correlationKey).ToString();
+		}
+
+		#region TelegramMethods
+
+		public string GetMe()
+		{
+			return this.ProxyCall(this.botClient.GetMeAsync(this.CtFactory()));
+		}
+
+		public string StartGetMe()
+		{
+			return this.FireAndForgetProxyCall(this.botClient.GetMeAsync(this.CtFactory()));
+		}
+
+		public string SendText(string chatId, string text)
+		{
+			return this.ProxyCall(this.botClient.SendTextMessageAsync(
+				chatId: this.CreateChatId(chatId),
+				text: text,
+				cancellationToken: this.CtFactory()));
+		}
+
+		public string StartSendText(string chatId, string text)
+		{
+			return this.ProxyCall(this.botClient.SendTextMessageAsync(
+				chatId: this.CreateChatId(chatId),
+				text: text,
+				cancellationToken: this.CtFactory()));
+		}
+
+		#endregion
+
+		#region ProxyCalls
+
 		public void HandleFireAndForgetError(Exception ex, string correlationKey)
 		{
 			this.messageStore.Add(correlationKey, ResponseFactory.Error(ex).ToString());
@@ -32,23 +72,6 @@ namespace StEn.MMM.Mql.Telegram.Services.Telegram
 		public void HandleFireAndForgetSuccess<T>(T data, string correlationKey)
 		{
 			this.messageStore.Add(correlationKey, ResponseFactory.Success(message: new Message<T>() { Payload = data }).ToString());
-		}
-
-		public string GetMessageByCorrelationId(string correlationKey)
-		{
-			return this.messageStore.TryGetValue(correlationKey, out string resultValue)
-				? resultValue
-				: ResponseFactory.Error(new KeyNotFoundException($"There is no entry for correlation key {correlationKey} in the queue."), $"There is no entry for correlation key {correlationKey} in the queue.", correlationKey).ToString();
-		}
-
-		public string GetMe()
-		{
-			return this.ProxyCall(this.botClient.GetMeAsync(this.CtFactory()));
-		}
-
-		public string GetMeStart()
-		{
-			return this.FireAndForgetProxyCall(this.botClient.GetMeAsync(this.CtFactory()));
 		}
 
 		public string FireAndForgetProxyCall<T>(Task<T> telegramMethod)
@@ -83,6 +106,26 @@ namespace StEn.MMM.Mql.Telegram.Services.Telegram
 			var ctTimeout = timeout ?? this.RequestTimeout;
 			var cts = new CancellationTokenSource(ctTimeout);
 			return cts.Token;
+		}
+
+		#endregion
+
+		private ChatId CreateChatId(string username)
+		{
+			if (username.Length > 1 && username.Substring(0, 1) == "@")
+			{
+				return new ChatId(username);
+			}
+			else if (int.TryParse(username, out int chatId))
+			{
+				return new ChatId(chatId);
+			}
+			else if (long.TryParse(username, out long identifier))
+			{
+				return new ChatId(identifier);
+			}
+
+			throw new NotSupportedException("The format of the specified chat identifier is not supported");
 		}
 	}
 }

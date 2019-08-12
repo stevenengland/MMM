@@ -6,6 +6,10 @@
 
 		string GetMe();
 
-		string GetMeStart();
+		string StartGetMe();
+
+		string SendText(string chatId, string text);
+
+		string StartSendText(string chatId, string text);
 	}
 }

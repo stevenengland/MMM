@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using Moq;
 using Newtonsoft.Json;
 using StEn.MMM.Mql.Common.Services.InApi.Entities;
@@ -15,6 +16,10 @@ namespace Mql.Telegram.Tests
 
 		public DllExportsTests()
 		{
+			Type staticType = typeof(DllExports);
+			ConstructorInfo ci = staticType.TypeInitializer;
+			object[] parameters = new object[0];
+			ci.Invoke(null, parameters);
 			ResponseFactory.IsDebugEnabled = true;
 		}
 
@@ -74,11 +79,23 @@ namespace Mql.Telegram.Tests
 		{
 			var mock = new Mock<ITelegramBotMapper>();
 			mock.Setup(x => x.GetMe()).Returns("ok");
-			mock.Setup(x => x.GetMeStart()).Returns("ok");
+			mock.Setup(x => x.StartGetMe()).Returns("ok");
 
 			var dllExports = new DllExports(mock.Object);
 			Assert.True(DllExports.GetMe() == "ok");
 			Assert.True(DllExports.StartGetMe() == "ok");
+		}
+
+		[Fact]
+		public void SendTextSucceeds()
+		{
+			var mock = new Mock<ITelegramBotMapper>();
+			mock.Setup(x => x.SendText(It.IsAny<string>(), It.IsAny<string>())).Returns("ok");
+			mock.Setup(x => x.StartSendText(It.IsAny<string>(), It.IsAny<string>())).Returns("ok");
+
+			var dllExports = new DllExports(mock.Object);
+			Assert.True(DllExports.SendText(string.Empty, string.Empty) == "ok");
+			Assert.True(DllExports.StartSendText(string.Empty, string.Empty) == "ok");
 		}
 	}
 }
