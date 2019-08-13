@@ -1,11 +1,9 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">  
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
-	<!-- >Mobile Build Tools</!-->
-	<BuildHostSecretPrefix>SAFE_</BuildHostSecretPrefix>
-	<Configurations>Debug;Release;DLLImportDebug</Configurations>
   </PropertyGroup>
-  
+
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.2.0" />
     <PackageReference Include="Mobile.BuildTools" Version="1.4.0.638">
@@ -17,7 +15,7 @@
     <PackageReference Include="NUnit.Runners" Version="3.10.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.14.0" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <ProjectReference Include="..\..\StEn.MMM\Mql.Telegram\Mql.Telegram.csproj" />
   </ItemGroup>

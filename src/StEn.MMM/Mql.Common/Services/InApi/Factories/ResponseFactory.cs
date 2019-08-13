@@ -6,11 +6,11 @@ using StEn.MMM.Mql.Common.Services.InApi.Entities;
 
 namespace StEn.MMM.Mql.Common.Services.InApi.Factories
 {
-	public static class ResponseFactory
+	public class ResponseFactory
 	{
-		public static bool IsDebugEnabled { get; set; }
+		public bool IsDebugEnabled { get; set; }
 
-		public static Response<Message<string>> Success(string correlationKey = null)
+		public Response<Message<string>> Success(string correlationKey = null)
 		{
 			return new Response<Message<string>>()
 			{
@@ -19,7 +19,7 @@ namespace StEn.MMM.Mql.Common.Services.InApi.Factories
 			};
 		}
 
-		public static Response<Message<T>> Success<T>(Message<T> message, string correlationKey = null)
+		public Response<Message<T>> Success<T>(Message<T> message, string correlationKey = null)
 		{
 			return new Response<Message<T>>()
 			{
@@ -29,7 +29,7 @@ namespace StEn.MMM.Mql.Common.Services.InApi.Factories
 			};
 		}
 
-		public static Response<Error> Error(Exception ex, string message = null, string correlationKey = null)
+		public Response<Error> Error(Exception ex, string message = null, string correlationKey = null)
 		{
 			var response = new Response<Error>()
 			{

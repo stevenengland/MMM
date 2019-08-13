@@ -16,11 +16,13 @@ namespace Mql.Telegram.Tests
 
 		public DllExportsTests()
 		{
+			// https://colinmackay.scot/2007/06/16/unit-testing-a-static-class/
 			Type staticType = typeof(DllExports);
 			ConstructorInfo ci = staticType.TypeInitializer;
 			object[] parameters = new object[0];
 			ci.Invoke(null, parameters);
-			ResponseFactory.IsDebugEnabled = true;
+
+			DllExports.SetDebugOutput(true);
 		}
 
 		[Fact]
@@ -70,8 +72,9 @@ namespace Mql.Telegram.Tests
 		public void TimeoutIsSet()
 		{
 			DllExports.Initialize(ApiKey, 10);
-			DllExports.SetRequestTimeout(10);
-			Assert.True(DllExports.Bot.RequestTimeout == 10);
+			Assert.True(DllExports.Bot.RequestTimeout == 10000);
+			DllExports.SetRequestTimeout(20);
+			Assert.True(DllExports.Bot.RequestTimeout == 20000);
 		}
 
 		[Fact]

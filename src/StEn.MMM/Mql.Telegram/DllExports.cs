@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Runtime.CompilerServices;
 using System.Runtime.ExceptionServices;
 using System.Runtime.InteropServices;
@@ -17,6 +18,8 @@ namespace StEn.MMM.Mql.Telegram
 		private static ITelegramBotMapper bot;
 
 		private static bool isInitialized;
+
+		private static ResponseFactory responseFactory = new ResponseFactory();
 
 		static DllExports()
 		{
@@ -57,7 +60,7 @@ namespace StEn.MMM.Mql.Telegram
 			}
 			catch (Exception e)
 			{
-				return ResponseFactory.Error(e).ToString();
+				return responseFactory.Error(e).ToString();
 			}
 		}
 
@@ -73,7 +76,7 @@ namespace StEn.MMM.Mql.Telegram
 			}
 			catch (Exception e)
 			{
-				return ResponseFactory.Error(e).ToString();
+				return responseFactory.Error(e).ToString();
 			}
 		}
 
@@ -91,7 +94,7 @@ namespace StEn.MMM.Mql.Telegram
 			}
 			catch (Exception e)
 			{
-				return ResponseFactory.Error(e).ToString();
+				return responseFactory.Error(e).ToString();
 			}
 		}
 
@@ -109,7 +112,7 @@ namespace StEn.MMM.Mql.Telegram
 			}
 			catch (Exception e)
 			{
-				return ResponseFactory.Error(e).ToString();
+				return responseFactory.Error(e).ToString();
 			}
 		}
 
@@ -128,15 +131,13 @@ namespace StEn.MMM.Mql.Telegram
 				Ensure.NotNullOrEmptyOrWhiteSpace(apiKey, $"{nameof(apiKey)} must not be empty or just whitespace.");
 				Ensure.That<ArgumentException>(timeout > 0, $"{nameof(timeout)} must be greater than 0.");
 
-				InitializeClass(new TelegramBotMapper(new TelegramBotClient(apiKey))
-				{
-					RequestTimeout = timeout,
-				});
-				return ResponseFactory.Success().ToString();
+				InitializeClass(new TelegramBotMapper(new TelegramBotClient(apiKey), responseFactory));
+				SetBotTimeout(timeout);
+				return responseFactory.Success().ToString();
 			}
 			catch (Exception e)
 			{
-				return ResponseFactory.Error(e).ToString();
+				return responseFactory.Error(e).ToString();
 			}
 		}
 
@@ -149,13 +150,21 @@ namespace StEn.MMM.Mql.Telegram
 			try
 			{
 				Ensure.That<ArgumentException>(timeout > 0, $"{nameof(timeout)} must be greater than 0.");
-				Bot.RequestTimeout = timeout;
-				return ResponseFactory.Success().ToString();
+				SetBotTimeout(timeout);
+				return responseFactory.Success().ToString();
 			}
 			catch (Exception e)
 			{
-				return ResponseFactory.Error(e).ToString();
+				return responseFactory.Error(e).ToString();
 			}
+		}
+
+#if !DEBUG
+		[DllExport("SetDebugOutput", CallingConvention = CallingConvention.StdCall)]
+#endif
+		public static void SetDebugOutput([MarshalAs(UnmanagedType.Bool)] bool enableDebug)
+		{
+			responseFactory.IsDebugEnabled = enableDebug;
 		}
 
 #if !DEBUG
@@ -178,6 +187,11 @@ namespace StEn.MMM.Mql.Telegram
 		{
 			Bot = telegramBotMapper;
 			isInitialized = true;
+		}
+
+		private static void SetBotTimeout(int timeout)
+		{
+			Bot.RequestTimeout = timeout * 1000;
 		}
 	}
 }

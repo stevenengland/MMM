@@ -18,9 +18,12 @@ namespace StEn.MMM.Mql.Telegram.Services.Telegram
 
 		private readonly MessageStore<string, string> messageStore = new MessageStore<string, string>(1000);
 
-		public TelegramBotMapper(ITelegramBotClient botClient)
+		private readonly ResponseFactory responseFactory;
+
+		public TelegramBotMapper(ITelegramBotClient botClient, ResponseFactory responseFactory = null)
 		{
 			this.botClient = botClient;
+			this.responseFactory = responseFactory ?? new ResponseFactory();
 		}
 
 		public int RequestTimeout { get; set; }
@@ -29,35 +32,47 @@ namespace StEn.MMM.Mql.Telegram.Services.Telegram
 		{
 			return this.messageStore.TryGetValue(correlationKey, out string resultValue)
 				? resultValue
-				: ResponseFactory.Error(new KeyNotFoundException($"There is no entry for correlation key {correlationKey} in the queue."), $"There is no entry for correlation key {correlationKey} in the queue.", correlationKey).ToString();
+				: this.responseFactory.Error(new KeyNotFoundException($"There is no entry for correlation key {correlationKey} in the queue."), $"There is no entry for correlation key {correlationKey} in the queue.", correlationKey).ToString();
 		}
 
 		#region TelegramMethods
 
 		public string GetMe()
 		{
-			return this.ProxyCall(this.botClient.GetMeAsync(this.CtFactory()));
+			using (var cancellationTokenSource = this.CtsFactory())
+			{
+				return this.ProxyCall(this.botClient.GetMeAsync(cancellationTokenSource.Token));
+			}
 		}
 
 		public string StartGetMe()
 		{
-			return this.FireAndForgetProxyCall(this.botClient.GetMeAsync(this.CtFactory()));
+			using (var cancellationTokenSource = this.CtsFactory())
+			{
+				return this.FireAndForgetProxyCall(this.botClient.GetMeAsync(cancellationTokenSource.Token));
+			}
 		}
 
 		public string SendText(string chatId, string text)
 		{
-			return this.ProxyCall(this.botClient.SendTextMessageAsync(
-				chatId: this.CreateChatId(chatId),
-				text: text,
-				cancellationToken: this.CtFactory()));
+			using (var cancellationTokenSource = this.CtsFactory())
+			{
+				return this.ProxyCall(this.botClient.SendTextMessageAsync(
+					chatId: this.CreateChatId(chatId),
+					text: text,
+					cancellationToken: cancellationTokenSource.Token));
+			}
 		}
 
 		public string StartSendText(string chatId, string text)
 		{
-			return this.ProxyCall(this.botClient.SendTextMessageAsync(
-				chatId: this.CreateChatId(chatId),
-				text: text,
-				cancellationToken: this.CtFactory()));
+			using (var cancellationTokenSource = this.CtsFactory())
+			{
+				return this.ProxyCall(this.botClient.SendTextMessageAsync(
+					chatId: this.CreateChatId(chatId),
+					text: text,
+					cancellationToken: cancellationTokenSource.Token));
+			}
 		}
 
 		#endregion
@@ -66,12 +81,12 @@ namespace StEn.MMM.Mql.Telegram.Services.Telegram
 
 		public void HandleFireAndForgetError(Exception ex, string correlationKey)
 		{
-			this.messageStore.Add(correlationKey, ResponseFactory.Error(ex).ToString());
+			this.messageStore.Add(correlationKey, this.responseFactory.Error(ex).ToString());
 		}
 
 		public void HandleFireAndForgetSuccess<T>(T data, string correlationKey)
 		{
-			this.messageStore.Add(correlationKey, ResponseFactory.Success(message: new Message<T>() { Payload = data }).ToString());
+			this.messageStore.Add(correlationKey, this.responseFactory.Success(message: new Message<T>() { Payload = data }).ToString());
 		}
 
 		public string FireAndForgetProxyCall<T>(Task<T> telegramMethod)
@@ -80,11 +95,11 @@ namespace StEn.MMM.Mql.Telegram.Services.Telegram
 			{
 				string correlationKey = IDGenerator.Instance.Next;
 				telegramMethod.FireAndForgetSafe(correlationKey, this, this);
-				return ResponseFactory.Success(correlationKey).ToString();
+				return this.responseFactory.Success(correlationKey).ToString();
 			}
 			catch (Exception ex)
 			{
-				return ResponseFactory.Error(ex).ToString();
+				return this.responseFactory.Error(ex).ToString();
 			}
 		}
 
@@ -93,19 +108,19 @@ namespace StEn.MMM.Mql.Telegram.Services.Telegram
 			try
 			{
 				var result = telegramMethod.FireSafe();
-				return ResponseFactory.Success(message: new Message<T>() { Payload = result }).ToString();
+				return this.responseFactory.Success(message: new Message<T>() { Payload = result }).ToString();
 			}
 			catch (Exception ex)
 			{
-				return ResponseFactory.Error(ex).ToString();
+				return this.responseFactory.Error(ex).ToString();
 			}
 		}
 
-		private CancellationToken CtFactory(int? timeout = null)
+		private CancellationTokenSource CtsFactory(int timeout = 0)
 		{
-			var ctTimeout = timeout ?? this.RequestTimeout;
+			var ctTimeout = timeout == 0 ? this.RequestTimeout : timeout;
 			var cts = new CancellationTokenSource(ctTimeout);
-			return cts.Token;
+			return cts;
 		}
 
 		#endregion
