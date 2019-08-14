@@ -42,6 +42,7 @@ namespace StEn.MMM.Mql.Telegram
 			set => bot = value;
 		}
 
+		/// <see href="https://core.telegram.org/bots/api#getme"/>
 #if !DEBUG
 		[DllExport("GetMe", CallingConvention = CallingConvention.StdCall)]
 #endif
@@ -58,6 +59,7 @@ namespace StEn.MMM.Mql.Telegram
 			}
 		}
 
+		/// <see href="https://core.telegram.org/bots/api#getme"/>
 #if !DEBUG
 		[DllExport("StartGetMe", CallingConvention = CallingConvention.StdCall)]
 #endif
@@ -74,6 +76,7 @@ namespace StEn.MMM.Mql.Telegram
 			}
 		}
 
+		/// <see href="https://core.telegram.org/bots/api#sendmessage"/>
 #if !DEBUG
 		[DllExport("SendText", CallingConvention = CallingConvention.StdCall)]
 #endif
@@ -92,6 +95,7 @@ namespace StEn.MMM.Mql.Telegram
 			}
 		}
 
+		/// <see href="https://core.telegram.org/bots/api#sendmessage"/>
 #if !DEBUG
 		[DllExport("StartSendText", CallingConvention = CallingConvention.StdCall)]
 #endif
