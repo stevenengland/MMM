@@ -18,14 +18,14 @@ namespace StEn.MMM.Mql.Telegram
 
 		private static ResponseFactory responseFactory = new ResponseFactory();
 
-		protected TelegramDllExports()
-		{
-		}
-
 		static TelegramDllExports()
 		{
 			// https://colinmackay.scot/2007/06/16/unit-testing-a-static-class/
 			ResetClass();
+		}
+
+		protected TelegramDllExports()
+		{
 		}
 
 		/// <summary>
@@ -156,9 +156,18 @@ namespace StEn.MMM.Mql.Telegram
 #if !DEBUG
 		[DllExport("SetDebugOutput", CallingConvention = CallingConvention.StdCall)]
 #endif
-		public static void SetDebugOutput([MarshalAs(UnmanagedType.Bool)] bool enableDebug)
+		[return: MarshalAs(UnmanagedType.LPWStr)]
+		public static string SetDebugOutput([MarshalAs(UnmanagedType.Bool)] bool enableDebug)
 		{
-			responseFactory.IsDebugEnabled = enableDebug;
+			try
+			{
+				responseFactory.IsDebugEnabled = enableDebug;
+				return responseFactory.Success().ToString();
+			}
+			catch (Exception e)
+			{
+				return responseFactory.Error(e).ToString();
+			}
 		}
 
 		#endregion
