@@ -14,9 +14,9 @@ namespace StEn.MMM.Mql.Common.Services.InApi.Entities
 		public string ExceptionMessage { get; internal set; }
 
 		[JsonProperty(Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
-		public string StackTrace { get; internal set; }
+		public string ExceptionType { get; internal set; }
 
 		[JsonProperty(Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
-		public string ExceptionType { get; internal set; }
+		public string StackTrace { get; internal set; }
 	}
 }
