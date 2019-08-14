@@ -10,18 +10,18 @@ namespace StEn.MMM.Mql.Common.Services.InApi.Factories
 	{
 		public bool IsDebugEnabled { get; set; }
 
-		public Response<Message<string>> Success(string correlationKey = null)
+		public Response<string> Success(string correlationKey = null)
 		{
-			return new Response<Message<string>>()
+			return new Response<string>()
 			{
 				CorrelationKey = correlationKey,
 				IsSuccess = true,
 			};
 		}
 
-		public Response<Message<T>> Success<T>(Message<T> message, string correlationKey = null)
+		public Response<T> Success<T>(T message, string correlationKey = null)
 		{
-			return new Response<Message<T>>()
+			return new Response<T>()
 			{
 				CorrelationKey = correlationKey,
 				IsSuccess = true,

@@ -31,8 +31,8 @@ namespace Mql.Telegram.IntegrationTests
 			Initialize(Secrets.BOT_API_KEY, 100);
 			SetDebugOutput(true);
 			var result = GetMe();
-			var successResponse = JsonConvert.DeserializeObject<Response<Message<User>>>(result);
-			Assert.True(successResponse.Content.Payload.IsBot);
+			var successResponse = JsonConvert.DeserializeObject<Response<User>>(result);
+			Assert.True(successResponse.Content.IsBot);
 		}
 
 		#region DllImport

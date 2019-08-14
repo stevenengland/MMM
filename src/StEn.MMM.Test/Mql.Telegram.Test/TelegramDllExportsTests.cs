@@ -29,8 +29,8 @@ namespace Mql.Telegram.Tests
 		public void InitializationSucceeds()
 		{
 			var exportResponse = TelegramDllExports.Initialize("1234567:4TT8bAc8GHUspu3ERYn-KGcvsvGB9u_n4ddy", 10);
-			var response = JsonConvert.DeserializeObject<Response<Message<string>>>(exportResponse);
-			Assert.IsType<Response<Message<string>>>(response);
+			var response = JsonConvert.DeserializeObject<Response<string>>(exportResponse);
+			Assert.IsType<Response<string>>(response);
 		}
 
 		[Fact]

@@ -45,7 +45,7 @@ namespace Mql.Telegram.Tests.Services.Telegram
 			var cts = new CancellationTokenSource(3000);
 
 			var result = mapper.FireAndForgetProxyCall(this.LongRunningTaskAsync(cts.Token));
-			var successResponse = JsonConvert.DeserializeObject<Response<Message<string>>>(result);
+			var successResponse = JsonConvert.DeserializeObject<Response<string>>(result);
 			Assert.True(successResponse.IsSuccess);
 			Assert.False(string.IsNullOrWhiteSpace(successResponse.CorrelationKey));
 		}
@@ -65,7 +65,7 @@ namespace Mql.Telegram.Tests.Services.Telegram
 			var mapper = new TelegramBotMapper(new TelegramBotClient(ApiKey), responseFactory);
 
 			var result = mapper.FireAndForgetProxyCall(this.ThrowingTaskAsync());
-			var successResponse = JsonConvert.DeserializeObject<Response<Message<string>>>(result);
+			var successResponse = JsonConvert.DeserializeObject<Response<string>>(result);
 
 			Assert.True(successResponse.IsSuccess);
 		}
@@ -87,8 +87,8 @@ namespace Mql.Telegram.Tests.Services.Telegram
 
 			mapper.HandleFireAndForgetSuccess("successTest", "testCorrelationId");
 			var result = mapper.GetMessageByCorrelationId("testCorrelationId");
-			var successResponse = JsonConvert.DeserializeObject<Response<Message<string>>>(result);
-			Assert.Equal("successTest", successResponse.Content.Payload);
+			var successResponse = JsonConvert.DeserializeObject<Response<string>>(result);
+			Assert.Equal("successTest", successResponse.Content);
 		}
 
 		[Fact]
