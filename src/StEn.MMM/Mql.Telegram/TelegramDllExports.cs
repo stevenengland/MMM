@@ -13,7 +13,7 @@ using Telegram.Bot;
 
 namespace StEn.MMM.Mql.Telegram
 {
-	public class DllExports
+	public class TelegramDllExports
 	{
 		private static ITelegramBotMapper bot;
 
@@ -21,14 +21,14 @@ namespace StEn.MMM.Mql.Telegram
 
 		private static ResponseFactory responseFactory = new ResponseFactory();
 
-		static DllExports()
+		static TelegramDllExports()
 		{
 			// https://colinmackay.scot/2007/06/16/unit-testing-a-static-class/
 			ResetClass();
 		}
 
 #pragma warning disable S1118
-		public DllExports(ITelegramBotMapper telegramBotMapper)
+		public TelegramDllExports(ITelegramBotMapper telegramBotMapper)
 #pragma warning restore S1118
 		{
 			InitializeClass(telegramBotMapper);

@@ -20,10 +20,25 @@ namespace Mql.Telegram.IntegrationTests
 	{
 #if !DEBUG
 
+		[SetUp]
+		public void PerTestSetup()
+		{
+		}
+
+		[Test, Category(Constants.TelegramBotApiMethods.GetMe)]
+		public void GetMeReturnsBotUser()
+		{
+			Initialize(Secrets.BOT_API_KEY, 100);
+			SetDebugOutput(true);
+			var result = GetMe();
+			var successResponse = JsonConvert.DeserializeObject<Response<Message<User>>>(result);
+			Assert.True(successResponse.Content.Payload.IsBot);
+		}
+
 		#region DllImport
 
 		[DllImport(Constants.AssemblyUnderTestName)]
-		public static extern void SetDebugOutput([MarshalAs(UnmanagedType.Bool)] bool enabled);
+		private static extern void SetDebugOutput([MarshalAs(UnmanagedType.Bool)] bool enabled);
 
 		[DllImport(Constants.AssemblyUnderTestName)]
 		[return: MarshalAs(UnmanagedType.LPWStr)]
@@ -40,21 +55,6 @@ namespace Mql.Telegram.IntegrationTests
 		private static extern string StartGetMe();
 
 		#endregion
-
-		[SetUp]
-		public void PerTestSetup()
-		{
-		}
-
-		[Test, Category(Constants.TelegramBotApiMethods.GetMe)]
-		public void GetMeReturnsBotUser()
-		{
-			Initialize(Secrets.BOT_API_KEY, 100);
-			SetDebugOutput(true);
-			var result = GetMe();
-			var successResponse = JsonConvert.DeserializeObject<Response<Message<User>>>(result);
-			Assert.True(successResponse.Content.Payload.IsBot);
-		}
 
 #endif
 	}
