@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using StEn.MMM.Mql.Common.Base.Utilities;
+﻿using StEn.MMM.Mql.Common.Base.Utilities;
 using Xunit;
 
 namespace Mql.Common.Tests.Utilities
@@ -17,9 +14,8 @@ namespace Mql.Common.Tests.Utilities
 				store.Add(i, i);
 			}
 
-			int outInt;
-			Assert.False(store.TryGetValue(1, out outInt));
-			Assert.True(store.TryGetValue(11, out outInt));
+			Assert.False(store.TryGetValue(1, out _));
+			Assert.True(store.TryGetValue(11, out _));
 		}
 	}
 }

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mql.Telegram.IntegrationTests.Framework
+﻿namespace Mql.Telegram.IntegrationTests.Framework
 {
 	public class Constants
 	{

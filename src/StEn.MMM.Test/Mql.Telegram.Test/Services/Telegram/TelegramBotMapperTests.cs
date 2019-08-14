@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -115,6 +114,7 @@ namespace Mql.Telegram.Tests.Services.Telegram
 
 		private async Task<string> ThrowingTaskAsync()
 		{
+			await Task.Delay(0);
 			throw new AccessViolationException("You are not allowed to be here.");
 		}
 	}

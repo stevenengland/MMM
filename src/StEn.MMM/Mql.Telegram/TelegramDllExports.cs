@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Net;
-using System.Runtime.CompilerServices;
-using System.Runtime.ExceptionServices;
 using System.Runtime.InteropServices;
 #if !DEBUG
 using RGiesecke.DllExport;

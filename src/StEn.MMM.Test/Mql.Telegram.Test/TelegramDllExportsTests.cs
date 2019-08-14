@@ -3,7 +3,6 @@ using System.Reflection;
 using Moq;
 using Newtonsoft.Json;
 using StEn.MMM.Mql.Common.Services.InApi.Entities;
-using StEn.MMM.Mql.Common.Services.InApi.Factories;
 using StEn.MMM.Mql.Telegram;
 using StEn.MMM.Mql.Telegram.Services.Telegram;
 using Xunit;

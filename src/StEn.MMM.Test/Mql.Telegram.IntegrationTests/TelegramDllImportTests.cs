@@ -1,16 +1,9 @@
-﻿using System;
-using System.Reflection;
-using System.Runtime.ExceptionServices;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 using Mql.Telegram.IntegrationTests.Framework;
 using Mql.Telegram.IntegrationTests.Helpers;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using StEn.MMM.Mql.Common.Services.InApi.Entities;
-using StEn.MMM.Mql.Common.Services.InApi.Factories;
-using StEn.MMM.Mql.Telegram;
-using StEn.MMM.Mql.Telegram.Services.Telegram;
-using Telegram.Bot;
 using Telegram.Bot.Types;
 
 namespace Mql.Telegram.IntegrationTests

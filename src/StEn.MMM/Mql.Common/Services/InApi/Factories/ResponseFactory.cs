@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Net.Mime;
-using System.Runtime.InteropServices;
 using Newtonsoft.Json;
 using StEn.MMM.Mql.Common.Services.InApi.Entities;
 
@@ -56,13 +54,13 @@ namespace StEn.MMM.Mql.Common.Services.InApi.Factories
 			string message;
 			switch (ex)
 			{
-				case ArgumentException argumentException:
+				case ArgumentException _:
 					message = "One or more arguments are not valid.";
 					break;
-				case JsonSerializationException jsonSerializationException:
+				case JsonSerializationException _:
 					message = "There was a problem serializing/deserializing a message.";
 					break;
-				case OperationCanceledException operationCanceledException:
+				case OperationCanceledException _:
 					message = "The operation was cancelled.";
 					break;
 				default:
