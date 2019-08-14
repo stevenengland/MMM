@@ -167,14 +167,6 @@ namespace StEn.MMM.Mql.Telegram
 			responseFactory.IsDebugEnabled = enableDebug;
 		}
 
-#if !DEBUG
-		[DllExport("Test", CallingConvention = CallingConvention.StdCall)]
-#endif
-		public static void Test()
-		{
-			var x = 10;
-		}
-
 		#endregion
 
 		private static void ResetClass()

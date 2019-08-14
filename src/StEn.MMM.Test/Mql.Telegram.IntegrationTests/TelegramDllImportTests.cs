@@ -23,9 +23,6 @@ namespace Mql.Telegram.IntegrationTests
 		#region DllImport
 
 		[DllImport(Constants.AssemblyUnderTestName)]
-		public static extern void Test();
-
-		[DllImport(Constants.AssemblyUnderTestName)]
 		public static extern void SetDebugOutput([MarshalAs(UnmanagedType.Bool)] bool enabled);
 
 		[DllImport(Constants.AssemblyUnderTestName)]
@@ -47,17 +44,6 @@ namespace Mql.Telegram.IntegrationTests
 		[SetUp]
 		public void PerTestSetup()
 		{
-			// https://colinmackay.scot/2007/06/16/unit-testing-a-static-class/
-			// Type staticType = typeof(DllExports);
-			// ConstructorInfo ci = staticType.TypeInitializer;
-			// object[] parameters = new object[0];
-			// ci.Invoke(null, parameters);
-		}
-
-		[Test]
-		public void TestCall()
-		{
-			Test();
 		}
 
 		[Test, Category(Constants.TelegramBotApiMethods.GetMe)]
