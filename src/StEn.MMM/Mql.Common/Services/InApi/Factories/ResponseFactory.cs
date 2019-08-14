@@ -39,7 +39,7 @@ namespace StEn.MMM.Mql.Common.Services.InApi.Factories
 				},
 			};
 
-			if (IsDebugEnabled)
+			if (this.IsDebugEnabled)
 			{
 				response.Content.ExceptionMessage = ex.Message;
 				response.Content.StackTrace = ex.StackTrace;

@@ -4,7 +4,7 @@ namespace StEn.MMM.Mql.Common.Base.Utilities
 {
 	public class MessageStore<TKey, TValue>
 	{
-		private static readonly object LockObject = new object();
+		private readonly object lockObject = new object();
 
 		private readonly Dictionary<TKey, TValue> dictionary;
 		private readonly Queue<TKey> keys;
@@ -26,7 +26,7 @@ namespace StEn.MMM.Mql.Common.Base.Utilities
 
 		public void Add(TKey key, TValue value)
 		{
-			lock (LockObject)
+			lock (lockObject)
 			{
 				if (this.dictionary.Count == this.capacity)
 				{

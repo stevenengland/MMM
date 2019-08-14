@@ -18,17 +18,14 @@ namespace StEn.MMM.Mql.Telegram
 
 		private static ResponseFactory responseFactory = new ResponseFactory();
 
+		protected TelegramDllExports()
+		{
+		}
+
 		static TelegramDllExports()
 		{
 			// https://colinmackay.scot/2007/06/16/unit-testing-a-static-class/
 			ResetClass();
-		}
-
-#pragma warning disable S1118
-		public TelegramDllExports(ITelegramBotMapper telegramBotMapper)
-#pragma warning restore S1118
-		{
-			InitializeClass(telegramBotMapper);
 		}
 
 		/// <summary>
@@ -42,7 +39,7 @@ namespace StEn.MMM.Mql.Telegram
 				Ensure.That<ApplicationException>(isInitialized, $"The framework is not initialized yet. Please run the {nameof(Initialize)} method first.");
 				return bot;
 			}
-			private set => bot = value;
+			set => bot = value;
 		}
 
 #if !DEBUG

@@ -16,9 +16,11 @@ namespace Mql.Telegram.IntegrationTests
 		[SetUp]
 		public void PerTestSetup()
 		{
+			// Method intentionally left empty.
 		}
 
-		[Test, Category(Constants.TelegramBotApiMethods.GetMe)]
+		[Test]
+		[Category(Constants.TelegramBotApiMethods.GetMe)]
 		public void GetMeReturnsBotUser()
 		{
 			Initialize(Secrets.BOT_API_KEY, 100);

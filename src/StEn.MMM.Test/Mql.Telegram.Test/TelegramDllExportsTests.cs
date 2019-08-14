@@ -83,7 +83,9 @@ namespace Mql.Telegram.Tests
 			mock.Setup(x => x.GetMe()).Returns("ok");
 			mock.Setup(x => x.StartGetMe()).Returns("ok");
 
-			var dllExports = new TelegramDllExports(mock.Object);
+			TelegramDllExports.Initialize(ApiKey, 10);
+			TelegramDllExports.Bot = mock.Object;
+
 			Assert.True(TelegramDllExports.GetMe() == "ok");
 			Assert.True(TelegramDllExports.StartGetMe() == "ok");
 		}
@@ -95,7 +97,9 @@ namespace Mql.Telegram.Tests
 			mock.Setup(x => x.SendText(It.IsAny<string>(), It.IsAny<string>())).Returns("ok");
 			mock.Setup(x => x.StartSendText(It.IsAny<string>(), It.IsAny<string>())).Returns("ok");
 
-			var dllExports = new TelegramDllExports(mock.Object);
+			TelegramDllExports.Initialize(ApiKey, 10);
+			TelegramDllExports.Bot = mock.Object;
+
 			Assert.True(TelegramDllExports.SendText(string.Empty, string.Empty) == "ok");
 			Assert.True(TelegramDllExports.StartSendText(string.Empty, string.Empty) == "ok");
 		}

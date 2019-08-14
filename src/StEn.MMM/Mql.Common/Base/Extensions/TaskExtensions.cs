@@ -30,7 +30,9 @@ namespace StEn.MMM.Mql.Common.Base.Extensions
 
 		public static T FireSafe<T>(this Task<T> task)
 		{
+#pragma warning disable VSTHRD003
 			return Task.Run(() => task).WaitAndUnwrapException();
+#pragma warning restore VSTHRD003
 		}
 	}
 }
