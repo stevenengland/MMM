@@ -79,7 +79,7 @@ steps:
     SAFE_APPCENTER_IOS_SECRET: $(AppCenter_iOS_Secret)
     SAFE_APPCENTER_ANDROID_SECRET: $(AppCenter_Android_Secret)
     SAFE_APPCENTER_WINDOWS_SECRET: $(AppCenter_Windows_Secret)
-    SolutionDir: '$(Build.Repository.LocalPath)/'
+    SolutionDir: '$(Build.Repository.LocalPath)/' # when building only projects the SolutionDir is unknown.
 
 - task: VSTest@2
   displayName: 'VsTest - testAssemblies'
