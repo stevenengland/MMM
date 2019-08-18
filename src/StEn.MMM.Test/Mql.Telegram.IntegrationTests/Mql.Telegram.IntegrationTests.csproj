@@ -3,6 +3,7 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
 	<!-- >Mobile Build Tools</!-->
 	<BuildHostSecretPrefix>SAFE_</BuildHostSecretPrefix>
+  <MobileBuildToolsDebug>true</MobileBuildToolsDebug>
 	<Configurations>Debug;Release;DLLImportDebug</Configurations>
 	<Platforms>AnyCPU;x64;x86</Platforms>
   </PropertyGroup>
