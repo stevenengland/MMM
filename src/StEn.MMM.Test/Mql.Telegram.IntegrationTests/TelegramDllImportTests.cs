@@ -23,7 +23,7 @@ namespace Mql.Telegram.IntegrationTests
 		[Category(Constants.TelegramBotApiMethods.GetMe)]
 		public void GetMeReturnsBotUser()
 		{
-			Initialize(Secrets.BOT_API_KEY.ToString(), 10);
+			Initialize(Secrets.TELEGRAM_BOT_API_KEY.ToString(), 10);
 			SetDebugOutput(true);
 			var result = GetMe();
 			var successResponse = JsonConvert.DeserializeObject<Response<User>>(result);
@@ -34,9 +34,9 @@ namespace Mql.Telegram.IntegrationTests
 		[Category(Constants.TelegramBotApiMethods.SendMessage)]
 		public void SendTextSendsTextMessageToGroup()
 		{
-			Initialize(Secrets.BOT_API_KEY.ToString(), 10);
+			Initialize(Secrets.TELEGRAM_BOT_API_KEY.ToString(), 10);
 			SetDebugOutput(true);
-			var result = SendText(Secrets.GROUP_ID.ToString(),$"{nameof(this.SendTextSendsTextMessageToGroup)}");
+			var result = SendText(Secrets.TELEGRAM_GROUP_ID.ToString(),$"{nameof(this.SendTextSendsTextMessageToGroup)}");
 			var successResponse = JsonConvert.DeserializeObject<Response<Message>>(result);
 			Assert.AreEqual($"{nameof(this.SendTextSendsTextMessageToGroup)}", successResponse.Content.Text);
 		}
@@ -45,9 +45,9 @@ namespace Mql.Telegram.IntegrationTests
 		[Category(Constants.TelegramBotApiMethods.SendMessage)]
 		public void SendTextSendsTextMessageToChannel()
 		{
-			Initialize(Secrets.BOT_API_KEY.ToString(), 10);
+			Initialize(Secrets.TELEGRAM_BOT_API_KEY.ToString(), 10);
 			SetDebugOutput(true);
-			var result = SendText(Secrets.CHANNEL_ID.ToString(), $"{nameof(this.SendTextSendsTextMessageToChannel)}");
+			var result = SendText(Secrets.TELEGRAM_CHANNEL_ID.ToString(), $"{nameof(this.SendTextSendsTextMessageToChannel)}");
 			var successResponse = JsonConvert.DeserializeObject<Response<Message>>(result);
 			Assert.AreEqual($"{nameof(this.SendTextSendsTextMessageToChannel)}", successResponse.Content.Text);
 
@@ -63,9 +63,9 @@ namespace Mql.Telegram.IntegrationTests
 		[Category(Constants.TelegramBotApiMethods.SendMessage)]
 		public void SendTextSendsTextMessageToUser()
 		{
-			Initialize(Secrets.BOT_API_KEY.ToString(), 10);
+			Initialize(Secrets.TELEGRAM_BOT_API_KEY.ToString(), 10);
 			SetDebugOutput(true);
-			var result = SendText(Secrets.USER_ID.ToString(), $"{nameof(this.SendTextSendsTextMessageToUser)}");
+			var result = SendText(Secrets.TELEGRAM_USER_ID.ToString(), $"{nameof(this.SendTextSendsTextMessageToUser)}");
 			var successResponse = JsonConvert.DeserializeObject<Response<Message>>(result);
 			Assert.AreEqual($"{nameof(this.SendTextSendsTextMessageToUser)}", successResponse.Content.Text);
 		}
