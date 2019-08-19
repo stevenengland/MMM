@@ -23,7 +23,9 @@ namespace Mql.Telegram.IntegrationTests
 		[Category(Constants.TelegramBotApiMethods.GetMe)]
 		public void GetMeReturnsBotUser()
 		{
-			Initialize(Secrets.TELEGRAM_BOT_API_KEY.ToString(), 10);
+			Initialize(
+				MBTHelper.ConvertMaskedSecretToRealValue(Secrets.TELEGRAM_BOT_API_KEY.ToString()),
+				10);
 			SetDebugOutput(true);
 			var result = GetMe();
 			var successResponse = JsonConvert.DeserializeObject<Response<User>>(result);
@@ -34,9 +36,13 @@ namespace Mql.Telegram.IntegrationTests
 		[Category(Constants.TelegramBotApiMethods.SendMessage)]
 		public void SendTextSendsTextMessageToGroup()
 		{
-			Initialize(Secrets.TELEGRAM_BOT_API_KEY.ToString(), 10);
+			Initialize(
+				MBTHelper.ConvertMaskedSecretToRealValue(Secrets.TELEGRAM_BOT_API_KEY.ToString()),
+				10);
 			SetDebugOutput(true);
-			var result = SendText(Secrets.TELEGRAM_GROUP_ID.ToString(),$"{nameof(this.SendTextSendsTextMessageToGroup)}");
+			var result = SendText(
+				MBTHelper.ConvertMaskedSecretToRealValue(Secrets.TELEGRAM_GROUP_ID.ToString()),
+				$"{nameof(this.SendTextSendsTextMessageToGroup)}");
 			var successResponse = JsonConvert.DeserializeObject<Response<Message>>(result);
 			Assert.AreEqual($"{nameof(this.SendTextSendsTextMessageToGroup)}", successResponse.Content.Text);
 		}
@@ -45,27 +51,30 @@ namespace Mql.Telegram.IntegrationTests
 		[Category(Constants.TelegramBotApiMethods.SendMessage)]
 		public void SendTextSendsTextMessageToChannel()
 		{
-			Initialize(Secrets.TELEGRAM_BOT_API_KEY.ToString(), 10);
+			// Sending by @channelname only works if it is a public channel
+			// SendText(Secrets.CHANNEL_NAME.ToString(), $"{nameof(this.SendTextSendsTextMessageToChannel)}")
+			Initialize(
+				MBTHelper.ConvertMaskedSecretToRealValue(Secrets.TELEGRAM_BOT_API_KEY.ToString()),
+				10);
 			SetDebugOutput(true);
-			var result = SendText(Secrets.TELEGRAM_CHANNEL_ID.ToString(), $"{nameof(this.SendTextSendsTextMessageToChannel)}");
+			var result = SendText(
+				MBTHelper.ConvertMaskedSecretToRealValue(Secrets.TELEGRAM_CHANNEL_ID.ToString()),
+				$"{nameof(this.SendTextSendsTextMessageToChannel)}");
 			var successResponse = JsonConvert.DeserializeObject<Response<Message>>(result);
 			Assert.AreEqual($"{nameof(this.SendTextSendsTextMessageToChannel)}", successResponse.Content.Text);
-
-			// Sending by @channelname only works if it is a public channel
-			/*
-			result = SendText(Secrets.CHANNEL_NAME.ToString(), $"{nameof(this.SendTextSendsTextMessageToChannel)}");
-			successResponse = JsonConvert.DeserializeObject<Response<Message>>(result);
-			Assert.AreEqual($"{nameof(this.SendTextSendsTextMessageToChannel)}", successResponse.Content.Text);
-			*/
 		}
 
 		[Test]
 		[Category(Constants.TelegramBotApiMethods.SendMessage)]
 		public void SendTextSendsTextMessageToUser()
 		{
-			Initialize(Secrets.TELEGRAM_BOT_API_KEY.ToString(), 10);
+			Initialize(
+				MBTHelper.ConvertMaskedSecretToRealValue(Secrets.TELEGRAM_BOT_API_KEY.ToString()),
+				10);
 			SetDebugOutput(true);
-			var result = SendText(Secrets.TELEGRAM_USER_ID.ToString(), $"{nameof(this.SendTextSendsTextMessageToUser)}");
+			var result = SendText(
+				MBTHelper.ConvertMaskedSecretToRealValue(Secrets.TELEGRAM_USER_ID.ToString()),
+				$"{nameof(this.SendTextSendsTextMessageToUser)}");
 			var successResponse = JsonConvert.DeserializeObject<Response<Message>>(result);
 			Assert.AreEqual($"{nameof(this.SendTextSendsTextMessageToUser)}", successResponse.Content.Text);
 		}
