@@ -1,4 +1,7 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using Mql.Telegram.IntegrationTests.Framework;
 using Mql.Telegram.IntegrationTests.Helpers;
 using Newtonsoft.Json;
@@ -21,6 +24,20 @@ namespace Mql.Telegram.IntegrationTests
 
 		[Test]
 		[Category(Constants.TelegramBotApiMethods.GetMe)]
+		public void RequestForCorrelationKeyReturnsErrorIfEntryIsNotFound()
+		{
+			Initialize(
+				MBTHelper.ConvertMaskedSecretToRealValue(Secrets.TELEGRAM_BOT_API_KEY.ToString()),
+				10);
+			SetDebugOutput(true);
+			var result = GetMessageByCorrelationId("test");
+			var errorResponse = JsonConvert.DeserializeObject<Response<Error>>(result);
+			Assert.False(errorResponse.IsSuccess);
+			Assert.AreEqual(typeof(KeyNotFoundException).Name, errorResponse.Content.ExceptionType);
+		}
+
+		[Test]
+		[Category(Constants.TelegramBotApiMethods.GetMe)]
 		public void GetMeReturnsBotUser()
 		{
 			Initialize(
@@ -34,7 +51,7 @@ namespace Mql.Telegram.IntegrationTests
 
 		[Test]
 		[Category(Constants.TelegramBotApiMethods.GetMe)]
-		public void StartGetMeReturnsCorrelationId()
+		public async Task StartGetMeReturnsCorrelationId()
 		{
 			Initialize(
 				MBTHelper.ConvertMaskedSecretToRealValue(Secrets.TELEGRAM_BOT_API_KEY.ToString()),
@@ -43,6 +60,9 @@ namespace Mql.Telegram.IntegrationTests
 			var result = StartGetMe();
 			var successResponse = JsonConvert.DeserializeObject<Response<string>>(result);
 			Assert.True(!string.IsNullOrWhiteSpace(successResponse.CorrelationKey));
+			var messageStoreResult = await this.WaitForMessageStoreAsync(successResponse.CorrelationKey);
+
+			Assert.IsInstanceOf<Response<User>>(JsonConvert.DeserializeObject<Response<User>>(messageStoreResult));
 		}
 
 		[Test]
@@ -94,7 +114,7 @@ namespace Mql.Telegram.IntegrationTests
 
 		[Test]
 		[Category(Constants.TelegramBotApiMethods.SendMessage)]
-		public void StartSendTextReturnsCorrelationId()
+		public async Task StartSendTextReturnsCorrelationId()
 		{
 			Initialize(
 				MBTHelper.ConvertMaskedSecretToRealValue(Secrets.TELEGRAM_BOT_API_KEY.ToString()),
@@ -105,12 +125,41 @@ namespace Mql.Telegram.IntegrationTests
 				$"{nameof(this.SendTextSendsTextMessageToUser)}");
 			var successResponse = JsonConvert.DeserializeObject<Response<string>>(result);
 			Assert.True(!string.IsNullOrWhiteSpace(successResponse.CorrelationKey));
+
+			var messageStoreResult = await this.WaitForMessageStoreAsync(successResponse.CorrelationKey);
+
+			Assert.IsInstanceOf<Response<Message>>(JsonConvert.DeserializeObject<Response<Message>>(messageStoreResult));
+		}
+
+		private async Task<string> WaitForMessageStoreAsync(string correlationKey)
+		{
+			var messageStoreResult = string.Empty;
+			for (int i = 0; i <= 10; i++)
+			{
+				messageStoreResult = GetMessageByCorrelationId(correlationKey);
+				if (messageStoreResult.Contains(nameof(KeyNotFoundException)))
+				{
+					await Task.Delay(1000);
+				}
+				else
+				{
+					break;
+				}
+			}
+
+			return messageStoreResult;
 		}
 
 		#region DllImport
 
 		[DllImport(Constants.AssemblyUnderTestName)]
-		private static extern void SetDebugOutput([MarshalAs(UnmanagedType.Bool)] bool enabled);
+		[return: MarshalAs(UnmanagedType.LPWStr)]
+		private static extern string SetDebugOutput([MarshalAs(UnmanagedType.Bool)] bool enabled);
+
+		[DllImport(Constants.AssemblyUnderTestName)]
+		[return: MarshalAs(UnmanagedType.LPWStr)]
+		private static extern string GetMessageByCorrelationId(
+			[MarshalAs(UnmanagedType.LPWStr)] string correlationKey);
 
 		[DllImport(Constants.AssemblyUnderTestName)]
 		[return: MarshalAs(UnmanagedType.LPWStr)]

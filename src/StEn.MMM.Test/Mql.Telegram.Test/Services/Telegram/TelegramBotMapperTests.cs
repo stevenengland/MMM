@@ -76,6 +76,7 @@ namespace Mql.Telegram.Tests.Services.Telegram
 			var result = mapper.GetMessageByCorrelationId("testCorrelationId");
 			var errorResponse = JsonConvert.DeserializeObject<Response<Error>>(result);
 			Assert.Equal(typeof(KeyNotFoundException).Name, errorResponse.Content.ExceptionType);
+			Assert.Equal("testCorrelationId", errorResponse.CorrelationKey);
 		}
 
 		[Fact]
@@ -87,6 +88,7 @@ namespace Mql.Telegram.Tests.Services.Telegram
 			var result = mapper.GetMessageByCorrelationId("testCorrelationId");
 			var successResponse = JsonConvert.DeserializeObject<Response<string>>(result);
 			Assert.Equal("successTest", successResponse.Content);
+			Assert.Equal("testCorrelationId", successResponse.CorrelationKey);
 		}
 
 		[Fact]
