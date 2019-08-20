@@ -85,7 +85,7 @@ namespace StEn.MMM.Mql.Telegram.Services.Telegram
 
 		public void HandleFireAndForgetSuccess<T>(T data, string correlationKey)
 		{
-			this.messageStore.Add(correlationKey, this.responseFactory.Success(message: data).ToString());
+			this.messageStore.Add(correlationKey, this.responseFactory.Success<T>(message: data, correlationKey).ToString());
 		}
 
 		public string FireAndForgetProxyCall<T>(Task<T> telegramMethod)
