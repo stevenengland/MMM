@@ -67,7 +67,7 @@ namespace StEn.MMM.Mql.Telegram.Services.Telegram
 		{
 			using (var cancellationTokenSource = this.CtsFactory())
 			{
-				return this.ProxyCall(this.botClient.SendTextMessageAsync(
+				return this.FireAndForgetProxyCall(this.botClient.SendTextMessageAsync(
 					chatId: this.CreateChatId(chatId),
 					text: text,
 					cancellationToken: cancellationTokenSource.Token));

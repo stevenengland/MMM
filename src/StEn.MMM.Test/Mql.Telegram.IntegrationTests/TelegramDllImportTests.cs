@@ -33,6 +33,19 @@ namespace Mql.Telegram.IntegrationTests
 		}
 
 		[Test]
+		[Category(Constants.TelegramBotApiMethods.GetMe)]
+		public void StartGetMeReturnsCorrelationId()
+		{
+			Initialize(
+				MBTHelper.ConvertMaskedSecretToRealValue(Secrets.TELEGRAM_BOT_API_KEY.ToString()),
+				10);
+			SetDebugOutput(true);
+			var result = StartGetMe();
+			var successResponse = JsonConvert.DeserializeObject<Response<string>>(result);
+			Assert.True(!string.IsNullOrWhiteSpace(successResponse.CorrelationKey));
+		}
+
+		[Test]
 		[Category(Constants.TelegramBotApiMethods.SendMessage)]
 		public void SendTextSendsTextMessageToGroup()
 		{
@@ -79,6 +92,21 @@ namespace Mql.Telegram.IntegrationTests
 			Assert.AreEqual($"{nameof(this.SendTextSendsTextMessageToUser)}", successResponse.Content.Text);
 		}
 
+		[Test]
+		[Category(Constants.TelegramBotApiMethods.SendMessage)]
+		public void StartSendTextReturnsCorrelationId()
+		{
+			Initialize(
+				MBTHelper.ConvertMaskedSecretToRealValue(Secrets.TELEGRAM_BOT_API_KEY.ToString()),
+				10);
+			SetDebugOutput(true);
+			var result = StartSendText(
+				MBTHelper.ConvertMaskedSecretToRealValue(Secrets.TELEGRAM_USER_ID.ToString()),
+				$"{nameof(this.SendTextSendsTextMessageToUser)}");
+			var successResponse = JsonConvert.DeserializeObject<Response<string>>(result);
+			Assert.True(!string.IsNullOrWhiteSpace(successResponse.CorrelationKey));
+		}
+
 		#region DllImport
 
 		[DllImport(Constants.AssemblyUnderTestName)]
@@ -101,6 +129,12 @@ namespace Mql.Telegram.IntegrationTests
 		[DllImport(Constants.AssemblyUnderTestName)]
 		[return: MarshalAs(UnmanagedType.LPWStr)]
 		private static extern string SendText(
+			[MarshalAs(UnmanagedType.LPWStr)] string chatId,
+			[MarshalAs(UnmanagedType.LPWStr)] string chatText);
+
+		[DllImport(Constants.AssemblyUnderTestName)]
+		[return: MarshalAs(UnmanagedType.LPWStr)]
+		private static extern string StartSendText(
 			[MarshalAs(UnmanagedType.LPWStr)] string chatId,
 			[MarshalAs(UnmanagedType.LPWStr)] string chatText);
 
