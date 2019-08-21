@@ -4,6 +4,8 @@
 	{
 		int RequestTimeout { get; set; }
 
+		string GetMessageByCorrelationId(string correlationKey);
+
 		string GetMe();
 
 		string StartGetMe();

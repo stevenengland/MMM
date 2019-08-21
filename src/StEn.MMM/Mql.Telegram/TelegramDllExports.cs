@@ -114,6 +114,23 @@ namespace StEn.MMM.Mql.Telegram
 			}
 		}
 
+#if !DEBUG
+		[DllExport("GetMessageByCorrelationId", CallingConvention = CallingConvention.StdCall)]
+#endif
+		[return: MarshalAs(UnmanagedType.LPWStr)]
+		public static string GetMessageByCorrelationId(
+			[MarshalAs(UnmanagedType.LPWStr)] string correlationKey)
+		{
+			try
+			{
+				return Bot.GetMessageByCorrelationId(correlationKey);
+			}
+			catch (Exception e)
+			{
+				return responseFactory.Error(e).ToString();
+			}
+		}
+
 		#region Configuration API
 
 #if !DEBUG

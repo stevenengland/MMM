@@ -13,6 +13,9 @@
     <Platforms>AnyCPU;x64;x86</Platforms>
 	<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 	<Configurations>Debug;Release;DLLImportDebug</Configurations>
+	<PackageTags>MQL Telegram</PackageTags>
+	<AssemblyVersion>1.0.0.1</AssemblyVersion>
+	<FileVersion>1.0.0.1</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -33,13 +36,13 @@
   </ItemGroup>
   
   <ItemGroup>
-	<PackageReference Include="UnmanagedExports.Repack" Version="1.0.4" />
     <PackageReference Include="Costura.Fody" Version="4.0.0" />
 	<PackageReference Include="Fody" Version="5.1.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Telegram.Bot" Version="14.12.0" />
+    <PackageReference Include="UnmanagedExports.Repack.Upgrade" Version="1.2.1" />
   </ItemGroup>
 
   <ItemGroup>

@@ -67,7 +67,7 @@ namespace StEn.MMM.Mql.Telegram.Services.Telegram
 		{
 			using (var cancellationTokenSource = this.CtsFactory())
 			{
-				return this.ProxyCall(this.botClient.SendTextMessageAsync(
+				return this.FireAndForgetProxyCall(this.botClient.SendTextMessageAsync(
 					chatId: this.CreateChatId(chatId),
 					text: text,
 					cancellationToken: cancellationTokenSource.Token));
@@ -85,7 +85,7 @@ namespace StEn.MMM.Mql.Telegram.Services.Telegram
 
 		public void HandleFireAndForgetSuccess<T>(T data, string correlationKey)
 		{
-			this.messageStore.Add(correlationKey, this.responseFactory.Success(message: data).ToString());
+			this.messageStore.Add(correlationKey, this.responseFactory.Success<T>(message: data, correlationKey).ToString());
 		}
 
 		public string FireAndForgetProxyCall<T>(Task<T> telegramMethod)

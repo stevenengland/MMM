@@ -26,7 +26,7 @@ namespace StEn.MMM.Mql.Common.Base.Utilities
 
 		public void Add(TKey key, TValue value)
 		{
-			lock (lockObject)
+			lock (this.lockObject)
 			{
 				if (this.dictionary.Count == this.capacity)
 				{
