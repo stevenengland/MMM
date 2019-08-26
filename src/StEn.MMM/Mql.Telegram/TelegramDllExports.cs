@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using StEn.MMM.Mql.Common.Base.Attributes;
 #if !DEBUG
 using RGiesecke.DllExport;
 #endif
 using StEn.MMM.Mql.Common.Base.Utilities;
+using StEn.MMM.Mql.Common.Services.InApi.Entities;
 using StEn.MMM.Mql.Common.Services.InApi.Factories;
 using StEn.MMM.Mql.Telegram.Services.Telegram;
 using Telegram.Bot;
@@ -42,7 +44,14 @@ namespace StEn.MMM.Mql.Telegram
 			set => bot = value;
 		}
 
-		/// <see href="https://core.telegram.org/bots/api#getme"/>
+		/// <summary>
+		/// <para>A simple method for testing your bots auth token.</para>
+		/// <para>See <see href="https://core.telegram.org/bots/api#getme">Telegram API</see> for more details.</para>
+		/// </summary>
+		/// <returns>
+		/// A JSON string representing a <see wikiref="https://mmm.steven-england.info/Generic-Response"/>.
+		/// On success the payload is a <see href="https://core.telegram.org/bots/api#user">Telegram User</see> containing basic information about the bot.
+		/// </returns>
 #if !DEBUG
 		[DllExport("GetMe", CallingConvention = CallingConvention.StdCall)]
 #endif
@@ -59,7 +68,18 @@ namespace StEn.MMM.Mql.Telegram
 			}
 		}
 
-		/// <see href="https://core.telegram.org/bots/api#getme"/>
+		/// <summary>
+		/// <para>A simple method for testing your bots auth token.</para>
+		/// <para>See <see href="https://core.telegram.org/bots/api#getme">Telegram API</see> for more details.</para>
+		/// </summary>
+		/// <returns>
+		/// A JSON string representing a <see wikiref="https://mmm.steven-england.info/Generic-Response"/>.
+		/// On success the payload is a <see href="https://core.telegram.org/bots/api#user">Telegram User</see> containing basic information about the bot.
+		/// </returns>
+		/// <remarks>
+		/// <para>This method starts an independent background thread and immediately returns a response with a correlation key but empty payload.</para>
+		/// <para>You can use the correlation key to check the result of the thread later via <see cref="GetMessageByCorrelationId"/>.</para>
+		/// </remarks>
 #if !DEBUG
 		[DllExport("StartGetMe", CallingConvention = CallingConvention.StdCall)]
 #endif
@@ -76,13 +96,31 @@ namespace StEn.MMM.Mql.Telegram
 			}
 		}
 
-		/// <see href="https://core.telegram.org/bots/api#sendmessage"/>
+		/// <summary>
+		/// <para>Use this method to send text messages.</para>
+		/// <para>See <see href="https://core.telegram.org/bots/api#sendmessage">Telegram API</see> for more details.</para>
+		/// </summary>
+		/// <param name="chatId">
+		/// Identifier for the target chat. You have different options for identifiers:
+		/// <list type="bullet">
+		///   <item>The Username of the channel (in the format @channel_username)</item>
+		///   <item>The ID of a user, group or channel (in the format "1546456487" or "-165489645654654" etc.)</item>
+		/// </list>
+		/// The user name of a channel can only be used if the channel is public.
+		/// </param>
+		/// <param name="chatText">Text of the message to be sent.</param>
+		/// <returns>
+		/// A JSON string representing a <see wikiref="https://mmm.steven-england.info/Generic-Response"/>.
+		/// On success the payload is a <see href="https://core.telegram.org/bots/api#message">Telegram Message</see>.
+		/// </returns>
 #if !DEBUG
 		[DllExport("SendText", CallingConvention = CallingConvention.StdCall)]
 #endif
 		[return: MarshalAs(UnmanagedType.LPWStr)]
 		public static string SendText(
+			[MqlParamDoc(ExampleValue = "-1001167825793")]
 			[MarshalAs(UnmanagedType.LPWStr)] string chatId,
+			[MqlParamDoc(ExampleValue = "Some text")]
 			[MarshalAs(UnmanagedType.LPWStr)] string chatText)
 		{
 			try
@@ -95,13 +133,35 @@ namespace StEn.MMM.Mql.Telegram
 			}
 		}
 
-		/// <see href="https://core.telegram.org/bots/api#sendmessage"/>
+		/// <summary>
+		/// <para>Use this method to send text messages.</para>
+		/// <para>See <see href="https://core.telegram.org/bots/api#sendmessage">Telegram API</see> for more details.</para>
+		/// </summary>
+		/// <param name="chatId">
+		/// Identifier for the target chat. You have different options for identifiers:
+		/// <list type="bullet">
+		///   <item>The Username of the channel (in the format @channel_username)</item>
+		///   <item>The ID of a user, group or channel (in the format "1546456487" or "-165489645654654" etc.)</item>
+		/// </list>
+		/// The user name of a channel can only be used if the channel is public.
+		/// </param>
+		/// <param name="chatText">Text of the message to be sent.</param>
+		/// <returns>
+		/// A JSON string representing a <see wikiref="https://mmm.steven-england.info/Generic-Response"/>.
+		/// On success the payload is a <see href="https://core.telegram.org/bots/api#message">Telegram Message</see>.
+		/// </returns>
+		/// <remarks>
+		/// <para>This method starts an independent background thread and immediately returns a response with a correlation key but empty payload.</para>
+		/// <para>You can use the correlation key to check the result of the thread later via <see cref="GetMessageByCorrelationId"/>.</para>
+		/// </remarks>
 #if !DEBUG
 		[DllExport("StartSendText", CallingConvention = CallingConvention.StdCall)]
 #endif
 		[return: MarshalAs(UnmanagedType.LPWStr)]
 		public static string StartSendText(
+			[MqlParamDoc(ExampleValue = "-1001167825793")]
 			[MarshalAs(UnmanagedType.LPWStr)] string chatId,
+			[MqlParamDoc(ExampleValue = "Some text")]
 			[MarshalAs(UnmanagedType.LPWStr)] string chatText)
 		{
 			try
@@ -114,11 +174,21 @@ namespace StEn.MMM.Mql.Telegram
 			}
 		}
 
+		/// <summary>
+		/// Use this method to check if and which result for a given correlation key was obtained.
+		/// </summary>
+		/// <param name="correlationKey">The correlation key that was provided by a "Start" method.</param>
+		/// <returns>
+		/// A JSON string representing a <see wikiref="https://mmm.steven-england.info/Generic-Response"/>.
+		/// On success the payload is exactly of that type that was obtained from the corresponding "Start" method that generated the correlation key.
+		/// If the correlation key was not found the corresponding method has not finished yet.
+		/// </returns>
 #if !DEBUG
 		[DllExport("GetMessageByCorrelationId", CallingConvention = CallingConvention.StdCall)]
 #endif
 		[return: MarshalAs(UnmanagedType.LPWStr)]
 		public static string GetMessageByCorrelationId(
+			[MqlParamDoc(ExampleValue = "w8er4345grt76567")]
 			[MarshalAs(UnmanagedType.LPWStr)] string correlationKey)
 		{
 			try
@@ -133,12 +203,24 @@ namespace StEn.MMM.Mql.Telegram
 
 		#region Configuration API
 
+		/// <summary>
+		/// Must be called first before any other method is used. It initializes the framework.
+		/// </summary>
+		/// <param name="apiKey">The API token for the Telegram bot.</param>
+		/// <param name="timeout">Seconds that a request to the Telegram API can last before the call gets cancelled.</param>
+		/// <returns>
+		/// A JSON string representing a <see wikiref="https://mmm.steven-england.info/Generic-Response"/>.
+		/// On success there is no payload but only the success flag in the header data.
+		/// </returns>
 #if !DEBUG
 		[DllExport("Initialize", CallingConvention = CallingConvention.StdCall)]
 #endif
+		[MqlFuncDoc(Order = 1)]
 		[return: MarshalAs(UnmanagedType.LPWStr)]
 		public static string Initialize(
+			[MqlParamDoc(ExampleValue = "876708006:BAFEUxGUwPeLFKwPFu4GWjq0saUmVEsKxb4")]
 			[MarshalAs(UnmanagedType.LPWStr)] string apiKey,
+			[MqlParamDoc(ExampleValue = "3")]
 			int timeout)
 		{
 			try
@@ -156,11 +238,22 @@ namespace StEn.MMM.Mql.Telegram
 			}
 		}
 
+		/// <summary>
+		/// Adjusts the timespan that a call to the Telegram API can last before it gets cancelled.
+		/// </summary>
+		/// <param name="timeout">Seconds that a request to the Telegram API can last.</param>
+		/// <returns>
+		/// A JSON string representing a <see wikiref="https://mmm.steven-england.info/Generic-Response"/>.
+		/// On success there is no payload but only the success flag in the header data.
+		/// </returns>
 #if !DEBUG
 		[DllExport("SetRequestTimeout", CallingConvention = CallingConvention.StdCall)]
 #endif
+		[MqlFuncDoc(Order = 3)]
 		[return: MarshalAs(UnmanagedType.LPWStr)]
-		public static string SetRequestTimeout(int timeout)
+		public static string SetRequestTimeout(
+			[MqlParamDoc(ExampleValue = "3")]
+			int timeout)
 		{
 			try
 			{
@@ -174,11 +267,22 @@ namespace StEn.MMM.Mql.Telegram
 			}
 		}
 
+		/// <summary>
+		/// Enables or disables a more verbose output in case of exceptions.
+		/// </summary>
+		/// <param name="enableDebug">Indicates, if the debug output should be generated.</param>
+		/// <returns>
+		/// A JSON string representing a <see wikiref="https://mmm.steven-england.info/Generic-Response"/>.
+		/// On success there is no payload but only the success flag in the header data.
+		/// </returns>
 #if !DEBUG
 		[DllExport("SetDebugOutput", CallingConvention = CallingConvention.StdCall)]
 #endif
+		[MqlFuncDoc(Order = 2)]
 		[return: MarshalAs(UnmanagedType.LPWStr)]
-		public static string SetDebugOutput([MarshalAs(UnmanagedType.Bool)] bool enableDebug)
+		public static string SetDebugOutput(
+			[MqlParamDoc(ExampleValue = "true")]
+			[MarshalAs(UnmanagedType.Bool)] bool enableDebug)
 		{
 			try
 			{
