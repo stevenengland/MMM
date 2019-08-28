@@ -42,9 +42,16 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mql.Common.Tests", "StEn.MM
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mql.Telegram.IntegrationTests", "StEn.MMM.Test\Mql.Telegram.IntegrationTests\Mql.Telegram.IntegrationTests.csproj", "{791E6BD1-53BF-4C45-9F98-40AD1754C31F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mql.Generator", "StEn.MMM\Mql.Generator\Mql.Generator.csproj", "{C661CDB4-427A-4C73-A8CE-CBC383F7B776}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mql.Generator", "StEn.MMM\Mql.Generator\Mql.Generator.csproj", "{C661CDB4-427A-4C73-A8CE-CBC383F7B776}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "doc", "doc", "{A4E86A10-BE38-4CC9-9AC7-FE0C64986959}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{62758EC6-27C4-4A41-8CCD-18767B6CE608}"
+	ProjectSection(SolutionItems) = preProject
+		..\doc\module_usage\api\mql_telegram\Mql_Telegram_latest.md = ..\doc\module_usage\api\mql_telegram\Mql_Telegram_latest.md
+		..\doc\module_usage\implementation\mql_telegram\Mql_Telegram_latest.mq4 = ..\doc\module_usage\implementation\mql_telegram\Mql_Telegram_latest.mq4
+		..\doc\module_usage\implementation\mql_telegram\Mql_Telegram_latest.mq5 = ..\doc\module_usage\implementation\mql_telegram\Mql_Telegram_latest.mq5
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -59,8 +66,8 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{B191BFAA-0ABC-4AF8-9BF4-B6B965E4F8E3}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{B191BFAA-0ABC-4AF8-9BF4-B6B965E4F8E3}.Debug|Any CPU.Build.0 = Debug|x86
+		{B191BFAA-0ABC-4AF8-9BF4-B6B965E4F8E3}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{B191BFAA-0ABC-4AF8-9BF4-B6B965E4F8E3}.Debug|Any CPU.Build.0 = Debug|x64
 		{B191BFAA-0ABC-4AF8-9BF4-B6B965E4F8E3}.Debug|x64.ActiveCfg = Debug|x64
 		{B191BFAA-0ABC-4AF8-9BF4-B6B965E4F8E3}.Debug|x64.Build.0 = Debug|x64
 		{B191BFAA-0ABC-4AF8-9BF4-B6B965E4F8E3}.Debug|x86.ActiveCfg = Debug|x86
