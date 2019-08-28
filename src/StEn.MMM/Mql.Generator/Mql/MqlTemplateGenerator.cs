@@ -9,6 +9,7 @@ namespace StEn.MMM.Mql.Generator.Mql
 	{
 		internal static void WriteTemplateOutput(string templateFile, string templateText)
 		{
+			Directory.CreateDirectory(Path.GetDirectoryName(templateFile));
 			File.WriteAllText(templateFile, templateText);
 			File.WriteAllText(templateFile, templateText);
 		}
@@ -76,7 +77,15 @@ namespace StEn.MMM.Mql.Generator.Mql
 		private static string CreateMethodExample(Mql5FunctionDefinition definition)
 		{
 			var builder = new StringBuilder();
-			builder.Append("resultOf" + definition.MethodName + " = " + definition.MethodName + "(");
+			if (definition.MethodReturnType == "void")
+			{
+				builder.Append(definition.MethodName + "(");
+			}
+			else
+			{
+				builder.Append(definition.MethodReturnType + " resultOf" + definition.MethodName + " = " + definition.MethodName + "(");
+			}
+			
 			for (int i = 0; i < definition.Parameters.Count; i++)
 			{
 				if (i != 0)

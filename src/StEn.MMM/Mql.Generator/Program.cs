@@ -17,7 +17,7 @@ namespace StEn.MMM.Mql.Generator
 			args = new[]
 			{
 				"D:/coding/MMM/src/StEn.MMM/Mql.Telegram",
-				"D:/temporaer",
+				"D:/coding/MMM/doc",
 			};
 #endif
 			if (args.Length < 2)
@@ -59,9 +59,24 @@ namespace StEn.MMM.Mql.Generator
 				                        file.ToLower().Contains("release") &&
 				                        file.ToLower().Contains("x64"));
 
-			if (dllExportFile == null || projectFile == null || xmlCommentFile == null || binaryFile == null)
+			if (dllExportFile == null)
 			{
-				throw new FileNotFoundException("Either DllExport file, Csproj file, XML comment file or Dll was not found");
+				throw new FileNotFoundException($"{nameof(dllExportFile)} was not found");
+			}
+
+			if (projectFile == null)
+			{
+				throw new FileNotFoundException($"{nameof(projectFile)} was not found");
+			}
+
+			if (xmlCommentFile == null)
+			{
+				throw new FileNotFoundException($"{nameof(xmlCommentFile)} was not found");
+			}
+
+			if (binaryFile == null)
+			{
+				throw new FileNotFoundException($"{nameof(binaryFile)} was not found");
 			}
 
 			// Read exported functions and their properties
@@ -76,14 +91,27 @@ namespace StEn.MMM.Mql.Generator
 
 			// Write the MQL template text to output files
 			MqlTemplateGenerator.WriteTemplateOutput(
-				$"{pathToOutput}/{AssemblyPropertyParser.GetAssemblyNameByProjectFile(projectFile)}_{AssemblyPropertyParser.GetAssemblyVersionByProjectFile(projectFile)}.mq4",
+				$"{pathToOutput}/module_usage/implementation/{AssemblyPropertyParser.GetAssemblyNameByProjectFile(projectFile).ToLower()}/{AssemblyPropertyParser.GetAssemblyNameByProjectFile(projectFile)}_{AssemblyPropertyParser.GetAssemblyVersionByProjectFile(projectFile)}.mq4",
 				templateText);
 			MqlTemplateGenerator.WriteTemplateOutput(
-				$"{pathToOutput}/{AssemblyPropertyParser.GetAssemblyNameByProjectFile(projectFile)}_{AssemblyPropertyParser.GetAssemblyVersionByProjectFile(projectFile)}.mq5",
+				$"{pathToOutput}/module_usage/implementation/{AssemblyPropertyParser.GetAssemblyNameByProjectFile(projectFile).ToLower()}/{AssemblyPropertyParser.GetAssemblyNameByProjectFile(projectFile)}_latest.mq4",
+				templateText);
+			MqlTemplateGenerator.WriteTemplateOutput(
+				$"{pathToOutput}/module_usage/implementation/{AssemblyPropertyParser.GetAssemblyNameByProjectFile(projectFile).ToLower()}/{AssemblyPropertyParser.GetAssemblyNameByProjectFile(projectFile)}_{AssemblyPropertyParser.GetAssemblyVersionByProjectFile(projectFile)}.mq5",
+				templateText);
+			MqlTemplateGenerator.WriteTemplateOutput(
+				$"{pathToOutput}/module_usage/implementation/{AssemblyPropertyParser.GetAssemblyNameByProjectFile(projectFile).ToLower()}/{AssemblyPropertyParser.GetAssemblyNameByProjectFile(projectFile)}_latest.mq5",
 				templateText);
 
 			// Write the online documentation to output files
 			var documentationText = DocumentationGenerator.GenerateDocumentationText(xmlCommentFile, binaryFile, AssemblyPropertyParser.GetAssemblyNameByProjectFile(projectFile), functionDefinitions);
+
+			DocumentationGenerator.WriteTemplateOutput(
+				$"{pathToOutput}/module_usage/api/{AssemblyPropertyParser.GetAssemblyNameByProjectFile(projectFile).ToLower()}/{AssemblyPropertyParser.GetAssemblyNameByProjectFile(projectFile)}_{AssemblyPropertyParser.GetAssemblyVersionByProjectFile(projectFile)}.md",
+				documentationText);
+			DocumentationGenerator.WriteTemplateOutput(
+				$"{pathToOutput}/module_usage/api/{AssemblyPropertyParser.GetAssemblyNameByProjectFile(projectFile).ToLower()}/{AssemblyPropertyParser.GetAssemblyNameByProjectFile(projectFile)}_latest.md",
+				documentationText);
 		}
 	}
 }

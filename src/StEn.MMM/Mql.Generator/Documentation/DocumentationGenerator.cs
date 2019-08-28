@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -13,6 +14,13 @@ namespace StEn.MMM.Mql.Generator.Documentation
 	{
 		private static DocXmlReader reader;
 		private static Type dllExportsType;
+
+		internal static void WriteTemplateOutput(string templateFile, string templateText)
+		{
+			Directory.CreateDirectory(Path.GetDirectoryName(templateFile));
+			File.WriteAllText(templateFile, templateText);
+			File.WriteAllText(templateFile, templateText);
+		}
 
 		internal static string GenerateDocumentationText(
 			string xmlCommentFile,
