@@ -4,8 +4,8 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <RootNamespace>StEn.MMM.Mql.Generator</RootNamespace>
-    <AssemblyVersion>1.0.19240.8</AssemblyVersion>
-    <FileVersion>1.0.19240.8</FileVersion>
+    <AssemblyVersion>1.0.19241.9</AssemblyVersion>
+    <FileVersion>1.0.19241.9</FileVersion>
 	<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
 

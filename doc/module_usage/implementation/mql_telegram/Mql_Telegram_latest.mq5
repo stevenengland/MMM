@@ -1,6 +1,6 @@
 #property copyright "Copyright 2019, StEn"
 #property link      "https://steven-england.info"
-#property version   "1.0"
+#property version   "1.1"
 
 #import "Mql_Telegram.dll"
 	string Initialize(string apiKey, int timeout);
