@@ -9,4 +9,3 @@ REM		MT5MQLFolder="C:\Users\user\AppData\Roaming\MetaTrader 5\MQL5\"
 for /f "delims=" %%x in (.local.config.txt) do (set "%%x")
 
 mklink /J "D:\coding\MMM\doc\module_usage\implementation\metatrader5\MQL5" %MT5MQLFolder%
-mklink /J "D:\coding\MMM\doc\module_usage\implementation\metatrader4\MQL5" %MT4MQLFolder%

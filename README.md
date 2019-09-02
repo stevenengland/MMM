@@ -42,6 +42,10 @@ Did you encounter a problem when using MMM? Then please have a look at the follo
 
 If your question is not answered, feel free to raise a new issue or [contact me](https://mmm.steven-england.info/contact))
 
+### MT4/MQL4 Support
+Because MT4 is not really supported anymore MMM will neither. See this [Post](https://smnweekly.com/2016/11/15/metaquotes-abandons-mt4-turns-entirely-to-mt5-trading-platform/) for more information.
+Despites you might be lucky and the software will run though. Please don't ask for support if it does not.
+
 ## Donation
 
 If you like this software feel free to buy me a coffee via the following options:

@@ -91,16 +91,10 @@ namespace StEn.MMM.Mql.Generator
 
 			// Write the MQL template text to output files
 			MqlTemplateGenerator.WriteTemplateOutput(
-				$"{pathToOutput}/module_usage/implementation/{AssemblyPropertyParser.GetAssemblyNameByProjectFile(projectFile).ToLower()}/{AssemblyPropertyParser.GetAssemblyNameByProjectFile(projectFile)}_{AssemblyPropertyParser.GetAssemblyVersionByProjectFile(projectFile)}.mq4",
+				$"{pathToOutput}/module_usage/implementation/metatrader5/MQL5/Experts/MMM_Modules/{AssemblyPropertyParser.GetAssemblyNameByProjectFile(projectFile).ToLower()}/{AssemblyPropertyParser.GetAssemblyNameByProjectFile(projectFile)}_{AssemblyPropertyParser.GetAssemblyVersionByProjectFile(projectFile)}.mq5",
 				templateText);
 			MqlTemplateGenerator.WriteTemplateOutput(
-				$"{pathToOutput}/module_usage/implementation/{AssemblyPropertyParser.GetAssemblyNameByProjectFile(projectFile).ToLower()}/{AssemblyPropertyParser.GetAssemblyNameByProjectFile(projectFile)}_latest.mq4",
-				templateText);
-			MqlTemplateGenerator.WriteTemplateOutput(
-				$"{pathToOutput}/module_usage/implementation/{AssemblyPropertyParser.GetAssemblyNameByProjectFile(projectFile).ToLower()}/{AssemblyPropertyParser.GetAssemblyNameByProjectFile(projectFile)}_{AssemblyPropertyParser.GetAssemblyVersionByProjectFile(projectFile)}.mq5",
-				templateText);
-			MqlTemplateGenerator.WriteTemplateOutput(
-				$"{pathToOutput}/module_usage/implementation/{AssemblyPropertyParser.GetAssemblyNameByProjectFile(projectFile).ToLower()}/{AssemblyPropertyParser.GetAssemblyNameByProjectFile(projectFile)}_latest.mq5",
+				$"{pathToOutput}/module_usage/implementation/metatrader5/MQL5/Experts/MMM_Modules/{AssemblyPropertyParser.GetAssemblyNameByProjectFile(projectFile).ToLower()}/{AssemblyPropertyParser.GetAssemblyNameByProjectFile(projectFile)}_latest.mq5",
 				templateText);
 
 			// Write the online documentation to output files
