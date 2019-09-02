@@ -48,9 +48,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "doc", "doc", "{A4E86A10-BE3
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{62758EC6-27C4-4A41-8CCD-18767B6CE608}"
 	ProjectSection(SolutionItems) = preProject
+		..\doc\module_usage\implementation\metatrader5\MQL5\Experts\MMM_Common\JsonExamples.mq5 = ..\doc\module_usage\implementation\metatrader5\MQL5\Experts\MMM_Common\JsonExamples.mq5
 		..\doc\module_usage\api\mql_telegram\Mql_Telegram_latest.md = ..\doc\module_usage\api\mql_telegram\Mql_Telegram_latest.md
-		..\doc\module_usage\implementation\mql_telegram\Mql_Telegram_latest.mq4 = ..\doc\module_usage\implementation\mql_telegram\Mql_Telegram_latest.mq4
-		..\doc\module_usage\implementation\mql_telegram\Mql_Telegram_latest.mq5 = ..\doc\module_usage\implementation\mql_telegram\Mql_Telegram_latest.mq5
+		..\doc\module_usage\implementation\metatrader5\MQL5\Experts\MMM_Modules\mql_telegram\Mql_Telegram_latest.mq5 = ..\doc\module_usage\implementation\metatrader5\MQL5\Experts\MMM_Modules\mql_telegram\Mql_Telegram_latest.mq5
 	EndProjectSection
 EndProject
 Global
