@@ -85,7 +85,7 @@ namespace StEn.MMM.Mql.Generator.Mql
 			{
 				builder.Append(definition.MethodReturnType + " resultOf" + definition.MethodName + " = " + definition.MethodName + "(");
 			}
-			
+
 			for (int i = 0; i < definition.Parameters.Count; i++)
 			{
 				if (i != 0)

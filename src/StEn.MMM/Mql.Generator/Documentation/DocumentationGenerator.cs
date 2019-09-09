@@ -183,7 +183,8 @@ namespace StEn.MMM.Mql.Generator.Documentation
 
 			// <list>
 			text = Regex.Replace(
-				text, "<list\\s+type=\"bullet\">(.*?)<\\/list>",
+				text,
+				"<list\\s+type=\"bullet\">(.*?)<\\/list>",
 				match =>
 				{
 					string itemText = match.Groups[1].ToString();

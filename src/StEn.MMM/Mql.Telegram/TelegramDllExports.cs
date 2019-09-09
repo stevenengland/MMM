@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Runtime.InteropServices;
 using StEn.MMM.Mql.Common.Base.Attributes;
 #if !DEBUG
@@ -12,6 +13,9 @@ using Telegram.Bot;
 
 namespace StEn.MMM.Mql.Telegram
 {
+	/// <summary>
+	/// Contains dll exports for the Telegram Bot API.
+	/// </summary>
 	public class TelegramDllExports
 	{
 		private static ITelegramBotMapper bot;
@@ -26,6 +30,9 @@ namespace StEn.MMM.Mql.Telegram
 			ResetClass();
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="TelegramDllExports"/> class.
+		/// </summary>
 		protected TelegramDllExports()
 		{
 		}
@@ -97,6 +104,140 @@ namespace StEn.MMM.Mql.Telegram
 		}
 
 		/// <summary>
+		/// <para>Use this method to receive incoming updates.</para>
+		/// <para>See <see href="https://core.telegram.org/bots/api#getupdates">Telegram API</see> for more details.</para>
+		/// </summary>
+		/// <returns>
+		/// A JSON string representing a <see wikiref="https://mmm.steven-england.info/Generic-Response"/>.
+		/// On success the payload is an array of <see href="https://core.telegram.org/bots/api#update">Telegram Updates</see>.
+		/// </returns>
+#if !DEBUG
+		[DllExport("GetUpdates", CallingConvention = CallingConvention.StdCall)]
+#endif
+		[return: MarshalAs(UnmanagedType.LPWStr)]
+		public static string GetUpdates()
+		{
+			try
+			{
+				return Bot.GetUpdates();
+			}
+			catch (Exception e)
+			{
+				return responseFactory.Error(e).ToString();
+			}
+		}
+
+		/// <summary>
+		/// <para>Use this method to receive incoming updates.</para>
+		/// <para>See <see href="https://core.telegram.org/bots/api#getupdates">Telegram API</see> for more details.</para>
+		/// </summary>
+		/// <returns>
+		/// A JSON string representing a <see wikiref="https://mmm.steven-england.info/Generic-Response"/>.
+		/// On success the payload is an array of <see href="https://core.telegram.org/bots/api#update">Telegram Updates</see>.
+		/// </returns>
+		/// <remarks>
+		/// <para>This method starts an independent background thread and immediately returns a response with a correlation key but empty payload.</para>
+		/// <para>You can use the correlation key to check the result of the thread later via <see cref="GetMessageByCorrelationId"/>.</para>
+		/// </remarks>
+#if !DEBUG
+		[DllExport("StartGetUpdates", CallingConvention = CallingConvention.StdCall)]
+#endif
+		[return: MarshalAs(UnmanagedType.LPWStr)]
+		public static string StartGetUpdates()
+		{
+			try
+			{
+				return Bot.StartGetUpdates();
+			}
+			catch (Exception e)
+			{
+				return responseFactory.Error(e).ToString();
+			}
+		}
+
+		/// <summary>
+		/// <para>Use this method to send a photo.</para>
+		/// <para>See <see href="https://core.telegram.org/bots/api#sendphoto">Telegram API</see> for more details.</para>
+		/// </summary>
+		/// <param name="chatId">
+		/// Identifier for the target chat. You have different options for identifiers:
+		/// <list type="bullet">
+		///   <item>The Username of the channel (in the format @channel_username)</item>
+		///   <item>The ID of a user, group or channel (in the format "1546456487" or "-165489645654654" etc.)</item>
+		/// </list>
+		/// The user name of a channel can only be used if the channel is public.
+		/// </param>
+		/// <param name="photoFile">Path to the photo file.</param>
+		/// <returns>
+		/// A JSON string representing a <see wikiref="https://mmm.steven-england.info/Generic-Response"/>.
+		/// On success the payload is a <see href="https://core.telegram.org/bots/api#message">Telegram Message</see>.
+		/// </returns>
+#if !DEBUG
+		[DllExport("SendPhoto", CallingConvention = CallingConvention.StdCall)]
+#endif
+		[return: MarshalAs(UnmanagedType.LPWStr)]
+		public static string SendPhoto(
+			[MqlParamDoc(ExampleValue = "-1001167825793")]
+			[MarshalAs(UnmanagedType.LPWStr)] string chatId,
+			[MqlParamDoc(ExampleValue = "D:/pathToPhoto/photo.png")]
+			[MarshalAs(UnmanagedType.LPWStr)] string photoFile)
+		{
+			try
+			{
+				Ensure.NotNullOrEmptyOrWhiteSpace(chatId, $"The argument {nameof(chatId)} must not be empty or just whitespace.");
+				Ensure.That<ArgumentException>(File.Exists(photoFile), $"The argument {nameof(photoFile)} does not contain a valid file path.");
+				return Bot.SendPhoto(chatId, photoFile);
+			}
+			catch (Exception e)
+			{
+				return responseFactory.Error(e).ToString();
+			}
+		}
+
+		/// <summary>
+		/// <para>Use this method to send a photo.</para>
+		/// <para>See <see href="https://core.telegram.org/bots/api#sendphoto">Telegram API</see> for more details.</para>
+		/// </summary>
+		/// <param name="chatId">
+		/// Identifier for the target chat. You have different options for identifiers:
+		/// <list type="bullet">
+		///   <item>The Username of the channel (in the format @channel_username)</item>
+		///   <item>The ID of a user, group or channel (in the format "1546456487" or "-165489645654654" etc.)</item>
+		/// </list>
+		/// The user name of a channel can only be used if the channel is public.
+		/// </param>
+		/// <param name="photoFile">Path to the photo file.</param>
+		/// <returns>
+		/// A JSON string representing a <see wikiref="https://mmm.steven-england.info/Generic-Response"/>.
+		/// On success the payload is a <see href="https://core.telegram.org/bots/api#message">Telegram Message</see>.
+		/// </returns>
+		/// <remarks>
+		/// <para>This method starts an independent background thread and immediately returns a response with a correlation key but empty payload.</para>
+		/// <para>You can use the correlation key to check the result of the thread later via <see cref="GetMessageByCorrelationId"/>.</para>
+		/// </remarks>
+#if !DEBUG
+		[DllExport("StartSendPhoto", CallingConvention = CallingConvention.StdCall)]
+#endif
+		[return: MarshalAs(UnmanagedType.LPWStr)]
+		public static string StartSendPhoto(
+			[MqlParamDoc(ExampleValue = "-1001167825793")]
+			[MarshalAs(UnmanagedType.LPWStr)] string chatId,
+			[MqlParamDoc(ExampleValue = "D:/pathToPhoto/photo.png")]
+			[MarshalAs(UnmanagedType.LPWStr)] string photoFile)
+		{
+			try
+			{
+				Ensure.NotNullOrEmptyOrWhiteSpace(chatId, $"The argument {nameof(chatId)} must not be empty or just whitespace.");
+				Ensure.That<ArgumentException>(File.Exists(photoFile), $"The argument {nameof(photoFile)} does not contain a valid file path.");
+				return Bot.StartSendPhoto(chatId, photoFile);
+			}
+			catch (Exception e)
+			{
+				return responseFactory.Error(e).ToString();
+			}
+		}
+
+		/// <summary>
 		/// <para>Use this method to send text messages.</para>
 		/// <para>See <see href="https://core.telegram.org/bots/api#sendmessage">Telegram API</see> for more details.</para>
 		/// </summary>
@@ -125,6 +266,8 @@ namespace StEn.MMM.Mql.Telegram
 		{
 			try
 			{
+				Ensure.NotNullOrEmptyOrWhiteSpace(chatId, $"The argument {nameof(chatId)} must not be empty or just whitespace.");
+				Ensure.NotNullOrEmptyOrWhiteSpace(chatText, $"The argument {nameof(chatText)} must not be empty or just whitespace.");
 				return Bot.SendText(chatId, chatText);
 			}
 			catch (Exception e)
@@ -166,6 +309,8 @@ namespace StEn.MMM.Mql.Telegram
 		{
 			try
 			{
+				Ensure.NotNullOrEmptyOrWhiteSpace(chatId, $"The argument {nameof(chatId)} must not be empty or just whitespace.");
+				Ensure.NotNullOrEmptyOrWhiteSpace(chatText, $"The argument {nameof(chatText)} must not be empty or just whitespace.");
 				return Bot.StartSendText(chatId, chatText);
 			}
 			catch (Exception e)
@@ -193,6 +338,7 @@ namespace StEn.MMM.Mql.Telegram
 		{
 			try
 			{
+				Ensure.NotNullOrEmptyOrWhiteSpace(correlationKey, $"The argument {nameof(correlationKey)} must not be empty or just whitespace.");
 				return Bot.GetMessageByCorrelationId(correlationKey);
 			}
 			catch (Exception e)
@@ -225,8 +371,8 @@ namespace StEn.MMM.Mql.Telegram
 		{
 			try
 			{
-				Ensure.NotNullOrEmptyOrWhiteSpace(apiKey, $"{nameof(apiKey)} must not be empty or just whitespace.");
-				Ensure.That<ArgumentException>(timeout > 0, $"{nameof(timeout)} must be greater than 0.");
+				Ensure.NotNullOrEmptyOrWhiteSpace(apiKey, $"The argument {nameof(apiKey)} must not be empty or just whitespace.");
+				Ensure.That<ArgumentException>(timeout > 0, $"The argument {nameof(timeout)} must be greater than 0.");
 
 				InitializeClass(new TelegramBotMapper(new TelegramBotClient(apiKey), responseFactory));
 				SetBotTimeout(timeout);
@@ -257,7 +403,7 @@ namespace StEn.MMM.Mql.Telegram
 		{
 			try
 			{
-				Ensure.That<ArgumentException>(timeout > 0, $"{nameof(timeout)} must be greater than 0.");
+				Ensure.That<ArgumentException>(timeout > 0, $"The argument {nameof(timeout)} must be greater than 0.");
 				SetBotTimeout(timeout);
 				return responseFactory.Success().ToString();
 			}
