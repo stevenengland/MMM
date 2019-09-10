@@ -31,6 +31,8 @@ namespace Mql.Telegram.IntegrationTests
 				10);
 			SetDebugOutput(true);
 			var result = GetMessageByCorrelationId("test");
+			Console.WriteLine($"JSON for {nameof(result)} is: {result}");
+
 			var errorResponse = JsonConvert.DeserializeObject<Response<Error>>(result);
 			Assert.False(errorResponse.IsSuccess);
 			Assert.AreEqual(typeof(KeyNotFoundException).Name, errorResponse.Content.ExceptionType);
@@ -45,6 +47,7 @@ namespace Mql.Telegram.IntegrationTests
 				10);
 			SetDebugOutput(true);
 			var result = GetMe();
+			Console.WriteLine($"JSON for {nameof(result)} is: {result}");
 			var successResponse = JsonConvert.DeserializeObject<Response<User>>(result);
 			Assert.True(successResponse.Content.IsBot);
 		}
@@ -61,12 +64,13 @@ namespace Mql.Telegram.IntegrationTests
 			var successResponse = JsonConvert.DeserializeObject<Response<string>>(result);
 			Assert.True(!string.IsNullOrWhiteSpace(successResponse.CorrelationKey));
 			var messageStoreResult = await this.WaitForMessageStoreAsync(successResponse.CorrelationKey);
+			Console.WriteLine($"JSON for {nameof(messageStoreResult)} is: {messageStoreResult}");
 
 			Assert.IsInstanceOf<Response<User>>(JsonConvert.DeserializeObject<Response<User>>(messageStoreResult));
 		}
 
 		[Test]
-		[Category(Constants.TelegramBotApiMethods.GetMe)]
+		[Category(Constants.TelegramBotApiMethods.GetUpdates)]
 		public void GetUpdatesReturnsNullOrMoreMessages()
 		{
 			Initialize(
@@ -74,12 +78,13 @@ namespace Mql.Telegram.IntegrationTests
 				10);
 			SetDebugOutput(true);
 			var result = GetUpdates();
+			Console.WriteLine($"JSON for {nameof(result)} is: {result}");
 			var successResponse = JsonConvert.DeserializeObject<Response<Update[]>>(result);
 			Assert.True(successResponse.IsSuccess);
 		}
 
 		[Test]
-		[Category(Constants.TelegramBotApiMethods.GetMe)]
+		[Category(Constants.TelegramBotApiMethods.GetUpdates)]
 		public async Task StartGetUpdatesReturnsCorrelationIdAsync()
 		{
 			Initialize(
@@ -89,7 +94,9 @@ namespace Mql.Telegram.IntegrationTests
 			var result = StartGetUpdates();
 			var successResponse = JsonConvert.DeserializeObject<Response<string>>(result);
 			Assert.True(!string.IsNullOrWhiteSpace(successResponse.CorrelationKey));
+
 			var messageStoreResult = await this.WaitForMessageStoreAsync(successResponse.CorrelationKey);
+			Console.WriteLine($"JSON for {nameof(messageStoreResult)} is: {messageStoreResult}");
 
 			Assert.IsInstanceOf<Response<Update[]>>(JsonConvert.DeserializeObject<Response<Update[]>>(messageStoreResult));
 		}
@@ -105,6 +112,7 @@ namespace Mql.Telegram.IntegrationTests
 			var result = SendPhoto(
 				MBTHelper.ConvertMaskedSecretToRealValue(Secrets.TELEGRAM_USER_ID.ToString()),
 				$"assets/favicon-32x32.png");
+			Console.WriteLine($"JSON for {nameof(result)} is: {result}");
 			var successResponse = JsonConvert.DeserializeObject<Response<Message>>(result);
 			Assert.IsNotEmpty(successResponse.Content.Photo);
 		}
@@ -124,6 +132,7 @@ namespace Mql.Telegram.IntegrationTests
 			Assert.True(!string.IsNullOrWhiteSpace(successResponse.CorrelationKey));
 
 			var messageStoreResult = await this.WaitForMessageStoreAsync(successResponse.CorrelationKey);
+			Console.WriteLine($"JSON for {nameof(messageStoreResult)} is: {messageStoreResult}");
 
 			var correlatedResponse = JsonConvert.DeserializeObject<Response<Message>>(messageStoreResult);
 			Assert.IsInstanceOf<Response<Message>>(correlatedResponse);
@@ -141,6 +150,7 @@ namespace Mql.Telegram.IntegrationTests
 			var result = SendText(
 				MBTHelper.ConvertMaskedSecretToRealValue(Secrets.TELEGRAM_GROUP_ID.ToString()),
 				$"{nameof(this.SendTextSendsTextMessageToGroup)}");
+			Console.WriteLine($"JSON for {nameof(result)} is: {result}");
 			var successResponse = JsonConvert.DeserializeObject<Response<Message>>(result);
 			Assert.AreEqual($"{nameof(this.SendTextSendsTextMessageToGroup)}", successResponse.Content.Text);
 		}
@@ -158,6 +168,7 @@ namespace Mql.Telegram.IntegrationTests
 			var result = SendText(
 				MBTHelper.ConvertMaskedSecretToRealValue(Secrets.TELEGRAM_CHANNEL_ID.ToString()),
 				$"{nameof(this.SendTextSendsTextMessageToChannel)}");
+			Console.WriteLine($"JSON for {nameof(result)} is: {result}");
 			var successResponse = JsonConvert.DeserializeObject<Response<Message>>(result);
 			Assert.AreEqual($"{nameof(this.SendTextSendsTextMessageToChannel)}", successResponse.Content.Text);
 		}
@@ -173,6 +184,7 @@ namespace Mql.Telegram.IntegrationTests
 			var result = SendText(
 				MBTHelper.ConvertMaskedSecretToRealValue(Secrets.TELEGRAM_USER_ID.ToString()),
 				$"{nameof(this.SendTextSendsTextMessageToUser)}");
+			Console.WriteLine($"JSON for {nameof(result)} is: {result}");
 			var successResponse = JsonConvert.DeserializeObject<Response<Message>>(result);
 			Assert.AreEqual($"{nameof(this.SendTextSendsTextMessageToUser)}", successResponse.Content.Text);
 		}
@@ -192,6 +204,8 @@ namespace Mql.Telegram.IntegrationTests
 			Assert.True(!string.IsNullOrWhiteSpace(successResponse.CorrelationKey));
 
 			var messageStoreResult = await this.WaitForMessageStoreAsync(successResponse.CorrelationKey);
+			Console.WriteLine($"JSON for {nameof(messageStoreResult)} is: {messageStoreResult}");
+
 			var correlatedResponse = JsonConvert.DeserializeObject<Response<Message>>(messageStoreResult);
 
 			Assert.IsInstanceOf<Response<Message>>(correlatedResponse);
