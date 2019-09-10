@@ -20,7 +20,9 @@
 		public static class TelegramBotApiMethods
 		{
 			public const string GetMe = "getMe";
+			public const string GetUpdates = "getUpdates";
 			public const string SendMessage = "sendMessage";
+			public const string SendPhoto = "sendPhoto";
 		}
 	}
 }

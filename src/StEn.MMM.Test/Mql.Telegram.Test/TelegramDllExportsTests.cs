@@ -91,6 +91,48 @@ namespace Mql.Telegram.Tests
 		}
 
 		[Fact]
+		public void GetUpdatesSucceeds()
+		{
+			var mock = new Mock<ITelegramBotMapper>();
+			mock.Setup(x => x.GetUpdates()).Returns("ok");
+			mock.Setup(x => x.StartGetUpdates()).Returns("ok");
+
+			TelegramDllExports.Initialize(ApiKey, 10);
+			TelegramDllExports.Bot = mock.Object;
+
+			Assert.True(TelegramDllExports.GetUpdates() == "ok");
+			Assert.True(TelegramDllExports.StartGetUpdates() == "ok");
+		}
+
+		[Fact]
+		public void SendPhotoSucceeds()
+		{
+			var mock = new Mock<ITelegramBotMapper>();
+			mock.Setup(x => x.SendPhoto(It.IsAny<string>(), It.IsAny<string>())).Returns("ok");
+			mock.Setup(x => x.StartSendPhoto(It.IsAny<string>(), It.IsAny<string>())).Returns("ok");
+
+			TelegramDllExports.Initialize(ApiKey, 10);
+			TelegramDllExports.Bot = mock.Object;
+
+			Assert.True(TelegramDllExports.SendPhoto("some text", "assets/favicon-32x32.png") == "ok");
+			Assert.True(TelegramDllExports.StartSendPhoto("some text", "assets/favicon-32x32.png") == "ok");
+		}
+
+		[Fact]
+		public void SendPhotoInputsGetValidated()
+		{
+			var mock = new Mock<ITelegramBotMapper>();
+
+			TelegramDllExports.Initialize(ApiKey, 10);
+			TelegramDllExports.Bot = mock.Object;
+
+			Assert.Contains(nameof(ArgumentException), TelegramDllExports.SendPhoto(string.Empty, "D:/PathToFile.png"));
+			Assert.Contains(nameof(ArgumentException), TelegramDllExports.SendPhoto("-102264846545", string.Empty));
+			Assert.Contains(nameof(ArgumentException), TelegramDllExports.StartSendPhoto(string.Empty, "D:/PathToFile.png"));
+			Assert.Contains(nameof(ArgumentException), TelegramDllExports.StartSendPhoto("-102264846545", string.Empty));
+		}
+
+		[Fact]
 		public void SendTextSucceeds()
 		{
 			var mock = new Mock<ITelegramBotMapper>();
@@ -100,8 +142,22 @@ namespace Mql.Telegram.Tests
 			TelegramDllExports.Initialize(ApiKey, 10);
 			TelegramDllExports.Bot = mock.Object;
 
-			Assert.True(TelegramDllExports.SendText(string.Empty, string.Empty) == "ok");
-			Assert.True(TelegramDllExports.StartSendText(string.Empty, string.Empty) == "ok");
+			Assert.True(TelegramDllExports.SendText("some text", "some text") == "ok");
+			Assert.True(TelegramDllExports.StartSendText("some text", "some text") == "ok");
+		}
+
+		[Fact]
+		public void SendTextInputsGetValidated()
+		{
+			var mock = new Mock<ITelegramBotMapper>();
+
+			TelegramDllExports.Initialize(ApiKey, 10);
+			TelegramDllExports.Bot = mock.Object;
+
+			Assert.Contains(nameof(ArgumentException), TelegramDllExports.SendText(string.Empty, "some text"));
+			Assert.Contains(nameof(ArgumentException), TelegramDllExports.SendText("some text", string.Empty));
+			Assert.Contains(nameof(ArgumentException), TelegramDllExports.StartSendText(string.Empty, "some text"));
+			Assert.Contains(nameof(ArgumentException), TelegramDllExports.StartSendText("some text", string.Empty));
 		}
 	}
 }

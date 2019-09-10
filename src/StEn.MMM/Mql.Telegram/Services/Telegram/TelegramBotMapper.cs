@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using StEn.MMM.Mql.Common.Base.Extensions;
@@ -8,9 +9,11 @@ using StEn.MMM.Mql.Common.Base.Utilities;
 using StEn.MMM.Mql.Common.Services.InApi.Factories;
 using Telegram.Bot;
 using Telegram.Bot.Types;
+using Telegram.Bot.Types.InputFiles;
 
 namespace StEn.MMM.Mql.Telegram.Services.Telegram
 {
+	/// <inheritdoc cref="ITelegramBotMapper" />
 	public class TelegramBotMapper : ITelegramBotMapper, IErrorHandler, ISuccessHandler, IProxyCall
 	{
 		private readonly ITelegramBotClient botClient;
@@ -19,14 +22,21 @@ namespace StEn.MMM.Mql.Telegram.Services.Telegram
 
 		private readonly ResponseFactory responseFactory;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="TelegramBotMapper"/> class.
+		/// </summary>
+		/// <param name="botClient">Reference to <see cref="ITelegramBotMapper"/>. For testing purposes only.</param>
+		/// <param name="responseFactory">Reference to a <see cref="ResponseFactory"/>. For testing purposes only.</param>
 		public TelegramBotMapper(ITelegramBotClient botClient, ResponseFactory responseFactory = null)
 		{
 			this.botClient = botClient;
 			this.responseFactory = responseFactory ?? new ResponseFactory();
 		}
 
+		/// <inheritdoc />
 		public int RequestTimeout { get; set; }
 
+		/// <inheritdoc />
 		public string GetMessageByCorrelationId(string correlationKey)
 		{
 			return this.messageStore.TryGetValue(correlationKey, out string resultValue)
@@ -36,6 +46,7 @@ namespace StEn.MMM.Mql.Telegram.Services.Telegram
 
 		#region TelegramMethods
 
+		/// <inheritdoc />
 		public string GetMe()
 		{
 			using (var cancellationTokenSource = this.CtsFactory())
@@ -44,14 +55,75 @@ namespace StEn.MMM.Mql.Telegram.Services.Telegram
 			}
 		}
 
+		/// <inheritdoc />
 		public string StartGetMe()
+		{
+			var cancellationTokenSource = this.CtsFactory();
+			return this.FireAndForgetProxyCall(this.botClient.GetMeAsync(cancellationTokenSource.Token)
+				.DisposeAfterThreadCompletionAsync(new IDisposable[]
+				{
+					cancellationTokenSource,
+				}));
+		}
+
+		/// <inheritdoc />
+		public string GetUpdates()
 		{
 			using (var cancellationTokenSource = this.CtsFactory())
 			{
-				return this.FireAndForgetProxyCall(this.botClient.GetMeAsync(cancellationTokenSource.Token));
+				return this.ProxyCall(this.botClient.GetUpdatesAsync(
+					cancellationToken: cancellationTokenSource.Token));
 			}
 		}
 
+		/// <inheritdoc />
+		public string StartGetUpdates()
+		{
+			var cancellationTokenSource = this.CtsFactory();
+			return this.FireAndForgetProxyCall(this.botClient.GetUpdatesAsync(
+					cancellationToken: cancellationTokenSource.Token)
+				.DisposeAfterThreadCompletionAsync(new IDisposable[]
+				{
+					cancellationTokenSource,
+				}));
+		}
+
+		/// <inheritdoc />
+		public string SendPhoto(string chatId, string photoFile)
+		{
+			using (var fs = System.IO.File.OpenRead(photoFile))
+			{
+				var inputOnlineFile = new InputOnlineFile(fs);
+				using (var cancellationTokenSource = this.CtsFactory())
+				{
+					return this.ProxyCall(this.botClient.SendPhotoAsync(
+						chatId: this.CreateChatId(chatId),
+						photo: inputOnlineFile,
+						cancellationToken: cancellationTokenSource.Token));
+				}
+			}
+		}
+
+		/// <inheritdoc />
+		public string StartSendPhoto(string chatId, string photoFile)
+		{
+			var fs = System.IO.File.OpenRead(photoFile);
+
+			var inputOnlineFile = new InputOnlineFile(fs);
+			var cancellationTokenSource = this.CtsFactory();
+
+			return this.FireAndForgetProxyCall(this.botClient.SendPhotoAsync(
+				chatId: this.CreateChatId(chatId),
+				photo: inputOnlineFile,
+				cancellationToken: cancellationTokenSource.Token)
+					.DisposeAfterThreadCompletionAsync(new IDisposable[]
+					{
+						cancellationTokenSource,
+						fs,
+					}));
+		}
+
+		/// <inheritdoc/>
 		public string SendText(string chatId, string text)
 		{
 			using (var cancellationTokenSource = this.CtsFactory())
@@ -63,31 +135,37 @@ namespace StEn.MMM.Mql.Telegram.Services.Telegram
 			}
 		}
 
+		/// <inheritdoc/>
 		public string StartSendText(string chatId, string text)
 		{
-			using (var cancellationTokenSource = this.CtsFactory())
-			{
-				return this.FireAndForgetProxyCall(this.botClient.SendTextMessageAsync(
+			var cancellationTokenSource = this.CtsFactory();
+			return this.FireAndForgetProxyCall(this.botClient.SendTextMessageAsync(
 					chatId: this.CreateChatId(chatId),
 					text: text,
-					cancellationToken: cancellationTokenSource.Token));
-			}
+					cancellationToken: cancellationTokenSource.Token)
+				.DisposeAfterThreadCompletionAsync(new IDisposable[]
+				{
+					cancellationTokenSource,
+				}));
 		}
 
 		#endregion
 
 		#region ProxyCalls
 
+		/// <inheritdoc/>
 		public void HandleFireAndForgetError(Exception ex, string correlationKey)
 		{
 			this.messageStore.Add(correlationKey, this.responseFactory.Error(ex).ToString());
 		}
 
+		/// <inheritdoc />
 		public void HandleFireAndForgetSuccess<T>(T data, string correlationKey)
 		{
 			this.messageStore.Add(correlationKey, this.responseFactory.Success<T>(message: data, correlationKey).ToString());
 		}
 
+		/// <inheritdoc />
 		public string FireAndForgetProxyCall<T>(Task<T> telegramMethod)
 		{
 			try
@@ -102,6 +180,7 @@ namespace StEn.MMM.Mql.Telegram.Services.Telegram
 			}
 		}
 
+		/// <inheritdoc />
 		public string ProxyCall<T>(Task<T> telegramMethod)
 		{
 			try
