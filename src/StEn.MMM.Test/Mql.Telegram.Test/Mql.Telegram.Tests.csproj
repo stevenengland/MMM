@@ -27,4 +27,10 @@
     <ProjectReference Include="..\..\StEn.MMM\Mql.Telegram\Mql.Telegram.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="assets\favicon-32x32.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

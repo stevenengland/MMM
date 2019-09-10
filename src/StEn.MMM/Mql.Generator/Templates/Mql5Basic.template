@@ -5,6 +5,12 @@
 <|ImportSection|>
 
 //+------------------------------------------------------------------+
+//| IMPORTANT														 |
+//| Before this code is able to run you may have to switch some dummy|
+//| values in the following examples.                                |
+//+------------------------------------------------------------------+
+
+//+------------------------------------------------------------------+
 //| Expert initialization function                                   |
 //+------------------------------------------------------------------+
 int OnInit()

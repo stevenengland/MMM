@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Nito.AsyncEx.Synchronous;
+using StEn.MMM.Mql.Common.Base.Extensions;
 using StEn.MMM.Mql.Common.Services.InApi.Entities;
 using StEn.MMM.Mql.Common.Services.InApi.Factories;
 using StEn.MMM.Mql.Telegram.Services.Telegram;
@@ -37,7 +39,7 @@ namespace Mql.Telegram.Tests.Services.Telegram
 		}
 
 		[Fact]
-		public void LongRunningFireAndForgetTaskGetsCancelled()
+		public async Task LongRunningFireAndForgetTaskGetsCancelledAsync()
 		{
 			var mapper = new TelegramBotMapper(new TelegramBotClient(ApiKey), this.responseFactory);
 			var cts = new CancellationTokenSource(3000);
@@ -46,6 +48,35 @@ namespace Mql.Telegram.Tests.Services.Telegram
 			var successResponse = JsonConvert.DeserializeObject<Response<string>>(result);
 			Assert.True(successResponse.IsSuccess);
 			Assert.False(string.IsNullOrWhiteSpace(successResponse.CorrelationKey));
+
+			var messageStoreResult = await this.WaitForMessageStoreAsync(mapper, successResponse.CorrelationKey);
+			var correlatedResponse = JsonConvert.DeserializeObject<Response<Error>>(messageStoreResult);
+
+			Assert.Equal(typeof(OperationCanceledException).Name, correlatedResponse.Content.ExceptionType);
+		}
+
+		[Fact]
+		public async Task LongRunningFireAndForgetTaskWorkingWithDisposableObjectsGetsCancelledAsync()
+		{
+			var mapper = new TelegramBotMapper(new TelegramBotClient(ApiKey), this.responseFactory);
+
+			string result;
+			var cancellationTokenSource = new CancellationTokenSource(2000);
+
+			result = mapper.FireAndForgetProxyCall(this.LongRunningTaskAsync(cancellationTokenSource.Token)
+				.DisposeAfterThreadCompletionAsync(new IDisposable[]
+				{
+					cancellationTokenSource,
+				}));
+
+			var successResponse = JsonConvert.DeserializeObject<Response<string>>(result);
+			Assert.True(successResponse.IsSuccess);
+			Assert.False(string.IsNullOrWhiteSpace(successResponse.CorrelationKey));
+
+			var messageStoreResult = await this.WaitForMessageStoreAsync(mapper, successResponse.CorrelationKey);
+			var correlatedResponse = JsonConvert.DeserializeObject<Response<Error>>(messageStoreResult);
+
+			Assert.Equal(typeof(OperationCanceledException).Name, correlatedResponse.Content.ExceptionType);
 		}
 
 		[Fact]
@@ -118,5 +149,28 @@ namespace Mql.Telegram.Tests.Services.Telegram
 			await Task.Delay(0);
 			throw new AccessViolationException("You are not allowed to be here.");
 		}
+
+		#region Helper Methods
+
+		private async Task<string> WaitForMessageStoreAsync(ITelegramBotMapper botMapper, string correlationKey)
+		{
+			var messageStoreResult = string.Empty;
+			for (int i = 0; i <= 10; i++)
+			{
+				messageStoreResult = botMapper.GetMessageByCorrelationId(correlationKey);
+				if (messageStoreResult.Contains(nameof(KeyNotFoundException)))
+				{
+					await Task.Delay(1000);
+				}
+				else
+				{
+					break;
+				}
+			}
+
+			return messageStoreResult;
+		}
+
+		#endregion
 	}
 }

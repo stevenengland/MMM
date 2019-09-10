@@ -1,0 +1,19 @@
+# MetaTrader documentation
+*.ex5
+
+!metatrader?/
+metatrader?/*
+
+!metatrader?/MQL5/
+metatrader?/MQL5/*
+
+!metatrader?/MQL5/Experts/
+metatrader?/MQL5/Experts/*
+
+!metatrader?/MQL5/Experts/MMM_Common/
+!metatrader?/MQL5/Experts/MMM_Modules/
+
+!metatrader?/MQL5/Include/
+metatrader?/MQL5/Include/*
+
+!metatrader?/MQL5/Include/MMM/

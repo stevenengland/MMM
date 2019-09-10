@@ -31,6 +31,8 @@ namespace Mql.Telegram.IntegrationTests
 				10);
 			SetDebugOutput(true);
 			var result = GetMessageByCorrelationId("test");
+			Console.WriteLine($"JSON for {nameof(result)} is: {result}");
+
 			var errorResponse = JsonConvert.DeserializeObject<Response<Error>>(result);
 			Assert.False(errorResponse.IsSuccess);
 			Assert.AreEqual(typeof(KeyNotFoundException).Name, errorResponse.Content.ExceptionType);
@@ -45,13 +47,14 @@ namespace Mql.Telegram.IntegrationTests
 				10);
 			SetDebugOutput(true);
 			var result = GetMe();
+			Console.WriteLine($"JSON for {nameof(result)} is: {result}");
 			var successResponse = JsonConvert.DeserializeObject<Response<User>>(result);
 			Assert.True(successResponse.Content.IsBot);
 		}
 
 		[Test]
 		[Category(Constants.TelegramBotApiMethods.GetMe)]
-		public async Task StartGetMeReturnsCorrelationId()
+		public async Task StartGetMeReturnsCorrelationIdAsync()
 		{
 			Initialize(
 				MBTHelper.ConvertMaskedSecretToRealValue(Secrets.TELEGRAM_BOT_API_KEY.ToString()),
@@ -61,8 +64,79 @@ namespace Mql.Telegram.IntegrationTests
 			var successResponse = JsonConvert.DeserializeObject<Response<string>>(result);
 			Assert.True(!string.IsNullOrWhiteSpace(successResponse.CorrelationKey));
 			var messageStoreResult = await this.WaitForMessageStoreAsync(successResponse.CorrelationKey);
+			Console.WriteLine($"JSON for {nameof(messageStoreResult)} is: {messageStoreResult}");
 
 			Assert.IsInstanceOf<Response<User>>(JsonConvert.DeserializeObject<Response<User>>(messageStoreResult));
+		}
+
+		[Test]
+		[Category(Constants.TelegramBotApiMethods.GetUpdates)]
+		public void GetUpdatesReturnsNullOrMoreMessages()
+		{
+			Initialize(
+				MBTHelper.ConvertMaskedSecretToRealValue(Secrets.TELEGRAM_BOT_API_KEY.ToString()),
+				10);
+			SetDebugOutput(true);
+			var result = GetUpdates();
+			Console.WriteLine($"JSON for {nameof(result)} is: {result}");
+			var successResponse = JsonConvert.DeserializeObject<Response<Update[]>>(result);
+			Assert.True(successResponse.IsSuccess);
+		}
+
+		[Test]
+		[Category(Constants.TelegramBotApiMethods.GetUpdates)]
+		public async Task StartGetUpdatesReturnsCorrelationIdAsync()
+		{
+			Initialize(
+				MBTHelper.ConvertMaskedSecretToRealValue(Secrets.TELEGRAM_BOT_API_KEY.ToString()),
+				10);
+			SetDebugOutput(true);
+			var result = StartGetUpdates();
+			var successResponse = JsonConvert.DeserializeObject<Response<string>>(result);
+			Assert.True(!string.IsNullOrWhiteSpace(successResponse.CorrelationKey));
+
+			var messageStoreResult = await this.WaitForMessageStoreAsync(successResponse.CorrelationKey);
+			Console.WriteLine($"JSON for {nameof(messageStoreResult)} is: {messageStoreResult}");
+
+			Assert.IsInstanceOf<Response<Update[]>>(JsonConvert.DeserializeObject<Response<Update[]>>(messageStoreResult));
+		}
+
+		[Test]
+		[Category(Constants.TelegramBotApiMethods.SendPhoto)]
+		public void SendPhotoSendsPhotoMessageToUser()
+		{
+			Initialize(
+				MBTHelper.ConvertMaskedSecretToRealValue(Secrets.TELEGRAM_BOT_API_KEY.ToString()),
+				10);
+			SetDebugOutput(true);
+			var result = SendPhoto(
+				MBTHelper.ConvertMaskedSecretToRealValue(Secrets.TELEGRAM_USER_ID.ToString()),
+				$"assets/favicon-32x32.png");
+			Console.WriteLine($"JSON for {nameof(result)} is: {result}");
+			var successResponse = JsonConvert.DeserializeObject<Response<Message>>(result);
+			Assert.IsNotEmpty(successResponse.Content.Photo);
+		}
+
+		[Test]
+		[Category(Constants.TelegramBotApiMethods.SendPhoto)]
+		public async Task StartSendPhotoReturnsCorrelationIdAsync()
+		{
+			Initialize(
+				MBTHelper.ConvertMaskedSecretToRealValue(Secrets.TELEGRAM_BOT_API_KEY.ToString()),
+				10);
+			SetDebugOutput(true);
+			var result = StartSendPhoto(
+				MBTHelper.ConvertMaskedSecretToRealValue(Secrets.TELEGRAM_USER_ID.ToString()),
+				$"assets/favicon-32x32.png");
+			var successResponse = JsonConvert.DeserializeObject<Response<string>>(result);
+			Assert.True(!string.IsNullOrWhiteSpace(successResponse.CorrelationKey));
+
+			var messageStoreResult = await this.WaitForMessageStoreAsync(successResponse.CorrelationKey);
+			Console.WriteLine($"JSON for {nameof(messageStoreResult)} is: {messageStoreResult}");
+
+			var correlatedResponse = JsonConvert.DeserializeObject<Response<Message>>(messageStoreResult);
+			Assert.IsInstanceOf<Response<Message>>(correlatedResponse);
+			Assert.IsNotEmpty(correlatedResponse.Content.Photo);
 		}
 
 		[Test]
@@ -76,6 +150,7 @@ namespace Mql.Telegram.IntegrationTests
 			var result = SendText(
 				MBTHelper.ConvertMaskedSecretToRealValue(Secrets.TELEGRAM_GROUP_ID.ToString()),
 				$"{nameof(this.SendTextSendsTextMessageToGroup)}");
+			Console.WriteLine($"JSON for {nameof(result)} is: {result}");
 			var successResponse = JsonConvert.DeserializeObject<Response<Message>>(result);
 			Assert.AreEqual($"{nameof(this.SendTextSendsTextMessageToGroup)}", successResponse.Content.Text);
 		}
@@ -93,6 +168,7 @@ namespace Mql.Telegram.IntegrationTests
 			var result = SendText(
 				MBTHelper.ConvertMaskedSecretToRealValue(Secrets.TELEGRAM_CHANNEL_ID.ToString()),
 				$"{nameof(this.SendTextSendsTextMessageToChannel)}");
+			Console.WriteLine($"JSON for {nameof(result)} is: {result}");
 			var successResponse = JsonConvert.DeserializeObject<Response<Message>>(result);
 			Assert.AreEqual($"{nameof(this.SendTextSendsTextMessageToChannel)}", successResponse.Content.Text);
 		}
@@ -108,13 +184,14 @@ namespace Mql.Telegram.IntegrationTests
 			var result = SendText(
 				MBTHelper.ConvertMaskedSecretToRealValue(Secrets.TELEGRAM_USER_ID.ToString()),
 				$"{nameof(this.SendTextSendsTextMessageToUser)}");
+			Console.WriteLine($"JSON for {nameof(result)} is: {result}");
 			var successResponse = JsonConvert.DeserializeObject<Response<Message>>(result);
 			Assert.AreEqual($"{nameof(this.SendTextSendsTextMessageToUser)}", successResponse.Content.Text);
 		}
 
 		[Test]
 		[Category(Constants.TelegramBotApiMethods.SendMessage)]
-		public async Task StartSendTextReturnsCorrelationId()
+		public async Task StartSendTextReturnsCorrelationIdAsync()
 		{
 			Initialize(
 				MBTHelper.ConvertMaskedSecretToRealValue(Secrets.TELEGRAM_BOT_API_KEY.ToString()),
@@ -127,27 +204,12 @@ namespace Mql.Telegram.IntegrationTests
 			Assert.True(!string.IsNullOrWhiteSpace(successResponse.CorrelationKey));
 
 			var messageStoreResult = await this.WaitForMessageStoreAsync(successResponse.CorrelationKey);
+			Console.WriteLine($"JSON for {nameof(messageStoreResult)} is: {messageStoreResult}");
 
-			Assert.IsInstanceOf<Response<Message>>(JsonConvert.DeserializeObject<Response<Message>>(messageStoreResult));
-		}
+			var correlatedResponse = JsonConvert.DeserializeObject<Response<Message>>(messageStoreResult);
 
-		private async Task<string> WaitForMessageStoreAsync(string correlationKey)
-		{
-			var messageStoreResult = string.Empty;
-			for (int i = 0; i <= 10; i++)
-			{
-				messageStoreResult = GetMessageByCorrelationId(correlationKey);
-				if (messageStoreResult.Contains(nameof(KeyNotFoundException)))
-				{
-					await Task.Delay(1000);
-				}
-				else
-				{
-					break;
-				}
-			}
-
-			return messageStoreResult;
+			Assert.IsInstanceOf<Response<Message>>(correlatedResponse);
+			Assert.AreEqual($"{nameof(this.SendTextSendsTextMessageToUser)}", correlatedResponse.Content.Text);
 		}
 
 		#region DllImport
@@ -177,6 +239,26 @@ namespace Mql.Telegram.IntegrationTests
 
 		[DllImport(Constants.AssemblyUnderTestName)]
 		[return: MarshalAs(UnmanagedType.LPWStr)]
+		private static extern string GetUpdates();
+
+		[DllImport(Constants.AssemblyUnderTestName)]
+		[return: MarshalAs(UnmanagedType.LPWStr)]
+		private static extern string StartGetUpdates();
+
+		[DllImport(Constants.AssemblyUnderTestName)]
+		[return: MarshalAs(UnmanagedType.LPWStr)]
+		private static extern string SendPhoto(
+			[MarshalAs(UnmanagedType.LPWStr)] string chatId,
+			[MarshalAs(UnmanagedType.LPWStr)] string photoFile);
+
+		[DllImport(Constants.AssemblyUnderTestName)]
+		[return: MarshalAs(UnmanagedType.LPWStr)]
+		private static extern string StartSendPhoto(
+			[MarshalAs(UnmanagedType.LPWStr)] string chatId,
+			[MarshalAs(UnmanagedType.LPWStr)] string photoFile);
+
+		[DllImport(Constants.AssemblyUnderTestName)]
+		[return: MarshalAs(UnmanagedType.LPWStr)]
 		private static extern string SendText(
 			[MarshalAs(UnmanagedType.LPWStr)] string chatId,
 			[MarshalAs(UnmanagedType.LPWStr)] string chatText);
@@ -189,6 +271,28 @@ namespace Mql.Telegram.IntegrationTests
 
 		#endregion
 
+		#region Helper Methods
+
+		private async Task<string> WaitForMessageStoreAsync(string correlationKey)
+		{
+			var messageStoreResult = string.Empty;
+			for (int i = 0; i <= 10; i++)
+			{
+				messageStoreResult = GetMessageByCorrelationId(correlationKey);
+				if (messageStoreResult.Contains(nameof(KeyNotFoundException)))
+				{
+					await Task.Delay(1000);
+				}
+				else
+				{
+					break;
+				}
+			}
+
+			return messageStoreResult;
+		}
+
+		#endregion
 #endif
 	}
 }
