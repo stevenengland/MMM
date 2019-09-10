@@ -14,8 +14,8 @@
 	<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 	<Configurations>Debug;Release;DLLImportDebug</Configurations>
 	<PackageTags>MQL Telegram</PackageTags>
-	<AssemblyVersion>1.1.0.1</AssemblyVersion>
-	<FileVersion>1.1.0.1</FileVersion>
+	<AssemblyVersion>1.2.0.1</AssemblyVersion>
+	<FileVersion>1.2.0.1</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
