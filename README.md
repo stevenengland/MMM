@@ -10,15 +10,15 @@ The aim of this project is to provide popular messaging services for Metatrader.
 | Module        | Description        |
 | ------------- |:-------------|
 |[MQL Telegram](https://mmm.steven-england.info/MQL-Telegram)|You can use this module to send and receive Telegram messages via MQL code|
-|MQL Mail (planned)| You can use this module to send and receive mails via MQL code|
+|[MQL Mail](https://mmm.steven-england.info/MQL-Mail) | You can use this module to send mails via MQL code|
 
 ### Build Overview
 | Module        | Branch        | Status  |
 | ------------- |:-------------| :-------------:|
 | [MQL Telegram](https://mmm.steven-england.info/MQL-Telegram)  | master | [![Build Status](https://dev.azure.com/StEnPublic/MMM/_apis/build/status/Telegram/MMM_MQL_Telegram_x64?branchName=master)](https://dev.azure.com/StEnPublic/MMM/_build/latest?definitionId=6&branchName=master) |
 |       | develop      |   [![Build Status](https://dev.azure.com/StEnPublic/MMM/_apis/build/status/Telegram/MMM_MQL_Telegram_x64?branchName=develop)](https://dev.azure.com/StEnPublic/MMM/_build/latest?definitionId=6&branchName=develop) |
-| MQL Mail (planned) | master |  |
-|       | develop      |    |
+| [MQL Mail](https://mmm.steven-england.info/MQL-Mail) | master | [![Build status](https://dev.azure.com/StEnPublic/MMM/_apis/build/status/Mail/MMM_MQL_Mail_x64?branchName=master)](https://dev.azure.com/StEnPublic/MMM/_build/latest?definitionId=8&branchName=master) |
+|       | develop      |  [![Build status](https://dev.azure.com/StEnPublic/MMM/_apis/build/status/Mail/MMM_MQL_Mail_x64?branchName=develop)](https://dev.azure.com/StEnPublic/MMM/_build/latest?definitionId=8&branchName=develop)  |
 
 ## Getting started
 
@@ -56,7 +56,11 @@ Despites you might be lucky and the software will run though. Please don't ask f
 
 ## Donation
 
-If you like this software feel free to buy me a coffee via the following options:
+If you think these modules are useful to you, then it's a good reason to do a donation :)
+
+Your gratitude and finance help will motivate me to continue MMM project development.
+
+You can click one of the following links or just scan the QR code. Thanks a lot in advance!
 
 | Provider        | Link        |
 | ------------- |:-------------|
