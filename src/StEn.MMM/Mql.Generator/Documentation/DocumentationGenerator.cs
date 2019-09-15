@@ -26,6 +26,7 @@ namespace StEn.MMM.Mql.Generator.Documentation
 			string xmlCommentFile,
 			string binaryFile,
 			string assemblyName,
+			string assemblyVersion,
 			IEnumerable<Mql5FunctionDefinition> definitions)
 		{
 			var sortedFunctionDefinitions = definitions.OrderBy(x => x.MethodName).ToList();
@@ -35,7 +36,7 @@ namespace StEn.MMM.Mql.Generator.Documentation
 			reader = new DocXmlReader($"{xmlCommentFile}");
 
 			var builder = new StringBuilder();
-			builder.Append($"# {assemblyName} Documentation\n");
+			builder.Append($"# {assemblyName} {assemblyVersion} Documentation\n");
 			foreach (var definition in sortedFunctionDefinitions)
 			{
 				builder.Append(GenerateFunctionDocumentationText(definition) + "\n");
