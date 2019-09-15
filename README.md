@@ -65,4 +65,4 @@ You can click one of the following links or just scan the QR code. Thanks a lot 
 | Provider        | Link        |
 | ------------- |:-------------|
 | [Paypal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=KLZLAV7333HYN&source=url)        |[![Donate via Paypal](https://donate.steven-england.info/donate_qr_paypal.png "Donate via Paypal")](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=KLZLAV7333HYN&source=url)|
-| [Bitcoin](bitcoin:1M7tAz41GHDhyZJGvVEpYq4ijsvduE7Zad)      |[![Donate via Bitcoin](https://donate.steven-england.info/donate_qr_bitcoin.png "Donate via Bitcoin")](bitcoin:1M7tAz41GHDhyZJGvVEpYq4ijsvduE7Zad)|
+| [Bitcoin](bitcoin:1M7tAz41GHDhyZJGvVEpYq4ijsvduE7Zad)      |Address: 1M7tAz41GHDhyZJGvVEpYq4ijsvduE7Zad [![Donate via Bitcoin](https://donate.steven-england.info/donate_qr_bitcoin.png "Donate via Bitcoin")](bitcoin:1M7tAz41GHDhyZJGvVEpYq4ijsvduE7Zad)|
