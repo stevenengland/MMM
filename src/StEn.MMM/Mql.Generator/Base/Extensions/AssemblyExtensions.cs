@@ -10,12 +10,12 @@ namespace StEn.MMM.Mql.Generator.Base.Extensions
 	{
 		/// <summary>
 		/// Get the types within the assembly that match the predicate.
-		/// <para>for example, to get all types within a namespace</para>
-		/// <para>    typeof(SomeClassInAssemblyYouWant).Assembly.GetMatchingTypesInAssembly(item => "MyNamespace".Equals(item.Namespace))</para>
+		/// <para>for example, to get all types within a namespace.</para>
+		/// <para>    typeof(SomeClassInAssemblyYouWant).Assembly.GetMatchingTypesInAssembly(item => "MyNamespace".Equals(item.Namespace)).</para>
 		/// </summary>
-		/// <param name="assembly">The assembly to search</param>
-		/// <param name="predicate">The predicate query to match against</param>
-		/// <returns>The collection of types within the assembly that match the predicate</returns>
+		/// <param name="assembly">The assembly to search.</param>
+		/// <param name="predicate">The predicate query to match against.</param>
+		/// <returns>The collection of types within the assembly that match the predicate.</returns>
 		public static ICollection<Type> GetMatchingTypesInAssembly(this Assembly assembly, Predicate<Type> predicate)
 		{
 			ICollection<Type> types = new List<Type>();
