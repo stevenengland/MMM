@@ -130,7 +130,7 @@ namespace StEn.MMM.Mql.Telegram.Services.Telegram
 			{
 				return this.ProxyCall(this.botClient.SendTextMessageAsync(
 					chatId: this.CreateChatId(chatId),
-					text: text,
+					text: CharacterTransformation.TransformSpecialCharacters(text),
 					cancellationToken: cancellationTokenSource.Token));
 			}
 		}
@@ -141,7 +141,7 @@ namespace StEn.MMM.Mql.Telegram.Services.Telegram
 			var cancellationTokenSource = this.CtsFactory();
 			return this.FireAndForgetProxyCall(this.botClient.SendTextMessageAsync(
 					chatId: this.CreateChatId(chatId),
-					text: text,
+					text: CharacterTransformation.TransformSpecialCharacters(text),
 					cancellationToken: cancellationTokenSource.Token)
 				.DisposeAfterThreadCompletionAsync(new IDisposable[]
 				{

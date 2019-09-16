@@ -6,6 +6,7 @@
       Newtonsoft.Json
       Telegram.Bot
       Nito.*
+      NeoSmart.Unicode
     </IncludeAssemblies>
   </Costura>
 </Weavers>

@@ -191,6 +191,22 @@ namespace Mql.Telegram.IntegrationTests
 
 		[Test]
 		[Category(Constants.TelegramBotApiMethods.SendMessage)]
+		public void SendTextSendsTextMessageWithEmojiToUser()
+		{
+			Initialize(
+				MBTHelper.ConvertMaskedSecretToRealValue(Secrets.TELEGRAM_BOT_API_KEY.ToString()),
+				10);
+			SetDebugOutput(true);
+			var result = SendText(
+				MBTHelper.ConvertMaskedSecretToRealValue(Secrets.TELEGRAM_USER_ID.ToString()),
+				$"{nameof(this.SendTextSendsTextMessageToUser)} with \\U+1F601");
+			Console.WriteLine($"JSON for {nameof(result)} is: {result}");
+			var successResponse = JsonConvert.DeserializeObject<Response<Message>>(result);
+			Assert.AreEqual($"{nameof(this.SendTextSendsTextMessageToUser)} with 😁", successResponse.Content.Text);
+		}
+
+		[Test]
+		[Category(Constants.TelegramBotApiMethods.SendMessage)]
 		public async Task StartSendTextReturnsCorrelationIdAsync()
 		{
 			Initialize(
