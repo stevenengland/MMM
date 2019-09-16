@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using StEn.MMM.Mql.Common.Services.InApi.Entities;
 using StEn.MMM.Mql.Telegram;
 using StEn.MMM.Mql.Telegram.Services.Telegram;
+using Telegram.Bot.Types.Enums;
 using Xunit;
 
 namespace Mql.Telegram.Tests
@@ -74,6 +75,31 @@ namespace Mql.Telegram.Tests
 			Assert.True(TelegramDllExports.Bot.RequestTimeout == 10000);
 			TelegramDllExports.SetRequestTimeout(20);
 			Assert.True(TelegramDllExports.Bot.RequestTimeout == 20000);
+		}
+
+		[Fact]
+		public void DefaultValuesAreSet()
+		{
+			TelegramDllExports.Initialize(ApiKey, 10);
+
+			TelegramDllExports.SetDefaultValue(nameof(TelegramDllExports.Bot.DisableNotifications),"true");
+			TelegramDllExports.SetDefaultValue(nameof(TelegramDllExports.Bot.DisableWebPagePreview),"true");
+			TelegramDllExports.SetDefaultValue(nameof(TelegramDllExports.Bot.ParseMode),"html");
+			Assert.True(TelegramDllExports.Bot.DisableNotifications);
+			Assert.True(TelegramDllExports.Bot.DisableWebPagePreview);
+			Assert.True(TelegramDllExports.Bot.ParseMode == ParseMode.Html);
+		}
+
+		[Fact]
+		public void SetDefaultValueInputsGetValidated()
+		{
+			var mock = new Mock<ITelegramBotMapper>();
+
+			TelegramDllExports.Initialize(ApiKey, 10);
+			TelegramDllExports.Bot = mock.Object;
+
+			Assert.Contains(nameof(ArgumentException), TelegramDllExports.SetDefaultValue(string.Empty, "some text"));
+			Assert.Contains(nameof(ArgumentException), TelegramDllExports.SetDefaultValue("some text", string.Empty));
 		}
 
 		[Fact]

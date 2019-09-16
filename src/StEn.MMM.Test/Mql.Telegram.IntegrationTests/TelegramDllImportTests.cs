@@ -23,6 +23,25 @@ namespace Mql.Telegram.IntegrationTests
 		}
 
 		[Test]
+		[Category(Constants.TelegramBotApiMethods.Internal)]
+		public void ConfigurationFunctionsCanBeCalled()
+		{
+			Assert.IsInstanceOf<Response<string>>(JsonConvert.DeserializeObject<Response<string>>(
+				Initialize(
+					MBTHelper.ConvertMaskedSecretToRealValue(Secrets.TELEGRAM_BOT_API_KEY.ToString()),
+					10)));
+
+			Assert.IsInstanceOf<Response<string>>(JsonConvert.DeserializeObject<Response<string>>(
+				SetDebugOutput(true)));
+
+			Assert.IsInstanceOf<Response<string>>(JsonConvert.DeserializeObject<Response<string>>(
+				SetRequestTimeout(10)));
+
+			Assert.IsInstanceOf<Response<string>>(JsonConvert.DeserializeObject<Response<string>>(
+				SetDefaultValue("ParseMode", "html")));
+		}
+
+		[Test]
 		[Category(Constants.TelegramBotApiMethods.GetMe)]
 		public void RequestForCorrelationKeyReturnsErrorIfEntryIsNotFound()
 		{
@@ -30,6 +49,7 @@ namespace Mql.Telegram.IntegrationTests
 				MBTHelper.ConvertMaskedSecretToRealValue(Secrets.TELEGRAM_BOT_API_KEY.ToString()),
 				10);
 			SetDebugOutput(true);
+			SetRequestTimeout(10);
 			var result = GetMessageByCorrelationId("test");
 			Console.WriteLine($"JSON for {nameof(result)} is: {result}");
 
@@ -232,7 +252,17 @@ namespace Mql.Telegram.IntegrationTests
 
 		[DllImport(Constants.AssemblyUnderTestName)]
 		[return: MarshalAs(UnmanagedType.LPWStr)]
+		private static extern string SetRequestTimeout(int timeout);
+
+		[DllImport(Constants.AssemblyUnderTestName)]
+		[return: MarshalAs(UnmanagedType.LPWStr)]
 		private static extern string SetDebugOutput([MarshalAs(UnmanagedType.Bool)] bool enabled);
+
+		[DllImport(Constants.AssemblyUnderTestName)]
+		[return: MarshalAs(UnmanagedType.LPWStr)]
+		private static extern string SetDefaultValue(
+			[MarshalAs(UnmanagedType.LPWStr)] string parameterKey,
+			[MarshalAs(UnmanagedType.LPWStr)] string defaultValue);
 
 		[DllImport(Constants.AssemblyUnderTestName)]
 		[return: MarshalAs(UnmanagedType.LPWStr)]

@@ -11,6 +11,7 @@ using StEn.MMM.Mql.Common.Services.InApi.Factories;
 using StEn.MMM.Mql.Telegram.Services.Telegram;
 using Telegram.Bot;
 
+
 namespace StEn.MMM.Mql.Telegram
 {
 	/// <summary>
@@ -304,7 +305,7 @@ namespace StEn.MMM.Mql.Telegram
 		public static string StartSendText(
 			[MqlParamDoc(ExampleValue = "-1001167825793")]
 			[MarshalAs(UnmanagedType.LPWStr)] string chatId,
-			[MqlParamDoc(ExampleValue = "Some text")]
+			[MqlParamDoc(ExampleValue = "Some text <b>bold</b>")]
 			[MarshalAs(UnmanagedType.LPWStr)] string chatText)
 		{
 			try
@@ -433,6 +434,47 @@ namespace StEn.MMM.Mql.Telegram
 			try
 			{
 				responseFactory.IsDebugEnabled = enableDebug;
+				return responseFactory.Success().ToString();
+			}
+			catch (Exception e)
+			{
+				return responseFactory.Error(e).ToString();
+			}
+		}
+
+		/// <summary>
+		/// Enables or disables a more verbose output in case of exceptions.
+		/// </summary>
+		/// <param name="parameterKey">
+		/// The parameter for which the default value should be changed. Valid inputs are:
+		/// <list type="bullet">
+		/// <item>DisableWebPagePreview - true/false</item>
+		/// <item>DisableNotifications - true/false</item>
+		/// <item>ParseMode - HTML/Markdown/Default</item>
+		/// </list>
+		/// The parameter takes effect for every upcoming call to a function using this parameter.
+		/// </param>
+		/// <param name="defaultValue">The default value for the parameter.</param>
+		/// <returns>
+		/// A JSON string representing a <see wikiref="https://mmm.steven-england.info/Generic-Response"/>.
+		/// On success there is no payload but only the success flag in the header data.
+		/// </returns>
+#if !DEBUG
+		[DllExport("SetDefaultValue", CallingConvention = CallingConvention.StdCall)]
+#endif
+		[MqlFuncDoc(Order = 3)]
+		[return: MarshalAs(UnmanagedType.LPWStr)]
+		public static string SetDefaultValue(
+			[MqlParamDoc(ExampleValue = "ParseMode")]
+			[MarshalAs(UnmanagedType.LPWStr)] string parameterKey,
+			[MqlParamDoc(ExampleValue = "html")]
+			[MarshalAs(UnmanagedType.LPWStr)] string defaultValue)
+		{
+			try
+			{
+				Ensure.NotNullOrEmptyOrWhiteSpace(parameterKey, $"The argument {nameof(parameterKey)} must not be empty or just whitespace.");
+				Ensure.NotNullOrEmptyOrWhiteSpace(defaultValue, $"The argument {nameof(defaultValue)} must not be empty or just whitespace.");
+				bot.SetDefaultValue(parameterKey, defaultValue);
 				return responseFactory.Success().ToString();
 			}
 			catch (Exception e)
