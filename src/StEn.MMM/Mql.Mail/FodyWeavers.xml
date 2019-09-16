@@ -2,11 +2,12 @@
 <Weavers xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="FodyWeavers.xsd">
   <Costura IncludeDebugSymbols='false'>
     <IncludeAssemblies>
+      BouncyCastle.Crypto
+      MailKit
+      MimeKit
       Mql.Common
       Newtonsoft.Json
-      Telegram.Bot
       Nito.*
-      NeoSmart.Unicode
     </IncludeAssemblies>
   </Costura>
 </Weavers>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using StEn.MMM.Mql.Common.Base.Extensions;
@@ -9,6 +10,7 @@ using StEn.MMM.Mql.Common.Base.Utilities;
 using StEn.MMM.Mql.Common.Services.InApi.Factories;
 using Telegram.Bot;
 using Telegram.Bot.Types;
+using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.InputFiles;
 
 namespace StEn.MMM.Mql.Telegram.Services.Telegram
@@ -35,6 +37,65 @@ namespace StEn.MMM.Mql.Telegram.Services.Telegram
 
 		/// <inheritdoc />
 		public int RequestTimeout { get; set; }
+
+		/// <inheritdoc />
+		public ParseMode ParseMode { get; private set; } = ParseMode.Default;
+
+		/// <inheritdoc />
+		public bool DisableNotifications { get; private set; } = false;
+
+		/// <inheritdoc />
+		public bool DisableWebPagePreview { get; private set; } = false;
+
+		/// <inheritdoc/>
+		public string SetDefaultValue(string parameterKey, string defaultValue)
+		{
+			var responseText = string.Empty;
+			bool disabled;
+			switch (parameterKey)
+			{
+				case nameof(this.DisableWebPagePreview):
+					if (bool.TryParse(defaultValue.ToLower(), out disabled))
+					{
+						this.DisableWebPagePreview = disabled;
+					}
+					else
+					{
+						return this.responseFactory.Error(new ArgumentException($"Invalid value for {nameof(defaultValue)}: {defaultValue}"), $"The value must be 'true' or 'false'.").ToString();
+					}
+
+					responseText = this.responseFactory.Success().ToString();
+					break;
+				case nameof(this.DisableNotifications):
+					if (bool.TryParse(defaultValue.ToLower(), out disabled))
+					{
+						this.DisableNotifications = disabled;
+					}
+					else
+					{
+						return this.responseFactory.Error(new ArgumentException($"Invalid value for {nameof(defaultValue)}: {defaultValue}"), $"The value must be 'true' or 'false'.").ToString();
+					}
+
+					responseText = this.responseFactory.Success().ToString();
+					break;
+				case nameof(this.ParseMode):
+					if (Enum.TryParse<ParseMode>(defaultValue, true, out var parseMode))
+					{
+						this.ParseMode = parseMode;
+					}
+					else
+					{
+						return this.responseFactory.Error(new ArgumentException($"Invalid value for {nameof(defaultValue)}: {defaultValue}"), $"The value must be 'true' or 'false'.").ToString();
+					}
+
+					responseText = this.responseFactory.Success().ToString();
+					break;
+				default:
+					return this.responseFactory.Error(new KeyNotFoundException($"Unknown {nameof(parameterKey)}: {parameterKey}"), $"Cannot set default value for unknown {nameof(parameterKey)}").ToString();
+			}
+
+			return responseText;
+		}
 
 		/// <inheritdoc />
 		public string GetMessageByCorrelationId(string correlationKey)
@@ -89,6 +150,45 @@ namespace StEn.MMM.Mql.Telegram.Services.Telegram
 		}
 
 		/// <inheritdoc />
+		public string SendDocument(string chatId, string file)
+		{
+			using (var fs = System.IO.File.OpenRead(file))
+			{
+				var inputOnlineFile = new InputOnlineFile(fs);
+				using (var cancellationTokenSource = this.CtsFactory())
+				{
+					return this.ProxyCall(this.botClient.SendDocumentAsync(
+						chatId: this.CreateChatId(chatId),
+						document: inputOnlineFile,
+						caption: Path.GetFileName(fs.Name),
+						disableNotification: this.DisableNotifications,
+						cancellationToken: cancellationTokenSource.Token));
+				}
+			}
+		}
+
+		/// <inheritdoc />
+		public string StartSendDocument(string chatId, string file)
+		{
+			var fs = System.IO.File.OpenRead(file);
+
+			var inputOnlineFile = new InputOnlineFile(fs);
+			var cancellationTokenSource = this.CtsFactory();
+
+			return this.FireAndForgetProxyCall(this.botClient.SendDocumentAsync(
+					chatId: this.CreateChatId(chatId),
+					document: inputOnlineFile,
+					caption: Path.GetFileName(fs.Name),
+					disableNotification: this.DisableNotifications,
+					cancellationToken: cancellationTokenSource.Token)
+				.DisposeAfterThreadCompletionAsync(new IDisposable[]
+				{
+					cancellationTokenSource,
+					fs,
+				}));
+		}
+
+		/// <inheritdoc />
 		public string SendPhoto(string chatId, string photoFile)
 		{
 			using (var fs = System.IO.File.OpenRead(photoFile))
@@ -99,6 +199,7 @@ namespace StEn.MMM.Mql.Telegram.Services.Telegram
 					return this.ProxyCall(this.botClient.SendPhotoAsync(
 						chatId: this.CreateChatId(chatId),
 						photo: inputOnlineFile,
+						disableNotification: this.DisableNotifications,
 						cancellationToken: cancellationTokenSource.Token));
 				}
 			}
@@ -115,6 +216,7 @@ namespace StEn.MMM.Mql.Telegram.Services.Telegram
 			return this.FireAndForgetProxyCall(this.botClient.SendPhotoAsync(
 				chatId: this.CreateChatId(chatId),
 				photo: inputOnlineFile,
+				disableNotification: this.DisableNotifications,
 				cancellationToken: cancellationTokenSource.Token)
 					.DisposeAfterThreadCompletionAsync(new IDisposable[]
 					{
@@ -130,7 +232,10 @@ namespace StEn.MMM.Mql.Telegram.Services.Telegram
 			{
 				return this.ProxyCall(this.botClient.SendTextMessageAsync(
 					chatId: this.CreateChatId(chatId),
-					text: text,
+					text: CharacterTransformation.TransformSpecialCharacters(text),
+					disableNotification: this.DisableNotifications,
+					disableWebPagePreview: this.DisableWebPagePreview,
+					parseMode: this.ParseMode,
 					cancellationToken: cancellationTokenSource.Token));
 			}
 		}
@@ -141,7 +246,10 @@ namespace StEn.MMM.Mql.Telegram.Services.Telegram
 			var cancellationTokenSource = this.CtsFactory();
 			return this.FireAndForgetProxyCall(this.botClient.SendTextMessageAsync(
 					chatId: this.CreateChatId(chatId),
-					text: text,
+					text: CharacterTransformation.TransformSpecialCharacters(text),
+					disableNotification: this.DisableNotifications,
+					disableWebPagePreview: this.DisableWebPagePreview,
+					parseMode: this.ParseMode,
 					cancellationToken: cancellationTokenSource.Token)
 				.DisposeAfterThreadCompletionAsync(new IDisposable[]
 				{

@@ -2,26 +2,16 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyName>Mql_Telegram</AssemblyName>
-    <PackageProjectUrl>https://github.com/stevenengland/MMM</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/stevenengland/MMM</RepositoryUrl>
-    <PackageId>Mql.Telegram</PackageId>
-    <Authors>Steven England (StEn)</Authors>
-    <Product>Mql.Telegram</Product>
-    <Company />
-    <RootNamespace>StEn.MMM.Mql.Telegram</RootNamespace>
     <Platforms>AnyCPU;x64;x86</Platforms>
+    <Configurations>Debug;Release;DLLImportDebug</Configurations>
+    <AssemblyName>Mql_Mail</AssemblyName>
+    <RootNamespace>StEn.MMM.Mql.Mail</RootNamespace>
 	<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-	<Configurations>Debug;Release;DLLImportDebug</Configurations>
-	<PackageTags>MQL Telegram</PackageTags>
-	<AssemblyVersion>1.3.0.1</AssemblyVersion>
-	<FileVersion>1.2.0.1</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <PlatformTarget>x64</PlatformTarget>
     <ShouldCreateLogs>True</ShouldCreateLogs>
-    <AdvancedSettingsExpanded>True</AdvancedSettingsExpanded>
+    <AdvancedSettingsExpanded>False</AdvancedSettingsExpanded>
     <UpdateAssemblyVersion>True</UpdateAssemblyVersion>
     <UpdateAssemblyFileVersion>True</UpdateAssemblyFileVersion>
     <UpdateAssemblyInfoVersion>False</UpdateAssemblyInfoVersion>
@@ -31,18 +21,18 @@
     <InheritWinAppVersionFrom>None</InheritWinAppVersionFrom>
     <AssemblyFileVersionSettings>IncrementOnDemand.IncrementOnDemand.None.None</AssemblyFileVersionSettings>
   </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
-    <PlatformTarget>x64</PlatformTarget>
-  </PropertyGroup>
-
+  
   <PropertyGroup>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <PackageId>Mql.Mail</PackageId>
+    <Authors>Steven England (StEn)</Authors>
+    <Product>Mql.Mail</Product>
+    <PackageProjectUrl>https://github.com/stevenengland/MMM</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/stevenengland/MMM</RepositoryUrl>
+    <PackageTags>MQL Mail</PackageTags>
+    <AssemblyVersion>1.0.0.1</AssemblyVersion>
+    <FileVersion>1.0.0.1</FileVersion>
   </PropertyGroup>
-
-  <ItemGroup Condition="'$(Configuration)' == 'Release'"> 
-	
-  </ItemGroup>
   
   <ItemGroup>
     <PackageReference Include="Costura.Fody" Version="4.0.0" />
@@ -50,16 +40,12 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Telegram.Bot" Version="14.12.0" />
+	<PackageReference Include="MailKit" Version="2.3.1.6" />
     <PackageReference Include="UnmanagedExports.Repack.Upgrade" Version="1.2.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Mql.Common\Mql.Common.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Base\" />
   </ItemGroup>
 
 </Project>

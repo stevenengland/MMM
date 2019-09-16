@@ -156,6 +156,88 @@ namespace StEn.MMM.Mql.Telegram
 		}
 
 		/// <summary>
+		/// <para>Use this method to send general files. Bots can send files of any type of up to 50 MB in size.</para>
+		/// <para>See <see href="https://core.telegram.org/bots/api#senddocument">Telegram API</see> for more details.</para>
+		/// </summary>
+		/// <param name="chatId">
+		/// Identifier for the target chat. You have different options for identifiers:
+		/// <list type="bullet">
+		///   <item>The Username of the channel (in the format @channel_username)</item>
+		///   <item>The ID of a user, group or channel (in the format "1546456487" or "-165489645654654" etc.)</item>
+		/// </list>
+		/// The user name of a channel can only be used if the channel is public.
+		/// </param>
+		/// <param name="file">Path to the document file.</param>
+		/// <returns>
+		/// A JSON string representing a <see wikiref="https://mmm.steven-england.info/Generic-Response"/>.
+		/// On success the payload is a <see href="https://core.telegram.org/bots/api#message">Telegram Message</see>.
+		/// </returns>
+#if !DEBUG
+		[DllExport("SendDocument", CallingConvention = CallingConvention.StdCall)]
+#endif
+		[return: MarshalAs(UnmanagedType.LPWStr)]
+		public static string SendDocument(
+			[MqlParamDoc(ExampleValue = "-1001167825793")]
+			[MarshalAs(UnmanagedType.LPWStr)] string chatId,
+			[MqlParamDoc(ExampleValue = "D:/pathToFile/log.txt")]
+			[MarshalAs(UnmanagedType.LPWStr)] string file)
+		{
+			try
+			{
+				Ensure.NotNullOrEmptyOrWhiteSpace(chatId, $"The argument {nameof(chatId)} must not be empty or just whitespace.");
+				Ensure.That<ArgumentException>(File.Exists(file), $"The argument {nameof(file)} does not contain a valid file path.");
+				return Bot.SendDocument(chatId, file);
+			}
+			catch (Exception e)
+			{
+				return responseFactory.Error(e).ToString();
+			}
+		}
+
+		/// <summary>
+		/// <para>Use this method to send general files. Bots can send files of any type of up to 50 MB in size.</para>
+		/// <para>See <see href="https://core.telegram.org/bots/api#senddocument">Telegram API</see> for more details.</para>
+		/// </summary>
+		/// <param name="chatId">
+		/// Identifier for the target chat. You have different options for identifiers:
+		/// <list type="bullet">
+		///   <item>The Username of the channel (in the format @channel_username)</item>
+		///   <item>The ID of a user, group or channel (in the format "1546456487" or "-165489645654654" etc.)</item>
+		/// </list>
+		/// The user name of a channel can only be used if the channel is public.
+		/// </param>
+		/// <param name="file">Path to the document file.</param>
+		/// <returns>
+		/// A JSON string representing a <see wikiref="https://mmm.steven-england.info/Generic-Response"/>.
+		/// On success the payload is a <see href="https://core.telegram.org/bots/api#message">Telegram Message</see>.
+		/// </returns>
+		/// <remarks>
+		/// <para>This method starts an independent background thread and immediately returns a response with a correlation key but empty payload.</para>
+		/// <para>You can use the correlation key to check the result of the thread later via <see cref="GetMessageByCorrelationId"/>.</para>
+		/// </remarks>
+#if !DEBUG
+		[DllExport("StartSendDocument", CallingConvention = CallingConvention.StdCall)]
+#endif
+		[return: MarshalAs(UnmanagedType.LPWStr)]
+		public static string StartSendDocument(
+			[MqlParamDoc(ExampleValue = "-1001167825793")]
+			[MarshalAs(UnmanagedType.LPWStr)] string chatId,
+			[MqlParamDoc(ExampleValue = "D:/pathToFile/log.txt")]
+			[MarshalAs(UnmanagedType.LPWStr)] string file)
+		{
+			try
+			{
+				Ensure.NotNullOrEmptyOrWhiteSpace(chatId, $"The argument {nameof(chatId)} must not be empty or just whitespace.");
+				Ensure.That<ArgumentException>(File.Exists(file), $"The argument {nameof(file)} does not contain a valid file path.");
+				return Bot.StartSendDocument(chatId, file);
+			}
+			catch (Exception e)
+			{
+				return responseFactory.Error(e).ToString();
+			}
+		}
+
+		/// <summary>
 		/// <para>Use this method to send a photo.</para>
 		/// <para>See <see href="https://core.telegram.org/bots/api#sendphoto">Telegram API</see> for more details.</para>
 		/// </summary>
@@ -304,7 +386,7 @@ namespace StEn.MMM.Mql.Telegram
 		public static string StartSendText(
 			[MqlParamDoc(ExampleValue = "-1001167825793")]
 			[MarshalAs(UnmanagedType.LPWStr)] string chatId,
-			[MqlParamDoc(ExampleValue = "Some text")]
+			[MqlParamDoc(ExampleValue = "Some text in <b>bold</b> with smile emoji: \\U+1F601")]
 			[MarshalAs(UnmanagedType.LPWStr)] string chatText)
 		{
 			try
@@ -433,6 +515,47 @@ namespace StEn.MMM.Mql.Telegram
 			try
 			{
 				responseFactory.IsDebugEnabled = enableDebug;
+				return responseFactory.Success().ToString();
+			}
+			catch (Exception e)
+			{
+				return responseFactory.Error(e).ToString();
+			}
+		}
+
+		/// <summary>
+		/// Enables or disables a more verbose output in case of exceptions.
+		/// </summary>
+		/// <param name="parameterKey">
+		/// The parameter for which the default value should be changed. Valid inputs are:
+		/// <list type="bullet">
+		/// <item>DisableWebPagePreview - true/false</item>
+		/// <item>DisableNotifications - true/false</item>
+		/// <item>ParseMode - HTML/Markdown/Default</item>
+		/// </list>
+		/// The parameter takes effect for every upcoming call to a function using this parameter.
+		/// </param>
+		/// <param name="defaultValue">The default value for the parameter.</param>
+		/// <returns>
+		/// A JSON string representing a <see wikiref="https://mmm.steven-england.info/Generic-Response"/>.
+		/// On success there is no payload but only the success flag in the header data.
+		/// </returns>
+#if !DEBUG
+		[DllExport("SetDefaultValue", CallingConvention = CallingConvention.StdCall)]
+#endif
+		[MqlFuncDoc(Order = 3)]
+		[return: MarshalAs(UnmanagedType.LPWStr)]
+		public static string SetDefaultValue(
+			[MqlParamDoc(ExampleValue = "ParseMode")]
+			[MarshalAs(UnmanagedType.LPWStr)] string parameterKey,
+			[MqlParamDoc(ExampleValue = "html")]
+			[MarshalAs(UnmanagedType.LPWStr)] string defaultValue)
+		{
+			try
+			{
+				Ensure.NotNullOrEmptyOrWhiteSpace(parameterKey, $"The argument {nameof(parameterKey)} must not be empty or just whitespace.");
+				Ensure.NotNullOrEmptyOrWhiteSpace(defaultValue, $"The argument {nameof(defaultValue)} must not be empty or just whitespace.");
+				bot.SetDefaultValue(parameterKey, defaultValue);
 				return responseFactory.Success().ToString();
 			}
 			catch (Exception e)
