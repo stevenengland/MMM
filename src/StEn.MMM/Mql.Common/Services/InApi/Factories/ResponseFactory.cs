@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 using StEn.MMM.Mql.Common.Services.InApi.Entities;
 
@@ -62,6 +63,9 @@ namespace StEn.MMM.Mql.Common.Services.InApi.Factories
 					break;
 				case OperationCanceledException _:
 					message = "The operation was cancelled.";
+					break;
+				case KeyNotFoundException _:
+					message = "The key could not be found.";
 					break;
 				default:
 					message = "An exception occured.";
