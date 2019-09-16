@@ -1,5 +1,6 @@
 ﻿using StEn.MMM.Mql.Common.Services.InApi.Entities;
 using Telegram.Bot.Types;
+using Telegram.Bot.Types.Enums;
 
 namespace StEn.MMM.Mql.Telegram.Services.Telegram
 {
@@ -14,10 +15,33 @@ namespace StEn.MMM.Mql.Telegram.Services.Telegram
 		int RequestTimeout { get; set; }
 
 		/// <summary>
+		/// Gets the current default parse mode.
+		/// </summary>
+		ParseMode ParseMode { get; }
+
+		/// <summary>
+		/// Gets a value indicating whether the default value for notification disabling is true.
+		/// </summary>
+		bool DisableNotifications { get; }
+
+		/// <summary>
+		/// Gets a value indicating whether the default value for web page preview disabling is true.
+		/// </summary>
+		bool DisableWebPagePreview { get; }
+
+		/// <summary>
+		/// Sets a default value for operations that use the <paramref name="parameterKey"/>.
+		/// </summary>
+		/// <param name="parameterKey">The parameter for which the default value should be changed.</param>
+		/// <param name="defaultValue">The default value for the <paramref name="parameterKey"/>.</param>
+		/// <returns>Returns if the default value was set successfully.</returns>
+		string SetDefaultValue(string parameterKey, string defaultValue);
+
+		/// <summary>
 		/// Determines the <see cref="Response{T}"/> of a background thread that was triggered via a Start method.
 		/// </summary>
 		/// <param name="correlationKey">The identifier that was created be a Start method.</param>
-		/// <returns>If the key exists a <see cref="Response{T}"/> is returned that holds the content of the corresponding Start method.</returns>
+		/// <returns>If the parameterKey exists a <see cref="Response{T}"/> is returned that holds the content of the corresponding Start method.</returns>
 		string GetMessageByCorrelationId(string correlationKey);
 
 		/// <summary>
@@ -49,6 +73,26 @@ namespace StEn.MMM.Mql.Telegram.Services.Telegram
 		/// <returns>Returns correlation information to obtain the result of the background thread.</returns>
 		/// <see href="https://core.telegram.org/bots/api#getupdates"/>
 		string StartGetUpdates();
+
+		/// <summary>
+		/// Use this method to send general files. On success, the sent Description is returned.
+		/// Bots can send files of any type of up to 50 MB in size.
+		/// </summary>
+		/// <param name="chatId"><see cref="ChatId"/> for the target chat.</param>
+		/// <param name="file">File to send.</param>
+		/// <returns>On success, the sent Description is returned.</returns>
+		/// <see href="https://core.telegram.org/bots/api#senddocument"/>
+		string SendDocument(string chatId, string file);
+
+		/// <summary>
+		/// Use this method to send general files. On success, the sent Description is returned.
+		/// Bots can send files of any type of up to 50 MB in size.
+		/// </summary>
+		/// <param name="chatId"><see cref="ChatId"/> for the target chat.</param>
+		/// <param name="file">File to send.</param>
+		/// <returns>Returns correlation information to obtain the result of the background thread.</returns>
+		/// <see href="https://core.telegram.org/bots/api#senddocument"/>
+		string StartSendDocument(string chatId, string file);
 
 		/// <summary>
 		/// Use this method to send photos. On success, the sent Description is returned.

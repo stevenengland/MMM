@@ -9,6 +9,7 @@ using StEn.MMM.Mql.Common.Services.InApi.Entities;
 using StEn.MMM.Mql.Common.Services.InApi.Factories;
 using StEn.MMM.Mql.Telegram.Services.Telegram;
 using Telegram.Bot;
+using Telegram.Bot.Types.Enums;
 using Xunit;
 
 namespace Mql.Telegram.Tests.Services.Telegram
@@ -36,6 +37,53 @@ namespace Mql.Telegram.Tests.Services.Telegram
 			var result = mapper.ProxyCall(this.LongRunningTaskAsync(cts.Token));
 			var errorResponse = JsonConvert.DeserializeObject<Response<Error>>(result);
 			Assert.Equal(typeof(OperationCanceledException).Name, errorResponse.Content.ExceptionType);
+		}
+
+		[Theory]
+		[InlineData("true", true)]
+		[InlineData("false", false)]
+		public void SetDefaultForDisableNotificationIsHandled(string actual, bool expected)
+		{
+			var mapper = new TelegramBotMapper(new TelegramBotClient(ApiKey), this.responseFactory);
+			JsonConvert.DeserializeObject<Response<string>>(mapper.SetDefaultValue($"{nameof(mapper.DisableNotifications)}", actual));
+			Assert.Equal(expected, mapper.DisableNotifications);
+			var result = JsonConvert.DeserializeObject<Response<Error>>(mapper.SetDefaultValue($"{nameof(mapper.DisableNotifications)}", "unknown"));
+			Assert.Equal(typeof(ArgumentException).Name, result.Content.ExceptionType);
+		}
+
+		[Theory]
+		[InlineData("true", true)]
+		[InlineData("false", false)]
+		public void SetDefaultForDisableWebPagePreviewIsHandled(string actual, bool expected)
+		{
+			var mapper = new TelegramBotMapper(new TelegramBotClient(ApiKey), this.responseFactory);
+			JsonConvert.DeserializeObject<Response<string>>(mapper.SetDefaultValue($"{nameof(mapper.DisableWebPagePreview)}", actual));
+			Assert.Equal(expected, mapper.DisableWebPagePreview);
+
+			var result = JsonConvert.DeserializeObject<Response<Error>>(mapper.SetDefaultValue($"{nameof(mapper.DisableWebPagePreview)}", "unknown"));
+			Assert.Equal(typeof(ArgumentException).Name, result.Content.ExceptionType);
+		}
+
+		[Theory]
+		[InlineData("default", ParseMode.Default)]
+		[InlineData("html", ParseMode.Html)]
+		[InlineData("Html", ParseMode.Html)]
+		public void SetDefaultForParseModeIsHandled(string actual, ParseMode expected)
+		{
+			var mapper = new TelegramBotMapper(new TelegramBotClient(ApiKey), this.responseFactory);
+			JsonConvert.DeserializeObject<Response<string>>(mapper.SetDefaultValue($"{nameof(mapper.ParseMode)}", actual));
+			Assert.Equal(expected, mapper.ParseMode);
+
+			var result = JsonConvert.DeserializeObject<Response<Error>>(mapper.SetDefaultValue($"{nameof(mapper.ParseMode)}", "unknown"));
+			Assert.Equal(typeof(ArgumentException).Name, result.Content.ExceptionType);
+		}
+
+		[Fact]
+		public void SetDefaultForUnknownKeyThrowsException()
+		{
+			var mapper = new TelegramBotMapper(new TelegramBotClient(ApiKey), this.responseFactory);
+			var result = JsonConvert.DeserializeObject<Response<Error>>(mapper.SetDefaultValue($"UnknownStuff", "test"));
+			Assert.Equal(typeof(KeyNotFoundException).Name, result.Content.ExceptionType);
 		}
 
 		[Fact]

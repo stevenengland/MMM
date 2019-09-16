@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using LoxSmoke.DocXml;
+using StEn.MMM.Mql.Generator.Base.Extensions;
 using StEn.MMM.Mql.Generator.Mql;
 
 namespace StEn.MMM.Mql.Generator.Documentation
@@ -26,16 +27,18 @@ namespace StEn.MMM.Mql.Generator.Documentation
 			string xmlCommentFile,
 			string binaryFile,
 			string assemblyName,
+			string assemblyVersion,
 			IEnumerable<Mql5FunctionDefinition> definitions)
 		{
 			var sortedFunctionDefinitions = definitions.OrderBy(x => x.MethodName).ToList();
 			var asm = Assembly.UnsafeLoadFrom(binaryFile);
-			dllExportsType = asm.GetTypes().FirstOrDefault(t => t.IsClass && t.Name.EndsWith("DllExports"));
+			var asmTypes = asm.GetMatchingTypesInAssembly(t => t.IsClass && t.Name.EndsWith("DllExports")); // asm.GetTypes();
+			dllExportsType = asmTypes.FirstOrDefault(t => t.IsClass && t.Name.EndsWith("DllExports"));
 
 			reader = new DocXmlReader($"{xmlCommentFile}");
 
 			var builder = new StringBuilder();
-			builder.Append($"# {assemblyName} Documentation\n");
+			builder.Append($"# {assemblyName} {assemblyVersion} Documentation\n");
 			foreach (var definition in sortedFunctionDefinitions)
 			{
 				builder.Append(GenerateFunctionDocumentationText(definition) + "\n");

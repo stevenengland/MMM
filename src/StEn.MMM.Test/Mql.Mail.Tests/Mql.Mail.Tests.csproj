@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
     <Platforms>AnyCPU;x64;x86</Platforms>
     <Configurations>Debug;Release;DLLImportDebug</Configurations>
   </PropertyGroup>
@@ -24,16 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\StEn.MMM\Mql.Telegram\Mql.Telegram.csproj" />
+    <ProjectReference Include="..\..\StEn.MMM\Mql.Mail\Mql.Mail.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <None Update="assets\fake_log.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="assets\favicon-32x32.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
+  
 </Project>
