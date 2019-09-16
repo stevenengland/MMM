@@ -122,6 +122,44 @@ namespace Mql.Telegram.IntegrationTests
 		}
 
 		[Test]
+		[Category(Constants.TelegramBotApiMethods.SendDocument)]
+		public void SendDocumentSendsDocumentMessageToUser()
+		{
+			Initialize(
+				MBTHelper.ConvertMaskedSecretToRealValue(Secrets.TELEGRAM_BOT_API_KEY.ToString()),
+				10);
+			SetDebugOutput(true);
+			var result = SendDocument(
+				MBTHelper.ConvertMaskedSecretToRealValue(Secrets.TELEGRAM_USER_ID.ToString()),
+				$"assets/fake_log.txt");
+			Console.WriteLine($"JSON for {nameof(result)} is: {result}");
+			var successResponse = JsonConvert.DeserializeObject<Response<Message>>(result);
+			Assert.IsNotEmpty(successResponse.Content.Document.FileId);
+		}
+
+		[Test]
+		[Category(Constants.TelegramBotApiMethods.SendDocument)]
+		public async Task StartSendDocumentReturnsCorrelationIdAsync()
+		{
+			Initialize(
+				MBTHelper.ConvertMaskedSecretToRealValue(Secrets.TELEGRAM_BOT_API_KEY.ToString()),
+				10);
+			SetDebugOutput(true);
+			var result = StartSendDocument(
+				MBTHelper.ConvertMaskedSecretToRealValue(Secrets.TELEGRAM_USER_ID.ToString()),
+				$"assets/fake_log.txt");
+			var successResponse = JsonConvert.DeserializeObject<Response<string>>(result);
+			Assert.True(!string.IsNullOrWhiteSpace(successResponse.CorrelationKey));
+
+			var messageStoreResult = await this.WaitForMessageStoreAsync(successResponse.CorrelationKey);
+			Console.WriteLine($"JSON for {nameof(messageStoreResult)} is: {messageStoreResult}");
+
+			var correlatedResponse = JsonConvert.DeserializeObject<Response<Message>>(messageStoreResult);
+			Assert.IsInstanceOf<Response<Message>>(correlatedResponse);
+			Assert.IsNotEmpty(correlatedResponse.Content.Document.FileId);
+		}
+
+		[Test]
 		[Category(Constants.TelegramBotApiMethods.SendPhoto)]
 		public void SendPhotoSendsPhotoMessageToUser()
 		{
@@ -290,6 +328,18 @@ namespace Mql.Telegram.IntegrationTests
 		[DllImport(Constants.AssemblyUnderTestName)]
 		[return: MarshalAs(UnmanagedType.LPWStr)]
 		private static extern string StartGetUpdates();
+
+		[DllImport(Constants.AssemblyUnderTestName)]
+		[return: MarshalAs(UnmanagedType.LPWStr)]
+		private static extern string SendDocument(
+			[MarshalAs(UnmanagedType.LPWStr)] string chatId,
+			[MarshalAs(UnmanagedType.LPWStr)] string file);
+
+		[DllImport(Constants.AssemblyUnderTestName)]
+		[return: MarshalAs(UnmanagedType.LPWStr)]
+		private static extern string StartSendDocument(
+			[MarshalAs(UnmanagedType.LPWStr)] string chatId,
+			[MarshalAs(UnmanagedType.LPWStr)] string file);
 
 		[DllImport(Constants.AssemblyUnderTestName)]
 		[return: MarshalAs(UnmanagedType.LPWStr)]

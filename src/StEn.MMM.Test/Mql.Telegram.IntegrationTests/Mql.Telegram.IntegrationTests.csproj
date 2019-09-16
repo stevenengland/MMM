@@ -39,6 +39,9 @@
   </ItemGroup>
   
   <ItemGroup>
+    <None Update="assets\fake_log.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="assets\favicon-32x32.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

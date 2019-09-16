@@ -23,6 +23,7 @@
 			public const string GetUpdates = "getUpdates";
 			public const string SendMessage = "sendMessage";
 			public const string SendPhoto = "sendPhoto";
+			public const string SendDocument = "sendDocument";
 			public const string Internal = "internal";
 		}
 	}

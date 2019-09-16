@@ -46,7 +46,7 @@ namespace Mql.Telegram.Tests.Services.Telegram
 		{
 			var mapper = new TelegramBotMapper(new TelegramBotClient(ApiKey), this.responseFactory);
 			JsonConvert.DeserializeObject<Response<string>>(mapper.SetDefaultValue($"{nameof(mapper.DisableNotifications)}", actual));
-			Assert.Equal(expected,mapper.DisableNotifications);
+			Assert.Equal(expected, mapper.DisableNotifications);
 			var result = JsonConvert.DeserializeObject<Response<Error>>(mapper.SetDefaultValue($"{nameof(mapper.DisableNotifications)}", "unknown"));
 			Assert.Equal(typeof(ArgumentException).Name, result.Content.ExceptionType);
 		}

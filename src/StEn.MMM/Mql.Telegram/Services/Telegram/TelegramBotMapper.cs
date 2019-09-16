@@ -47,7 +47,6 @@ namespace StEn.MMM.Mql.Telegram.Services.Telegram
 		/// <inheritdoc />
 		public bool DisableWebPagePreview { get; private set; } = false;
 
-
 		/// <inheritdoc/>
 		public string SetDefaultValue(string parameterKey, string defaultValue)
 		{
@@ -147,6 +146,45 @@ namespace StEn.MMM.Mql.Telegram.Services.Telegram
 				.DisposeAfterThreadCompletionAsync(new IDisposable[]
 				{
 					cancellationTokenSource,
+				}));
+		}
+
+		/// <inheritdoc />
+		public string SendDocument(string chatId, string file)
+		{
+			using (var fs = System.IO.File.OpenRead(file))
+			{
+				var inputOnlineFile = new InputOnlineFile(fs);
+				using (var cancellationTokenSource = this.CtsFactory())
+				{
+					return this.ProxyCall(this.botClient.SendDocumentAsync(
+						chatId: this.CreateChatId(chatId),
+						document: inputOnlineFile,
+						caption: Path.GetFileName(fs.Name),
+						disableNotification: this.DisableNotifications,
+						cancellationToken: cancellationTokenSource.Token));
+				}
+			}
+		}
+
+		/// <inheritdoc />
+		public string StartSendDocument(string chatId, string file)
+		{
+			var fs = System.IO.File.OpenRead(file);
+
+			var inputOnlineFile = new InputOnlineFile(fs);
+			var cancellationTokenSource = this.CtsFactory();
+
+			return this.FireAndForgetProxyCall(this.botClient.SendDocumentAsync(
+					chatId: this.CreateChatId(chatId),
+					document: inputOnlineFile,
+					caption: Path.GetFileName(fs.Name),
+					disableNotification: this.DisableNotifications,
+					cancellationToken: cancellationTokenSource.Token)
+				.DisposeAfterThreadCompletionAsync(new IDisposable[]
+				{
+					cancellationTokenSource,
+					fs,
 				}));
 		}
 

@@ -75,6 +75,26 @@ namespace StEn.MMM.Mql.Telegram.Services.Telegram
 		string StartGetUpdates();
 
 		/// <summary>
+		/// Use this method to send general files. On success, the sent Description is returned.
+		/// Bots can send files of any type of up to 50 MB in size.
+		/// </summary>
+		/// <param name="chatId"><see cref="ChatId"/> for the target chat.</param>
+		/// <param name="file">File to send.</param>
+		/// <returns>On success, the sent Description is returned.</returns>
+		/// <see href="https://core.telegram.org/bots/api#senddocument"/>
+		string SendDocument(string chatId, string file);
+
+		/// <summary>
+		/// Use this method to send general files. On success, the sent Description is returned.
+		/// Bots can send files of any type of up to 50 MB in size.
+		/// </summary>
+		/// <param name="chatId"><see cref="ChatId"/> for the target chat.</param>
+		/// <param name="file">File to send.</param>
+		/// <returns>Returns correlation information to obtain the result of the background thread.</returns>
+		/// <see href="https://core.telegram.org/bots/api#senddocument"/>
+		string StartSendDocument(string chatId, string file);
+
+		/// <summary>
 		/// Use this method to send photos. On success, the sent Description is returned.
 		/// </summary>
 		/// <param name="chatId"><see cref="ChatId"/> for the target chat.</param>
