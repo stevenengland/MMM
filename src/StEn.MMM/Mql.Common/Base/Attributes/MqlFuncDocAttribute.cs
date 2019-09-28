@@ -8,5 +8,7 @@ namespace StEn.MMM.Mql.Common.Base.Attributes
 	public class MqlFuncDocAttribute : Attribute
 	{
 		public int Order { get; set; }
+
+		public string AdditionalCodeLines { get; set; }
 	}
 }

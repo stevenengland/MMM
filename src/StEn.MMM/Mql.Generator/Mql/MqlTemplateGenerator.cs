@@ -28,18 +28,24 @@ namespace StEn.MMM.Mql.Generator.Mql
 			var builder = new StringBuilder();
 			builder.Append($"#import \"{assemblyName}.dll\"\n");
 
+			builder.Append("// Available functions:\n");
+
 			foreach (var definition in sortedFunctionDefinitions)
 			{
-				builder.Append("\t" + CreateMethodImportDirective(definition) + "\n");
+				builder.Append("\t" + "// " + CreateMethodImportDirective(definition) + "\n");
 			}
 
-			builder.Append($"#import");
 			template.ImportSection = builder.ToString();
 
 			builder.Clear();
 
 			foreach (var definition in sortedFunctionDefinitions)
 			{
+				if (!string.IsNullOrWhiteSpace(definition.AdditionalCodeLines))
+				{
+					builder.Append("\t" + definition.AdditionalCodeLines);
+				}
+
 				builder.Append("\t" + CreateMethodExample(definition) + "\n");
 				builder.Append("\t" + "Sleep(1000);" + "\n");
 			}
@@ -77,13 +83,14 @@ namespace StEn.MMM.Mql.Generator.Mql
 		private static string CreateMethodExample(Mql5FunctionDefinition definition)
 		{
 			var builder = new StringBuilder();
+
 			if (definition.MethodReturnType == "void")
 			{
-				builder.Append(definition.MethodName + "(");
+				builder.Append(definition.ClassName + "::" + definition.MethodName + "(");
 			}
 			else
 			{
-				builder.Append(definition.MethodReturnType + " resultOf" + definition.MethodName + " = " + definition.MethodName + "(");
+				builder.Append(definition.MethodReturnType + " resultOf" + definition.MethodName + " = " + definition.ClassName + "::" + definition.MethodName + "(");
 			}
 
 			for (int i = 0; i < definition.Parameters.Count; i++)

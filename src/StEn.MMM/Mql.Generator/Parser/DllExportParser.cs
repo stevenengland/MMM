@@ -45,9 +45,10 @@ namespace StEn.MMM.Mql.Generator.Parser
 					foreach (var attributeSyntax in attributeListSyntax.Attributes)
 					{
 						var name = (IdentifierNameSyntax)attributeSyntax.Name;
-						if (name.Identifier.Text == "DllExport")
+						if (name.Identifier.Text == nameof(MqlFuncDocAttribute).Replace("Attribute", string.Empty))
 						{
 							var methodSymbol = model.GetDeclaredSymbol(methodDeclarationSyntax);
+							definition.ClassName = methodSymbol.ContainingType.Name;
 							definition.MethodName = methodSymbol.Name;
 							definition.MethodReturnType = methodSymbol.ReturnsVoid
 									? MapNetTypeToMqlType("void")
@@ -62,10 +63,21 @@ namespace StEn.MMM.Mql.Generator.Parser
 									throw new ArgumentException($"{parameterSymbol.Name} in {methodSymbol.Name} has no documentation attribute assigned");
 								}
 
+								string mappableType = string.Empty;
+								if (parameterSymbol.Type is IArrayTypeSymbol)
+								{
+									var x = parameterSymbol.Type as IArrayTypeSymbol;
+									mappableType = x.ElementType.Name + "[]";
+								}
+								else
+								{
+									mappableType = parameterSymbol.Type.Name;
+								}
+
 								definition.Parameters.Add(new FunctionParameter()
 								{
 									ParameterName = parameterSymbol.Name,
-									ParameterType = MapNetTypeToMqlType(parameterSymbol.Type.Name),
+									ParameterType = MapNetTypeToMqlType(mappableType),
 									ParameterExample = exampleValue,
 								});
 							}
@@ -86,6 +98,12 @@ namespace StEn.MMM.Mql.Generator.Parser
 								{
 									var expression = argument.Expression as LiteralExpressionSyntax;
 									definition.DocumentationOrder = int.TryParse(expression?.Token.ValueText, out var order) ? order : int.MaxValue;
+								}
+
+								if (argument.NameEquals.Name.Identifier.Text == nameof(MqlFuncDocAttribute.AdditionalCodeLines))
+								{
+									var expression = argument.Expression as LiteralExpressionSyntax;
+									definition.AdditionalCodeLines = expression?.Token.ValueText;
 								}
 							}
 						}
@@ -136,6 +154,8 @@ namespace StEn.MMM.Mql.Generator.Parser
 					return "void";
 				case "string":
 					return "string";
+				case "string[]":
+					return "string &[]";
 				case "int":
 				case "int32":
 					return "int";

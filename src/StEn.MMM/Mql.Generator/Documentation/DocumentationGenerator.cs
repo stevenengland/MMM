@@ -32,8 +32,8 @@ namespace StEn.MMM.Mql.Generator.Documentation
 		{
 			var sortedFunctionDefinitions = definitions.OrderBy(x => x.MethodName).ToList();
 			var asm = Assembly.UnsafeLoadFrom(binaryFile);
-			var asmTypes = asm.GetMatchingTypesInAssembly(t => t.IsClass && t.Name.EndsWith("DllExports")); // asm.GetTypes();
-			dllExportsType = asmTypes.FirstOrDefault(t => t.IsClass && t.Name.EndsWith("DllExports"));
+			var asmTypes = asm.GetMatchingTypesInAssembly(t => t.IsClass && t.Name.EndsWith("Module")); // asm.GetTypes();
+			dllExportsType = asmTypes.FirstOrDefault(t => t.IsClass && t.Name.EndsWith("Module"));
 
 			reader = new DocXmlReader($"{xmlCommentFile}");
 

@@ -14,7 +14,7 @@ namespace StEn.MMM.Mql.Generator
 #if DEBUG
 			args = new[]
 			{
-				"D:/coding/MMM/src/StEn.MMM/Mql.Telegram|D:/coding/MMM/src/StEn.MMM/Mql.Mail",
+				"D:/coding/MMM/src/StEn.MMM/Mql.Mail|D:/coding/MMM/src/StEn.MMM/Mql.Telegram",
 				"D:/coding/MMM/doc",
 			};
 #endif
