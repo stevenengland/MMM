@@ -43,7 +43,7 @@ namespace StEn.MMM.Mql.Generator
 
 				// Detect export file
 				var dllExportFile = Directory.EnumerateFiles(pathToSources, "*.*", SearchOption.AllDirectories)
-					.FirstOrDefault(file => file.ToLower().EndsWith("DllExports.cs".ToLower()));
+					.FirstOrDefault(file => file.ToLower().EndsWith("Module.cs".ToLower()));
 
 				// Detect project file
 				var projectFile = Directory.EnumerateFiles(pathToSources, "*.*", SearchOption.AllDirectories)
@@ -51,13 +51,11 @@ namespace StEn.MMM.Mql.Generator
 
 				var xmlCommentFile = Directory.EnumerateFiles(pathToSources, "*.*", SearchOption.AllDirectories)
 					.FirstOrDefault(file => file.ToLower().EndsWith($"{AssemblyPropertyParser.GetAssemblyNameByProjectFile(projectFile)}.xml".ToLower()) &&
-											file.ToLower().Contains("release") &&
-											file.ToLower().Contains("x64"));
+											file.ToLower().Contains("release"));
 
 				var binaryFile = Directory.EnumerateFiles(pathToSources, "*.*", SearchOption.AllDirectories)
 					.FirstOrDefault(file => file.ToLower().EndsWith($"{AssemblyPropertyParser.GetAssemblyNameByProjectFile(projectFile)}.dll".ToLower()) &&
-											file.ToLower().Contains("release") &&
-											file.ToLower().Contains("x64"));
+											file.ToLower().Contains("release"));
 
 				if (dllExportFile == null)
 				{
