@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using StEn.MMM.Mql.Common.Base.Extensions;
 using StEn.MMM.Mql.Common.Services.InApi.Entities;
 
 namespace StEn.MMM.Mql.Common.Services.InApi.Factories
@@ -42,7 +43,7 @@ namespace StEn.MMM.Mql.Common.Services.InApi.Factories
 
 			if (this.IsDebugEnabled)
 			{
-				response.Content.ExceptionMessage = ex.Message;
+				response.Content.ExceptionMessage = ex.GetAllExceptionMessages();
 				response.Content.StackTrace = ex.StackTrace;
 				response.Content.ExceptionType = ex.GetType().Name;
 			}
