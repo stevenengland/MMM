@@ -92,6 +92,11 @@ namespace StEn.MMM.Mql.Generator.Parser
 
 						if (name.Identifier.Text == nameof(MqlFuncDocAttribute).Replace("Attribute", string.Empty))
 						{
+							if (attributeSyntax.ArgumentList == null)
+							{
+								continue;
+							}
+
 							foreach (var argument in attributeSyntax.ArgumentList.Arguments)
 							{
 								if (argument.NameEquals.Name.Identifier.Text == nameof(MqlFuncDocAttribute.Order))

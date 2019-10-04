@@ -39,6 +39,7 @@ namespace StEn.MMM.Mql.Generator.Mql
 
 			builder.Clear();
 
+			var listOfOverloadedFunctionsAlreadyProcessed = new Dictionary<string, string>();
 			foreach (var definition in sortedFunctionDefinitions)
 			{
 				if (!string.IsNullOrWhiteSpace(definition.AdditionalCodeLines))
@@ -46,7 +47,15 @@ namespace StEn.MMM.Mql.Generator.Mql
 					builder.Append("\t" + definition.AdditionalCodeLines);
 				}
 
-				builder.Append("\t" + CreateMethodExample(definition) + "\n");
+				if (listOfOverloadedFunctionsAlreadyProcessed.TryAdd(definition.MethodName, string.Empty))
+				{
+					builder.Append("\t" + CreateMethodExample(definition) + "\n");
+				}
+				else
+				{
+					builder.Append("\t" + CreateMethodExample(definition, false) + "\n");
+				}
+
 				builder.Append("\t" + "Sleep(1000);" + "\n");
 			}
 
@@ -80,7 +89,7 @@ namespace StEn.MMM.Mql.Generator.Mql
 			return stringBuilder.ToString();
 		}
 
-		private static string CreateMethodExample(Mql5FunctionDefinition definition)
+		private static string CreateMethodExample(Mql5FunctionDefinition definition, bool addVarTypeInFront = true)
 		{
 			var builder = new StringBuilder();
 
@@ -90,7 +99,14 @@ namespace StEn.MMM.Mql.Generator.Mql
 			}
 			else
 			{
-				builder.Append(definition.MethodReturnType + " resultOf" + definition.MethodName + " = " + definition.ClassName + "::" + definition.MethodName + "(");
+				if (addVarTypeInFront)
+				{
+					builder.Append(definition.MethodReturnType + " resultOf" + definition.MethodName + " = " + definition.ClassName + "::" + definition.MethodName + "(");
+				}
+				else
+				{
+					builder.Append("resultOf" + definition.MethodName + " = " + definition.ClassName + "::" + definition.MethodName + "(");
+				}
 			}
 
 			for (int i = 0; i < definition.Parameters.Count; i++)
