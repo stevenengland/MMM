@@ -5,6 +5,8 @@ namespace StEn.MMM.Mql.Generator.Mql
 {
 	internal class Mql5FunctionDefinition
 	{
+		public string ClassName { get; set; }
+
 		public string MethodName { get; set; }
 
 		public string MethodReturnType { get; set; }
@@ -14,5 +16,7 @@ namespace StEn.MMM.Mql.Generator.Mql
 		public DocumentationCommentTriviaSyntax MethodXmlComments { get; set; }
 
 		public int DocumentationOrder { get; set; } = int.MaxValue;
+
+		public string AdditionalCodeLines { get; set; }
 	}
 }

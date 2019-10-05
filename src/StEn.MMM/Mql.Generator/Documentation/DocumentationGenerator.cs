@@ -32,8 +32,8 @@ namespace StEn.MMM.Mql.Generator.Documentation
 		{
 			var sortedFunctionDefinitions = definitions.OrderBy(x => x.MethodName).ToList();
 			var asm = Assembly.UnsafeLoadFrom(binaryFile);
-			var asmTypes = asm.GetMatchingTypesInAssembly(t => t.IsClass && t.Name.EndsWith("DllExports")); // asm.GetTypes();
-			dllExportsType = asmTypes.FirstOrDefault(t => t.IsClass && t.Name.EndsWith("DllExports"));
+			var asmTypes = asm.GetMatchingTypesInAssembly(t => t.IsClass && t.Name.EndsWith("Module"));
+			dllExportsType = asmTypes.FirstOrDefault(t => t.IsClass && t.Name.EndsWith("Module"));
 
 			reader = new DocXmlReader($"{xmlCommentFile}");
 
@@ -49,7 +49,9 @@ namespace StEn.MMM.Mql.Generator.Documentation
 
 		private static string GenerateFunctionDocumentationText(Mql5FunctionDefinition definition)
 		{
-			var comments = reader.GetMethodComments(dllExportsType.GetMethod(definition.MethodName));
+			var mappedTypes = MapStringTypesToNetTypes(definition.Parameters);
+			var methodInfo = dllExportsType.GetMethod(definition.MethodName, mappedTypes); // null if method was not found -> check if the newest version of the module was built in release mode
+			var comments = reader.GetMethodComments(methodInfo);
 			var builder = new StringBuilder();
 
 			if (comments.Summary == null)
@@ -89,6 +91,39 @@ namespace StEn.MMM.Mql.Generator.Documentation
 			builder.Append("\n</dl>\n");
 
 			return builder.ToString();
+		}
+
+		private static Type[] MapStringTypesToNetTypes(List<FunctionParameter> parameters)
+		{
+			var returnTypes = new List<Type>();
+			if (parameters != null)
+			{
+				foreach (var parameter in parameters)
+				{
+					switch (parameter.ParameterType)
+					{
+						case "string":
+							returnTypes.Add(typeof(string));
+							break;
+						case "string &[]":
+							returnTypes.Add(typeof(string[]));
+							break;
+						case "int":
+							returnTypes.Add(typeof(int));
+							break;
+						case "int &[]":
+							returnTypes.Add(typeof(int[]));
+							break;
+						case "bool":
+							returnTypes.Add(typeof(bool));
+							break;
+						default:
+							throw new NotImplementedException(parameter.ParameterType);
+					}
+				}
+			}
+
+			return returnTypes.ToArray();
 		}
 
 		private static string MethodHeader(Mql5FunctionDefinition definition)

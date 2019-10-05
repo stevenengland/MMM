@@ -28,19 +28,34 @@ namespace StEn.MMM.Mql.Generator.Mql
 			var builder = new StringBuilder();
 			builder.Append($"#import \"{assemblyName}.dll\"\n");
 
+			builder.Append("// Available functions:\n");
+
 			foreach (var definition in sortedFunctionDefinitions)
 			{
-				builder.Append("\t" + CreateMethodImportDirective(definition) + "\n");
+				builder.Append("\t" + "// " + CreateMethodImportDirective(definition) + "\n");
 			}
 
-			builder.Append($"#import");
 			template.ImportSection = builder.ToString();
 
 			builder.Clear();
 
+			var listOfOverloadedFunctionsAlreadyProcessed = new Dictionary<string, string>();
 			foreach (var definition in sortedFunctionDefinitions)
 			{
-				builder.Append("\t" + CreateMethodExample(definition) + "\n");
+				if (!string.IsNullOrWhiteSpace(definition.AdditionalCodeLines))
+				{
+					builder.Append("\t" + definition.AdditionalCodeLines);
+				}
+
+				if (listOfOverloadedFunctionsAlreadyProcessed.TryAdd(definition.MethodName, string.Empty))
+				{
+					builder.Append("\t" + CreateMethodExample(definition) + "\n");
+				}
+				else
+				{
+					builder.Append("\t" + CreateMethodExample(definition, false) + "\n");
+				}
+
 				builder.Append("\t" + "Sleep(1000);" + "\n");
 			}
 
@@ -74,16 +89,24 @@ namespace StEn.MMM.Mql.Generator.Mql
 			return stringBuilder.ToString();
 		}
 
-		private static string CreateMethodExample(Mql5FunctionDefinition definition)
+		private static string CreateMethodExample(Mql5FunctionDefinition definition, bool addVarTypeInFront = true)
 		{
 			var builder = new StringBuilder();
+
 			if (definition.MethodReturnType == "void")
 			{
-				builder.Append(definition.MethodName + "(");
+				builder.Append(definition.ClassName + "::" + definition.MethodName + "(");
 			}
 			else
 			{
-				builder.Append(definition.MethodReturnType + " resultOf" + definition.MethodName + " = " + definition.MethodName + "(");
+				if (addVarTypeInFront)
+				{
+					builder.Append(definition.MethodReturnType + " resultOf" + definition.MethodName + " = " + definition.ClassName + "::" + definition.MethodName + "(");
+				}
+				else
+				{
+					builder.Append("resultOf" + definition.MethodName + " = " + definition.ClassName + "::" + definition.MethodName + "(");
+				}
 			}
 
 			for (int i = 0; i < definition.Parameters.Count; i++)

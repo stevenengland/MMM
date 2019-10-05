@@ -274,12 +274,12 @@ namespace StEn.MMM.Mql.Telegram.Services.Telegram
 		}
 
 		/// <inheritdoc />
-		public string FireAndForgetProxyCall<T>(Task<T> telegramMethod)
+		public string FireAndForgetProxyCall<T>(Task<T> method)
 		{
 			try
 			{
 				string correlationKey = IDGenerator.Instance.Next;
-				telegramMethod.FireAndForgetSafe(correlationKey, this, this);
+				method.FireAndForgetSafe(correlationKey, this, this);
 				return this.responseFactory.Success(correlationKey).ToString();
 			}
 			catch (Exception ex)
@@ -289,11 +289,11 @@ namespace StEn.MMM.Mql.Telegram.Services.Telegram
 		}
 
 		/// <inheritdoc />
-		public string ProxyCall<T>(Task<T> telegramMethod)
+		public string ProxyCall<T>(Task<T> method)
 		{
 			try
 			{
-				var result = telegramMethod.FireSafe();
+				var result = method.FireSafe();
 				return this.responseFactory.Success(message: result).ToString();
 			}
 			catch (Exception ex)
