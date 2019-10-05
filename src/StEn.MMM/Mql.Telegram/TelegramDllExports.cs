@@ -62,6 +62,7 @@ namespace StEn.MMM.Mql.Telegram
 #if !DEBUG
 		[DllExport("GetMe", CallingConvention = CallingConvention.StdCall)]
 #endif
+		[MqlFuncDoc]
 		[return: MarshalAs(UnmanagedType.LPWStr)]
 		public static string GetMe()
 		{
@@ -90,6 +91,7 @@ namespace StEn.MMM.Mql.Telegram
 #if !DEBUG
 		[DllExport("StartGetMe", CallingConvention = CallingConvention.StdCall)]
 #endif
+		[MqlFuncDoc]
 		[return: MarshalAs(UnmanagedType.LPWStr)]
 		public static string StartGetMe()
 		{
@@ -114,6 +116,7 @@ namespace StEn.MMM.Mql.Telegram
 #if !DEBUG
 		[DllExport("GetUpdates", CallingConvention = CallingConvention.StdCall)]
 #endif
+		[MqlFuncDoc]
 		[return: MarshalAs(UnmanagedType.LPWStr)]
 		public static string GetUpdates()
 		{
@@ -142,6 +145,7 @@ namespace StEn.MMM.Mql.Telegram
 #if !DEBUG
 		[DllExport("StartGetUpdates", CallingConvention = CallingConvention.StdCall)]
 #endif
+		[MqlFuncDoc]
 		[return: MarshalAs(UnmanagedType.LPWStr)]
 		public static string StartGetUpdates()
 		{
@@ -175,6 +179,7 @@ namespace StEn.MMM.Mql.Telegram
 #if !DEBUG
 		[DllExport("SendDocument", CallingConvention = CallingConvention.StdCall)]
 #endif
+		[MqlFuncDoc]
 		[return: MarshalAs(UnmanagedType.LPWStr)]
 		public static string SendDocument(
 			[MqlParamDoc(ExampleValue = "-1001167825793")]
@@ -218,6 +223,7 @@ namespace StEn.MMM.Mql.Telegram
 #if !DEBUG
 		[DllExport("StartSendDocument", CallingConvention = CallingConvention.StdCall)]
 #endif
+		[MqlFuncDoc]
 		[return: MarshalAs(UnmanagedType.LPWStr)]
 		public static string StartSendDocument(
 			[MqlParamDoc(ExampleValue = "-1001167825793")]
@@ -257,6 +263,7 @@ namespace StEn.MMM.Mql.Telegram
 #if !DEBUG
 		[DllExport("SendPhoto", CallingConvention = CallingConvention.StdCall)]
 #endif
+		[MqlFuncDoc]
 		[return: MarshalAs(UnmanagedType.LPWStr)]
 		public static string SendPhoto(
 			[MqlParamDoc(ExampleValue = "-1001167825793")]
@@ -300,6 +307,7 @@ namespace StEn.MMM.Mql.Telegram
 #if !DEBUG
 		[DllExport("StartSendPhoto", CallingConvention = CallingConvention.StdCall)]
 #endif
+		[MqlFuncDoc]
 		[return: MarshalAs(UnmanagedType.LPWStr)]
 		public static string StartSendPhoto(
 			[MqlParamDoc(ExampleValue = "-1001167825793")]
@@ -339,6 +347,7 @@ namespace StEn.MMM.Mql.Telegram
 #if !DEBUG
 		[DllExport("SendText", CallingConvention = CallingConvention.StdCall)]
 #endif
+		[MqlFuncDoc]
 		[return: MarshalAs(UnmanagedType.LPWStr)]
 		public static string SendText(
 			[MqlParamDoc(ExampleValue = "-1001167825793")]
@@ -382,6 +391,7 @@ namespace StEn.MMM.Mql.Telegram
 #if !DEBUG
 		[DllExport("StartSendText", CallingConvention = CallingConvention.StdCall)]
 #endif
+		[MqlFuncDoc]
 		[return: MarshalAs(UnmanagedType.LPWStr)]
 		public static string StartSendText(
 			[MqlParamDoc(ExampleValue = "-1001167825793")]
@@ -413,6 +423,7 @@ namespace StEn.MMM.Mql.Telegram
 #if !DEBUG
 		[DllExport("GetMessageByCorrelationId", CallingConvention = CallingConvention.StdCall)]
 #endif
+		[MqlFuncDoc]
 		[return: MarshalAs(UnmanagedType.LPWStr)]
 		public static string GetMessageByCorrelationId(
 			[MqlParamDoc(ExampleValue = "w8er4345grt76567")]
