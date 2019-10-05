@@ -13,7 +13,7 @@ namespace StEn.MMM.Mql.Telegram
 	/// <summary>
 	/// Contains dll exports for the Telegram Bot API.
 	/// </summary>
-	public class TelegramDllExports
+	public class TelegramModule
 	{
 		private static ITelegramBotMapper bot;
 
@@ -21,16 +21,16 @@ namespace StEn.MMM.Mql.Telegram
 
 		private static ResponseFactory responseFactory = new ResponseFactory();
 
-		static TelegramDllExports()
+		static TelegramModule()
 		{
 			// https://colinmackay.scot/2007/06/16/unit-testing-a-static-class/
 			ResetClass();
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="TelegramDllExports"/> class.
+		/// Initializes a new instance of the <see cref="TelegramModule"/> class.
 		/// </summary>
-		protected TelegramDllExports()
+		protected TelegramModule()
 		{
 		}
 
