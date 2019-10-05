@@ -6,6 +6,9 @@
   <MobileBuildToolsDebug>true</MobileBuildToolsDebug>
 	<Configurations>Debug;Release</Configurations>
 	<Platforms>AnyCPU</Platforms>
+  </PropertyGroup>  
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DefineConstants>TRACE</DefineConstants>
   </PropertyGroup>
   
   <ItemGroup>
