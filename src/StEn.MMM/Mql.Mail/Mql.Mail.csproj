@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <Platforms>AnyCPU;x64;x86</Platforms>
     <Configurations>Debug;Release;DLLImportDebug</Configurations>
-    <AssemblyName>Mql_Mail</AssemblyName>
+    <AssemblyName>StEn.MMM.Mql.Mail</AssemblyName>
     <RootNamespace>StEn.MMM.Mql.Mail</RootNamespace>
 	<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
@@ -35,13 +35,13 @@
   </PropertyGroup>
   
   <ItemGroup>
-    <PackageReference Include="Costura.Fody" Version="4.0.0" />
-	<PackageReference Include="Fody" Version="5.1.1">
+    <PackageReference Include="Costura.Fody" Version="4.1.0" />
+	<PackageReference Include="Fody" Version="6.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
 	<PackageReference Include="MailKit" Version="2.3.1.6" />
-    <PackageReference Include="UnmanagedExports.Repack.Upgrade" Version="1.2.1" />
+	<PackageReference Include="System.Text.Encoding.CodePages" Version="4.6.0" />
   </ItemGroup>
 
   <ItemGroup>
