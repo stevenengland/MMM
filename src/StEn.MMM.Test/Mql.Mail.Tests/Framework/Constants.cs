@@ -20,7 +20,7 @@
 
 		public static class Collections
 		{
-			public const string IntegrationTests = AssemblyUnderTestName + " tests";
+			public const string Tests = AssemblyUnderTestName + " tests";
 		}
 	}
 }
