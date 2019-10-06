@@ -12,6 +12,7 @@ using Xunit;
 
 namespace Mql.Mail.Tests
 {
+	[Collection(Constants.Collections.Tests)]
 	public class MailModuleTests
 	{
 		public MailModuleTests()
