@@ -3,8 +3,8 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>StEn.MMM.Mql.Common</RootNamespace>
-    <Platforms>AnyCPU;x64;x86</Platforms>
-    <Configurations>Debug;Release;DLLImportDebug</Configurations>
+    <Platforms>AnyCPU</Platforms>
+    <Configurations>Debug;Release</Configurations>
     <AssemblyVersion>1.2.0.0</AssemblyVersion>
     <FileVersion>1.3.0.0</FileVersion>
   </PropertyGroup>

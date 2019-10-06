@@ -15,8 +15,8 @@ The aim of this project is to provide popular messaging services for Metatrader.
 ### Build Overview
 | Module        | Branch        | Status  |
 | ------------- |:-------------| :-------------:|
-| [MQL Telegram](https://mmm.steven-england.info/MQL-Telegram)  | master | [![Build Status](https://dev.azure.com/StEnPublic/MMM/_apis/build/status/Telegram/MMM_MQL_Telegram_x64?branchName=master)](https://dev.azure.com/StEnPublic/MMM/_build/latest?definitionId=6&branchName=master) |
-|       | develop      |   [![Build Status](https://dev.azure.com/StEnPublic/MMM/_apis/build/status/Telegram/MMM_MQL_Telegram_x64?branchName=develop)](https://dev.azure.com/StEnPublic/MMM/_build/latest?definitionId=6&branchName=develop) |
+| [MQL Telegram](https://mmm.steven-england.info/MQL-Telegram)  | master | [![Build Status](https://dev.azure.com/StEnPublic/MMM/_apis/build/status/Telegram/MMM_MQL_Telegram_AnyCpu?branchName=master)](https://dev.azure.com/StEnPublic/MMM/_build/latest?definitionId=11&branchName=master) |
+|       | develop      |   [![Build Status](https://dev.azure.com/StEnPublic/MMM/_apis/build/status/Telegram/MMM_MQL_Telegram_AnyCpu?branchName=develop)](https://dev.azure.com/StEnPublic/MMM/_build/latest?definitionId=11&branchName=develop) |
 | [MQL Mail](https://mmm.steven-england.info/MQL-Mail) | master | [![Build status](https://dev.azure.com/StEnPublic/MMM/_apis/build/status/Mail/MMM_MQL_Mail_AnyCpu?branchName=master)](https://dev.azure.com/StEnPublic/MMM/_build/latest?definitionId=10&branchName=master) |
 |       | develop      |  [![Build status](https://dev.azure.com/StEnPublic/MMM/_apis/build/status/Mail/MMM_MQL_Mail_AnyCpu?branchName=develop)](https://dev.azure.com/StEnPublic/MMM/_build/latest?definitionId=10&branchName=develop)  |
 

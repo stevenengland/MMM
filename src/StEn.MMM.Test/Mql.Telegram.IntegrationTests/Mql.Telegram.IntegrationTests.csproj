@@ -4,8 +4,11 @@
 	<!-- >Mobile Build Tools</!-->
 	<BuildHostSecretPrefix>SAFE_</BuildHostSecretPrefix>
   <MobileBuildToolsDebug>true</MobileBuildToolsDebug>
-	<Configurations>Debug;Release;DLLImportDebug</Configurations>
-	<Platforms>AnyCPU;x64;x86</Platforms>
+	<Configurations>Debug;Release</Configurations>
+	<Platforms>AnyCPU</Platforms>
+  </PropertyGroup>  
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DefineConstants>TRACE</DefineConstants>
   </PropertyGroup>
   
   <ItemGroup>
