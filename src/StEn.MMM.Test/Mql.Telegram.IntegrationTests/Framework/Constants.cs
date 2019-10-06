@@ -10,11 +10,16 @@
 
 		public const string AssemblyName = "Mql.Telegram.IntegrationTests";
 
-		public const string AssemblyUnderTestName = "Mql_Telegram.dll";
+		public const string AssemblyUnderTestName = "Mql.Telegram.dll";
 
 		public static class TestCollections
 		{
 			public const string GettingUpdates = "Getting Updates";
+		}
+
+		public static class Collections
+		{
+			public const string IntegrationTests = AssemblyUnderTestName + " integration tests";
 		}
 
 		public static class TelegramBotApiMethods
