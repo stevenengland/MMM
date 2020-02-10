@@ -120,14 +120,14 @@ namespace Mql.Telegram.Tests
 		public void GetUpdatesSucceeds()
 		{
 			var mock = new Mock<ITelegramBotMapper>();
-			mock.Setup(x => x.GetUpdates()).Returns("ok");
-			mock.Setup(x => x.StartGetUpdates()).Returns("ok");
+			mock.Setup(x => x.GetUpdates(0, 0)).Returns("ok");
+			mock.Setup(x => x.StartGetUpdates(0, 0)).Returns("ok");
 
 			TelegramModule.Initialize(ApiKey, 10);
 			TelegramModule.Bot = mock.Object;
 
-			Assert.True(TelegramModule.GetUpdates() == "ok");
-			Assert.True(TelegramModule.StartGetUpdates() == "ok");
+			Assert.True(TelegramModule.GetUpdates(0, 0) == "ok");
+			Assert.True(TelegramModule.StartGetUpdates(0, 0) == "ok");
 		}
 
 		[Fact]

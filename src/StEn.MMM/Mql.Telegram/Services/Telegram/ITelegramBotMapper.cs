@@ -62,17 +62,37 @@ namespace StEn.MMM.Mql.Telegram.Services.Telegram
 		/// <summary>
 		/// Use this method to receive incoming updates using long polling.
 		/// </summary>
+		/// <param name="offset">
+		/// Identifier of the first <see cref="T:Telegram.Bot.Types.Update" /> to be returned.
+		/// Must be greater by one than the highest among the identifiers of previously received updates.
+		/// By default, updates starting with the earliest unconfirmed update are returned. An update is considered
+		/// confirmed as soon as <see cref="M:Telegram.Bot.ITelegramBotClient.GetUpdatesAsync(System.Int32,System.Int32,System.Int32,System.Collections.Generic.IEnumerable{Telegram.Bot.Types.Enums.UpdateType},System.Threading.CancellationToken)" /> is called with an offset higher than its <see cref="P:Telegram.Bot.Types.Update.Id" />.
+		/// The negative offset can be specified to retrieve updates starting from -offset update from the end of the updates queue. All previous updates will forgotten.
+		/// </param>
+		/// <param name="limit">
+		/// Limits the number of updates to be retrieved. Values between 1-100 are accepted.
+		/// </param>
 		/// <returns>An Array of <see cref="Update"/> is returned.</returns>
 		/// <see href="https://core.telegram.org/bots/api#getupdates"/>
-		string GetUpdates();
+		string GetUpdates(int offset = 0, int limit = 0);
 
 		/// <summary>
 		/// Use this method to receive incoming updates using long polling.
 		/// This method runs in a background thread and returns correlation information to obtain the result of the background thread.
 		/// </summary>
+		/// <param name="offset">
+		/// Identifier of the first <see cref="T:Telegram.Bot.Types.Update" /> to be returned.
+		/// Must be greater by one than the highest among the identifiers of previously received updates.
+		/// By default, updates starting with the earliest unconfirmed update are returned. An update is considered
+		/// confirmed as soon as <see cref="M:Telegram.Bot.ITelegramBotClient.GetUpdatesAsync(System.Int32,System.Int32,System.Int32,System.Collections.Generic.IEnumerable{Telegram.Bot.Types.Enums.UpdateType},System.Threading.CancellationToken)" /> is called with an offset higher than its <see cref="P:Telegram.Bot.Types.Update.Id" />.
+		/// The negative offset can be specified to retrieve updates starting from -offset update from the end of the updates queue. All previous updates will forgotten.
+		/// </param>
+		/// <param name="limit">
+		/// Limits the number of updates to be retrieved. Values between 1-100 are accepted.
+		/// </param>
 		/// <returns>Returns correlation information to obtain the result of the background thread.</returns>
 		/// <see href="https://core.telegram.org/bots/api#getupdates"/>
-		string StartGetUpdates();
+		string StartGetUpdates(int offset = 0, int limit = 0);
 
 		/// <summary>
 		/// Use this method to send general files. On success, the sent Description is returned.

@@ -80,7 +80,7 @@ namespace Mql.Telegram.IntegrationTests
 				MBTHelper.ConvertMaskedSecretToRealValue(Secrets.TELEGRAM_BOT_API_KEY.ToString()),
 				10);
 			TelegramModule.SetDebugOutput(true);
-			var result = TelegramModule.GetUpdates();
+			var result = TelegramModule.GetUpdates(0, 0);
 			var successResponse = JsonConvert.DeserializeObject<Response<Update[]>>(result);
 			Assert.True(successResponse.IsSuccess);
 		}
@@ -93,7 +93,7 @@ namespace Mql.Telegram.IntegrationTests
 				MBTHelper.ConvertMaskedSecretToRealValue(Secrets.TELEGRAM_BOT_API_KEY.ToString()),
 				10);
 			TelegramModule.SetDebugOutput(true);
-			var result = TelegramModule.StartGetUpdates();
+			var result = TelegramModule.StartGetUpdates(0, 0);
 			var successResponse = JsonConvert.DeserializeObject<Response<string>>(result);
 			Assert.True(!string.IsNullOrWhiteSpace(successResponse.CorrelationKey));
 
