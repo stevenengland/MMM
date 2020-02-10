@@ -49,8 +49,10 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{62758EC6-27C4-4A41-8CCD-18767B6CE608}"
 	ProjectSection(SolutionItems) = preProject
 		..\doc\module_usage\implementation\metatrader5\MQL5\Experts\MMM_Common\JsonExamples.mq5 = ..\doc\module_usage\implementation\metatrader5\MQL5\Experts\MMM_Common\JsonExamples.mq5
-		..\doc\module_usage\api\mql_telegram\Mql_Telegram_latest.md = ..\doc\module_usage\api\mql_telegram\Mql_Telegram_latest.md
-		..\doc\module_usage\implementation\metatrader5\MQL5\Experts\MMM_Modules\mql_telegram\Mql_Telegram_latest.mq5 = ..\doc\module_usage\implementation\metatrader5\MQL5\Experts\MMM_Modules\mql_telegram\Mql_Telegram_latest.mq5
+		..\doc\module_usage\api\sten.mmm.mql.mail\StEn.MMM.Mql.Mail_latest.md = ..\doc\module_usage\api\sten.mmm.mql.mail\StEn.MMM.Mql.Mail_latest.md
+		..\doc\module_usage\implementation\metatrader5\MQL5\Experts\MMM_Modules\sten.mmm.mql.mail\StEn.MMM.Mql.Mail_latest.mq5 = ..\doc\module_usage\implementation\metatrader5\MQL5\Experts\MMM_Modules\sten.mmm.mql.mail\StEn.MMM.Mql.Mail_latest.mq5
+		..\doc\module_usage\api\sten.mmm.mql.telegram\StEn.MMM.Mql.Telegram_latest.md = ..\doc\module_usage\api\sten.mmm.mql.telegram\StEn.MMM.Mql.Telegram_latest.md
+		..\doc\module_usage\implementation\metatrader5\MQL5\Experts\MMM_Modules\sten.mmm.mql.telegram\StEn.MMM.Mql.Telegram_latest.mq5 = ..\doc\module_usage\implementation\metatrader5\MQL5\Experts\MMM_Modules\sten.mmm.mql.telegram\StEn.MMM.Mql.Telegram_latest.mq5
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mql.Mail", "StEn.MMM\Mql.Mail\Mql.Mail.csproj", "{07B90D0E-7456-4A1D-861F-90A2F1E816B2}"

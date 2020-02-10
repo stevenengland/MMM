@@ -128,20 +128,24 @@ namespace StEn.MMM.Mql.Telegram.Services.Telegram
 		}
 
 		/// <inheritdoc />
-		public string GetUpdates()
+		public string GetUpdates(int offset = 0, int limit = 0)
 		{
 			using (var cancellationTokenSource = this.CtsFactory())
 			{
 				return this.ProxyCall(this.botClient.GetUpdatesAsync(
+					offset: offset,
+					limit: limit,
 					cancellationToken: cancellationTokenSource.Token));
 			}
 		}
 
 		/// <inheritdoc />
-		public string StartGetUpdates()
+		public string StartGetUpdates(int offset = 0, int limit = 0)
 		{
 			var cancellationTokenSource = this.CtsFactory();
 			return this.FireAndForgetProxyCall(this.botClient.GetUpdatesAsync(
+					offset: offset,
+					limit: limit,
 					cancellationToken: cancellationTokenSource.Token)
 				.DisposeAfterThreadCompletionAsync(new IDisposable[]
 				{
