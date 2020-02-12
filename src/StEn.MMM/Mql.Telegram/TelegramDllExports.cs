@@ -585,6 +585,9 @@ namespace StEn.MMM.Mql.Telegram
 
 		private static void InitializeClass(ITelegramBotMapper telegramBotMapper)
 		{
+			// https://github.com/stevenengland/MMM/issues/18 -> force TLS 1.2
+			System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
+
 			Bot = telegramBotMapper;
 			isInitialized = true;
 		}
